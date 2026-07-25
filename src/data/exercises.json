@@ -1,0 +1,110 @@
+[
+  {
+    "id": "push_up",
+    "name": "俯卧撑",
+    "muscleIds": ["chest", "triceps", "shoulders"],
+    "level": "beginner",
+    "advice": "身体成一条直线，胸部接近地面再推起。膝撑版适合入门。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "bench_press",
+    "name": "杠铃卧推",
+    "muscleIds": ["chest", "triceps", "shoulders"],
+    "level": "advanced",
+    "advice": "肩胛骨下沉后收，脚踩实，杠铃下落至胸部中下再推起。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "lateral_raise",
+    "name": "侧平举",
+    "muscleIds": ["shoulders"],
+    "level": "beginner",
+    "advice": "轻重量，肘微屈，举至略低于肩高，避免耸肩。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "pull_up",
+    "name": "引体向上",
+    "muscleIds": ["lats", "biceps"],
+    "level": "advanced",
+    "advice": "从死挂开始，肩胛下沉后拉至下巴过杠。可用弹力带辅助。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "lat_pulldown",
+    "name": "高位下拉",
+    "muscleIds": ["lats", "biceps"],
+    "level": "beginner",
+    "advice": "胸微挺，将杆拉至锁骨附近，感受背阔肌收缩。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "bicep_curl",
+    "name": "哑铃弯举",
+    "muscleIds": ["biceps"],
+    "level": "beginner",
+    "advice": "上臂贴身，只屈肘，下放时控制速度。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "tricep_pushdown",
+    "name": "绳索下压",
+    "muscleIds": ["triceps"],
+    "level": "beginner",
+    "advice": "肘固定在体侧，完全伸直后再缓慢回放。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "plank",
+    "name": "平板支撑",
+    "muscleIds": ["abs"],
+    "level": "beginner",
+    "advice": "核心收紧，臀部不塌不翘，保持均匀呼吸。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "squat",
+    "name": "深蹲",
+    "muscleIds": ["quads", "glutes"],
+    "level": "beginner",
+    "advice": "脚与肩同宽，膝盖跟随脚尖方向，躯干保持中立。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "rdl",
+    "name": "罗马尼亚硬拉",
+    "muscleIds": ["hamstrings", "glutes"],
+    "level": "advanced",
+    "advice": "髋铰链主导，杠贴近腿，感受腘绳与臀部拉伸。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "hip_thrust",
+    "name": "臀推",
+    "muscleIds": ["glutes"],
+    "level": "beginner",
+    "advice": "下背部贴凳，顶起时臀部夹紧，避免过度塌腰。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  },
+  {
+    "id": "calf_raise",
+    "name": "提踵",
+    "muscleIds": ["calves"],
+    "level": "beginner",
+    "advice": "完整上下幅度，顶部稍作停顿。",
+    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
+    "videoSource": "bilibili"
+  }
+]

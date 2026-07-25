@@ -1,0 +1,82 @@
+[
+  {
+    "id": "chest",
+    "name": "胸大肌",
+    "side": "front",
+    "region": "upper",
+    "summary": "胸部主要肌群，负责推的动作与上肢内收。",
+    "tips": ["训练时肩胛骨下沉后收", "注意肘部轨迹，避免耸肩"]
+  },
+  {
+    "id": "shoulders",
+    "name": "三角肌",
+    "side": "front",
+    "region": "upper",
+    "summary": "覆盖肩部，决定肩宽与上肢轮廓。",
+    "tips": ["前中后束均衡训练", "大重量推举注意肩关节热身"]
+  },
+  {
+    "id": "biceps",
+    "name": "肱二头肌",
+    "side": "front",
+    "region": "upper",
+    "summary": "上臂前侧，负责屈肘。",
+    "tips": ["控制离心，避免甩臂借力", "可配合背部拉的动作一起安排"]
+  },
+  {
+    "id": "abs",
+    "name": "腹直肌",
+    "side": "front",
+    "region": "core",
+    "summary": "核心前侧，维持躯干稳定与屈曲。",
+    "tips": ["先练稳定再练屈曲", "配合饮食才能看到腹肌线条"]
+  },
+  {
+    "id": "quads",
+    "name": "股四头肌",
+    "side": "front",
+    "region": "lower",
+    "summary": "大腿前侧，深蹲与伸膝的主力。",
+    "tips": ["膝盖与脚尖方向一致", "深蹲深度量力而行"]
+  },
+  {
+    "id": "lats",
+    "name": "背阔肌",
+    "side": "back",
+    "region": "upper",
+    "summary": "背部最大肌群，塑造倒三角与拉的力量。",
+    "tips": ["先学会肩胛下沉再拉", "感受肘部向髋关节收"]
+  },
+  {
+    "id": "triceps",
+    "name": "肱三头肌",
+    "side": "back",
+    "region": "upper",
+    "summary": "上臂后侧，负责伸肘，影响手臂围度。",
+    "tips": ["推类动作本身就会练到", "孤立训练控制肘部位置"]
+  },
+  {
+    "id": "glutes",
+    "name": "臀大肌",
+    "side": "back",
+    "region": "lower",
+    "summary": "臀部主力，髋伸与下肢力量的关键。",
+    "tips": ["髋铰链动作优先", "顶峰收缩感受臀部发力"]
+  },
+  {
+    "id": "hamstrings",
+    "name": "腘绳肌",
+    "side": "back",
+    "region": "lower",
+    "summary": "大腿后侧，屈膝与髋伸协同发力。",
+    "tips": ["与股四头肌平衡训练", "硬拉注意腰背中立"]
+  },
+  {
+    "id": "calves",
+    "name": "小腿三头肌",
+    "side": "back",
+    "region": "lower",
+    "summary": "小腿后侧，负责踮脚与踝关节稳定。",
+    "tips": ["全幅度上下", "可安排较高次数"]
+  }
+]

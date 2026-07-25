@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="320" viewBox="0 0 240 320" role="img" aria-label="OÖ«P:">
+  <rect width="240" height="320" rx="16" fill="#cfe3d8"/>
+  <ellipse cx="120" cy="56" rx="32" ry="34" fill="#2f5a48"/>
+  <path d="M78 92h84l28 100H50z" fill="#2f5a48"/>
+  <rect x="70" y="190" width="26" height="86" rx="10" fill="#2f5a48"/>
+  <rect x="144" y="190" width="26" height="86" rx="10" fill="#2f5a48"/>
+  <rect x="52" y="102" width="22" height="70" rx="10" fill="#2f5a48"/>
+  <rect x="166" y="102" width="22" height="70" rx="10" fill="#2f5a48"/>
+  <text x="120" y="300" text-anchor="middle" fill="#143028" font-size="16" font-family="sans-serif">OÖ</text>
+</svg>
