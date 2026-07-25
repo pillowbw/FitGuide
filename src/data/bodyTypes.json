@@ -2,49 +2,70 @@
   {
     "id": "slim",
     "label": "偏瘦",
-    "description": "体脂较低，肌肉量一般",
+    "description": "整体较瘦，希望逐步增加肌肉量",
     "image": "/body/current-slim.svg",
     "kind": "current"
   },
   {
     "id": "average",
     "label": "匀称",
-    "description": "身材中等，无明显短板",
+    "description": "整体比例较均衡，希望进一步塑形",
     "image": "/body/current-average.svg",
     "kind": "current"
   },
   {
     "id": "heavy",
-    "label": "偏胖",
-    "description": "体脂偏高，优先减脂与复合动作",
+    "label": "偏重",
+    "description": "体重相对较高，希望改善体能与身体线条",
     "image": "/body/current-heavy.svg",
     "kind": "current"
   },
   {
     "id": "athletic",
-    "label": "运动型",
-    "description": "肩宽臂厚，整体线条清晰",
+    "label": "匀称运动型",
+    "description": "全身肌肉发展较均衡，整体线条清晰",
     "image": "/body/target-athletic.svg",
     "kind": "target",
-    "recommendedMuscleIds": ["chest", "shoulders", "lats", "biceps", "triceps"],
-    "recommendedRegions": ["upper"]
+    "recommendedMuscleIds": [
+      "chest",
+      "shoulders",
+      "lats",
+      "biceps",
+      "triceps",
+      "abs",
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "recommendedRegions": ["upper", "core", "lower"]
   },
   {
     "id": "v_taper",
-    "label": "倒三角",
-    "description": "宽肩窄腰，背部与肩部突出",
+    "label": "倒三角型",
+    "description": "重点发展肩部和背部，塑造宽肩窄腰的视觉效果",
     "image": "/body/target-v-taper.svg",
     "kind": "target",
-    "recommendedMuscleIds": ["shoulders", "lats", "chest", "abs"],
+    "recommendedMuscleIds": [
+      "shoulders",
+      "lats",
+      "chest",
+      "abs"
+    ],
     "recommendedRegions": ["upper", "core"]
   },
   {
     "id": "lower_strong",
-    "label": "下肢有力",
-    "description": "臀腿发达，下肢线条明显",
+    "label": "下肢力量型",
+    "description": "重点发展臀腿力量，改善下肢线条与稳定性",
     "image": "/body/target-lower.svg",
     "kind": "target",
-    "recommendedMuscleIds": ["quads", "hamstrings", "glutes", "calves"],
+    "recommendedMuscleIds": [
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
     "recommendedRegions": ["lower"]
   }
 ]
