@@ -16,6 +16,9 @@ const PROFILE_FIELDS = [
   'targetBodyTypeId',
   'selectedMuscleIds',
   'blockedWeekdays',
+  'dislikedExerciseIds',
+  'injuries',
+  'postures',
 ]
 
 /**
@@ -26,7 +29,13 @@ export function pickProfileForCoach(profile = getProfile()) {
   const picked = {}
 
   for (const key of PROFILE_FIELDS) {
-    if (key === 'selectedMuscleIds' || key === 'blockedWeekdays') {
+    if (
+      key === 'selectedMuscleIds' ||
+      key === 'blockedWeekdays' ||
+      key === 'dislikedExerciseIds' ||
+      key === 'injuries' ||
+      key === 'postures'
+    ) {
       picked[key] = Array.isArray(profile[key]) ? profile[key] : []
       continue
     }

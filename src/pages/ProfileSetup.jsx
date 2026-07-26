@@ -3,6 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import bodyTypes from '../data/bodyTypes.json'
 import BodyTypePicker from '../components/BodyTypePicker'
 import { usePageReveal } from '../hooks/usePageReveal'
+import {
+  getInjuryOptions,
+  normalizeInjuryIds,
+} from '../utils/injurySafety'
+import {
+  getPostureOptions,
+  normalizePostureIds,
+} from '../utils/postureSafety'
 import { getPlan, getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 A：用户身材建档 */
@@ -10,6 +18,8 @@ export default function ProfileSetup() {
   const navigate = useNavigate()
   const pageRef = usePageReveal()
   const [existing] = useState(getProfile)
+  const injuryOptions = useMemo(() => getInjuryOptions(), [])
+  const postureOptions = useMemo(() => getPostureOptions(), [])
 
   const currentTypes = useMemo(
     () => bodyTypes.filter((type) => type.kind === 'current'),
@@ -25,6 +35,8 @@ export default function ProfileSetup() {
     hip: existing.hip ?? '',
     bodyFat: existing.bodyFat ?? '',
     currentBodyTypeId: existing.currentBodyTypeId || '',
+    injuries: normalizeInjuryIds(existing.injuries),
+    postures: normalizePostureIds(existing.postures),
   })
 
   const [errors, setErrors] = useState({})
@@ -41,6 +53,32 @@ export default function ProfileSetup() {
       [field]: '',
     }))
 
+    setStatus('')
+  }
+
+  function toggleInjury(injuryId) {
+    setForm((previous) => {
+      const selected = new Set(previous.injuries || [])
+      if (selected.has(injuryId)) selected.delete(injuryId)
+      else selected.add(injuryId)
+      return {
+        ...previous,
+        injuries: normalizeInjuryIds([...selected]),
+      }
+    })
+    setStatus('')
+  }
+
+  function togglePosture(postureId) {
+    setForm((previous) => {
+      const selected = new Set(previous.postures || [])
+      if (selected.has(postureId)) selected.delete(postureId)
+      else selected.add(postureId)
+      return {
+        ...previous,
+        postures: normalizePostureIds([...selected]),
+      }
+    })
     setStatus('')
   }
 
@@ -120,6 +158,8 @@ export default function ProfileSetup() {
       hip: numberOrNull(form.hip),
       bodyFat: numberOrNull(form.bodyFat),
       currentBodyTypeId: form.currentBodyTypeId,
+      injuries: normalizeInjuryIds(form.injuries),
+      postures: normalizePostureIds(form.postures),
       path,
     })
 
@@ -148,7 +188,7 @@ export default function ProfileSetup() {
         <p className="eyebrow">第 1 步 · 建立个人档案</p>
         <h1>完善基础信息</h1>
         <p className="lede">
-          性别、身高、体重和当前身材为必填项；三围和体脂率可以稍后补充。
+          性别、身高、体重和当前身材为必填项；三围、体脂、不适部位和体态问题可以稍后补充。不适部位相关动作会减重减次；体态问题会在计划中穿插矫正动作并标注「改善体态」。
         </p>
       </div>
 
@@ -307,6 +347,80 @@ export default function ProfileSetup() {
 
           {errors.currentBodyTypeId && (
             <p className="field-error">{errors.currentBodyTypeId}</p>
+          )}
+        </div>
+
+        <div className="profile-body-section">
+          <div>
+            <h2>不适部位（可选）</h2>
+            <p className="muted">
+              可多选。仍可继续训练：相关动作会减重减次，并尽量换成更友好的模式；轻微弹响或紧绷常见，尖锐痛、肿胀或不稳时再就医。
+            </p>
+          </div>
+
+          <div className="chip-row" role="group" aria-label="伤病部位">
+            {injuryOptions.map((option) => {
+              const selected = form.injuries.includes(option.id)
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={selected ? 'chip is-selected' : 'chip'}
+                  aria-pressed={selected}
+                  title={option.hint}
+                  onClick={() => toggleInjury(option.id)}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {form.injuries.length > 0 && (
+            <ul className="injury-hint-list">
+              {injuryOptions
+                .filter((option) => form.injuries.includes(option.id))
+                .map((option) => (
+                  <li key={option.id}>{option.hint}</li>
+                ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="profile-body-section">
+          <div>
+            <h2>体态问题（可选）</h2>
+            <p className="muted">
+              可多选。生成计划时会穿插对应的矫正动作（如面拉、臀桥、鸟狗），并明确标注「改善体态」。有明显疼痛时请先就医，这里不替代医疗诊断。
+            </p>
+          </div>
+
+          <div className="chip-row" role="group" aria-label="体态问题">
+            {postureOptions.map((option) => {
+              const selected = form.postures.includes(option.id)
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={selected ? 'chip is-selected' : 'chip'}
+                  aria-pressed={selected}
+                  title={option.hint}
+                  onClick={() => togglePosture(option.id)}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {form.postures.length > 0 && (
+            <ul className="injury-hint-list">
+              {postureOptions
+                .filter((option) => form.postures.includes(option.id))
+                .map((option) => (
+                  <li key={option.id}>{option.hint}</li>
+                ))}
+            </ul>
           )}
         </div>
 

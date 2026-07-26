@@ -9,6 +9,18 @@ import { getThumb } from '../utils/videoMap'
 
 const EQUIPMENT_ORDER = ['哑铃', '杠铃', '器械', '自重', '壶铃', '弹力带', 'TRX', '其他']
 
+/** 难度从易到难：入门 → 进阶 */
+const LEVEL_ORDER = { beginner: 0, intermediate: 1, advanced: 2 }
+
+function sortByDifficulty(list) {
+  return [...list].sort((a, b) => {
+    const diff =
+      (LEVEL_ORDER[a.level] ?? 99) - (LEVEL_ORDER[b.level] ?? 99)
+    if (diff !== 0) return diff
+    return a.name.localeCompare(b.name, 'zh')
+  })
+}
+
 /** 成员 B：进阶 — 正反肌肉解剖图 + 动作选择（按器材分组） */
 export default function AnatomyExplorer() {
   const navigate = useNavigate()
@@ -53,12 +65,18 @@ export default function AnatomyExplorer() {
     const ordered = []
     for (const eq of EQUIPMENT_ORDER) {
       if (groups[eq]) {
-        ordered.push({ equipment: eq, exercises: groups[eq] })
+        ordered.push({
+          equipment: eq,
+          exercises: sortByDifficulty(groups[eq]),
+        })
         delete groups[eq]
       }
     }
     for (const eq of Object.keys(groups).sort()) {
-      ordered.push({ equipment: eq, exercises: groups[eq] })
+      ordered.push({
+        equipment: eq,
+        exercises: sortByDifficulty(groups[eq]),
+      })
     }
     return ordered
   }, [selectedMuscleIds])

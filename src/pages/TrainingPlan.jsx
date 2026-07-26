@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FitnessCoach from '../components/FitnessCoach'
+import PlanDetailModal from '../components/PlanDetailModal'
 import WeeklyPlanOverview from '../components/WeeklyPlanOverview'
 import ExerciseCompletionModal from '../components/ExerciseCompletionModal'
 import { describeDayBurn, describeWeekBurn } from '../utils/calorieEstimate'
@@ -28,9 +29,25 @@ import {
   getExerciseEncouragement,
   shouldShowExerciseReward,
 } from '../utils/exerciseCompletion'
+import { injuryLabelsText } from '../utils/injurySafety'
+import { postureLabelsText } from '../utils/postureSafety'
 import { youtubeThumbFromUrl } from '../utils/videoMap'
-import { getDayAnchorId, getExerciseAnchorId } from '../utils/planOverview'
+import {
+  WEEK_DAYS,
+  buildWeekTimeline,
+  getDayAnchorId,
+  getExerciseAnchorId,
+} from '../utils/planOverview'
+import planRules from '../data/planRules.json'
 import './TrainingPlan.css'
+
+function stretchVideoUrl(item) {
+  return (
+    item?.videoUrl ||
+    planRules.postWorkoutStretches?.[item?.muscleId]?.videoUrl ||
+    ''
+  )
+}
 
 const PATH_LABEL = {
   beginner: '新手推荐',
@@ -88,6 +105,44 @@ function resolveExerciseThumb(ex) {
   return ex.videoThumb || youtubeThumbFromUrl(ex.videoUrl)
 }
 
+function ExerciseCareBadges({ exercise }) {
+  if (
+    !exercise?.lightLoad &&
+    !exercise?.injuryRelated &&
+    !exercise?.postureRelated
+  ) {
+    return null
+  }
+  return (
+    <div className="plan-ex-care">
+      {exercise.postureRelated && (
+        <span className="plan-ex-posture-cue">
+          {exercise.loadCue || '改善体态'}
+        </span>
+      )}
+      {exercise.lightLoad && !exercise.postureRelated && (
+        <span className="plan-ex-load-cue">
+          {exercise.loadCue || '减重减次'}
+        </span>
+      )}
+      {(exercise.careBadge ||
+        exercise.injuryRelated ||
+        exercise.postureRelated) && (
+        <span
+          className={
+            exercise.postureRelated
+              ? 'plan-ex-care-badge plan-ex-posture-badge'
+              : 'plan-ex-care-badge'
+          }
+        >
+          {exercise.careBadge ||
+            (exercise.postureRelated ? '改善体态' : '相关部位 · 减量')}
+        </span>
+      )}
+    </div>
+  )
+}
+
 function groupCompletedByDay(completed) {
   const map = new Map()
   for (const item of completed || []) {
@@ -95,7 +150,24 @@ function groupCompletedByDay(completed) {
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(item)
   }
+
   return [...map.entries()]
+    .map(([dayName, items]) => [
+      dayName,
+      [...items].sort(
+        (a, b) =>
+          new Date(a.completedAt || 0).getTime() -
+          new Date(b.completedAt || 0).getTime(),
+      ),
+    ])
+    .sort((a, b) => {
+      const ai = WEEK_DAYS.indexOf(a[0])
+      const bi = WEEK_DAYS.indexOf(b[0])
+      if (ai >= 0 && bi >= 0) return ai - bi
+      if (ai >= 0) return -1
+      if (bi >= 0) return 1
+      return String(a[0]).localeCompare(String(b[0]), 'zh-CN')
+    })
 }
 
 /** 成员 C：个性化训练计划 */
@@ -106,12 +178,13 @@ export default function TrainingPlan() {
   const [justGenerated, setJustGenerated] = useState(false)
   const [weekLog, setWeekLog] = useState(null)
   const [pastWeeks, setPastWeeks] = useState(() => getPastWeekLogs(6))
-  const [historyOpen, setHistoryOpen] = useState(true)
+  const [historyOpen, setHistoryOpen] = useState(false)
   const [syncedFromProfile, setSyncedFromProfile] = useState(false)
   const [exerciseRewardOpen, setExerciseRewardOpen] = useState(false)
   const [exerciseRewardMessage, setExerciseRewardMessage] = useState('')
   const [exerciseRewardName, setExerciseRewardName] = useState('')
   const [exerciseRewardKey, setExerciseRewardKey] = useState('')
+  const [detailOpen, setDetailOpen] = useState(false)
 
   function applyPlanState(nextPlan, nextProfile, { toast } = {}) {
     if (nextProfile) setProfile(nextProfile)
@@ -160,6 +233,18 @@ export default function TrainingPlan() {
     [plan, profile.weight],
   )
   const displayNote = plan ? planNoteWithoutScience(plan) : ''
+  const injurySummaryLabel = useMemo(
+    () =>
+      plan?.injuryCare?.labels ||
+      injuryLabelsText(plan?.injuries || profile.injuries),
+    [plan, profile.injuries],
+  )
+  const postureSummaryLabel = useMemo(
+    () =>
+      plan?.postureCare?.labels ||
+      postureLabelsText(plan?.postures || profile.postures),
+    [plan, profile.postures],
+  )
 
   const totalExercises = useMemo(
     () =>
@@ -168,6 +253,7 @@ export default function TrainingPlan() {
     [plan],
   )
   const doneCount = weekLog?.completed?.length || 0
+  const weekTimeline = useMemo(() => buildWeekTimeline(plan), [plan])
 
   function handleCloseExerciseReward() {
     if (plan && exerciseRewardKey) {
@@ -227,9 +313,7 @@ export default function TrainingPlan() {
       <header className="plan-hero">
         <p className="eyebrow">Training Plan</p>
         <h1>个性化训练计划</h1>
-        <p className="lede">
-          勾选做过的动作会记在本机；下方可回看前几周练过什么。
-        </p>
+        <p className="lede">看课表、勾完成，细节点「详情」。</p>
       </header>
 
       <aside className="plan-summary" aria-label="当前档案摘要">
@@ -255,6 +339,18 @@ export default function TrainingPlan() {
           <span className="plan-summary-label">本周进度</span>
           <strong>
             {plan ? `${doneCount}/${totalExercises}` : '—'}
+          </strong>
+        </div>
+        <div>
+          <span className="plan-summary-label">不适部位</span>
+          <strong>
+            {injurySummaryLabel ? `${injurySummaryLabel} · 减量安排` : '无'}
+          </strong>
+        </div>
+        <div>
+          <span className="plan-summary-label">体态问题</span>
+          <strong>
+            {postureSummaryLabel ? `${postureSummaryLabel} · 矫正穿插` : '无'}
           </strong>
         </div>
       </aside>
@@ -298,73 +394,49 @@ export default function TrainingPlan() {
       {plan ? (
         <div className="plan-board">
           <header className="plan-board-header">
-            <div>
-              <h2>{plan.weekLabel}</h2>
-              {plan.scienceNote && (
-                <p className="plan-science">{plan.scienceNote}</p>
+            <div className="plan-board-title-block">
+              <h2>
+                {plan.path === 'advanced' ? '进阶分化' : '入门轮换'}
+                {plan.bodyLoad?.goalLabel
+                  ? ` · ${plan.bodyLoad.goalLabel}`
+                  : ''}
+              </h2>
+              {plan.generatedAt && (
+                <time className="plan-time" dateTime={plan.generatedAt}>
+                  {formatGeneratedAt(plan.generatedAt)}
+                </time>
               )}
-              {displayNote && <p className="plan-note">{displayNote}</p>}
             </div>
-            {plan.generatedAt && (
-              <time className="plan-time" dateTime={plan.generatedAt}>
-                {formatGeneratedAt(plan.generatedAt)}
-              </time>
-            )}
+            <ul className="plan-keyword-chips" aria-label="本周关键词">
+              {plan.targetBodyTypeLabel && (
+                <li>{plan.targetBodyTypeLabel}</li>
+              )}
+              {plan.days?.length > 0 && (
+                <li>
+                  {plan.days.length} 练 · {totalExercises} 动作
+                </li>
+              )}
+              {injurySummaryLabel && <li>减量 · {injurySummaryLabel}</li>}
+              {postureSummaryLabel && <li>体态 · {postureSummaryLabel}</li>}
+              {plan.bodyLoad?.bmi != null && <li>BMI {plan.bodyLoad.bmi}</li>}
+              {plan.bodyLoad?.exercisesPerDay != null && (
+                <li>每天约 {plan.bodyLoad.exercisesPerDay} 动作</li>
+              )}
+              {weekBurn?.kcal > 0 && <li>约 {weekBurn.kcal} 千卡</li>}
+              {weekBurn?.foodLine && (
+                <li className="plan-keyword-chip-soft">≈ {weekBurn.foodLine}</li>
+              )}
+            </ul>
+            <button
+              type="button"
+              className="btn btn-ghost plan-detail-trigger"
+              onClick={() => setDetailOpen(true)}
+            >
+              查看详情
+            </button>
           </header>
 
           <WeeklyPlanOverview plan={plan} />
-
-          {plan.bodyLoad && (
-            <aside className="plan-body-load" aria-label="根据身体档案的运动量建议">
-              <div className="plan-body-load-top">
-                <span className="plan-burn-label">根据你的身体档案</span>
-                <strong className="plan-body-load-goal">
-                  {plan.bodyLoad.goalLabel}
-                </strong>
-              </div>
-              <p className="plan-body-load-summary">{plan.bodyLoad.summary}</p>
-              <ul className="plan-body-load-meta">
-                {plan.bodyLoad.bmi != null && (
-                  <li>BMI {plan.bodyLoad.bmi}</li>
-                )}
-                {plan.bodyLoad.bodyFat != null && (
-                  <li>体脂 {plan.bodyLoad.bodyFat}%</li>
-                )}
-                {plan.bodyLoad.exercisesPerDay != null && (
-                  <li>建议每天约 {plan.bodyLoad.exercisesPerDay} 个动作</li>
-                )}
-              </ul>
-              {plan.bodyLoad.tips?.length > 0 && (
-                <ul className="plan-body-load-tips">
-                  {plan.bodyLoad.tips.map((tip) => (
-                    <li key={tip}>{tip}</li>
-                  ))}
-                </ul>
-              )}
-            </aside>
-          )}
-
-          {weekBurn && weekBurn.kcal > 0 && (
-            <aside className="plan-burn-week" aria-label="本周热量对照">
-              <div className="plan-burn-week-main">
-                <span className="plan-burn-label">练完本周约消耗</span>
-                <strong className="plan-burn-kcal">{weekBurn.kcal} 千卡</strong>
-              </div>
-              {weekBurn.foodLine && (
-                <p className="plan-burn-food">
-                  大约相当于 <span>{weekBurn.foodLine}</span>
-                  <span className="plan-burn-or-note">（任选一种对照）</span>
-                </p>
-              )}
-              <p className="plan-burn-hint">
-                按动作类型与组数估算
-                {weekBurn.usedDefaultWeight
-                  ? '（未填体重时按 65 kg）'
-                  : `（按你的 ${profile.weight} kg）`}
-                ，强度不同会有偏差，用来建立体感就好。
-              </p>
-            </aside>
-          )}
 
           <div className="plan-progress" aria-label="本周完成进度">
             <div className="plan-progress-meta">
@@ -389,7 +461,34 @@ export default function TrainingPlan() {
           </div>
 
           <div className="plan-days">
-            {plan.days.map((day) => {
+            {weekTimeline.map((row) => {
+              if (row.isRest || !row.day) {
+                return (
+                  <article
+                    key={`rest-${row.weekday}`}
+                    className={[
+                      'plan-day',
+                      'plan-day-rest',
+                      row.isToday ? 'is-today' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    <header className="plan-day-header">
+                      <h3>
+                        <span className="plan-day-badge">{row.weekday}</span>
+                        恢复
+                        {row.isToday && (
+                          <span className="plan-day-today">今天</span>
+                        )}
+                      </h3>
+                    </header>
+                    <p className="plan-day-rest-hint">睡眠 · 步行 · 拉伸</p>
+                  </article>
+                )
+              }
+
+              const day = row.day
               const dayBurn = describeDayBurn(day, profile.weight)
               const dayDone = (day.exercises || []).filter((ex) =>
                 isExerciseCompleted(weekLog, day.dayIndex, ex.id),
@@ -398,12 +497,20 @@ export default function TrainingPlan() {
                 <article
                   key={`${day.day}-${day.sessionCode || day.focus}`}
                   id={getDayAnchorId(day.dayIndex)}
-                  className="plan-day"
+                  className={[
+                    'plan-day',
+                    row.isToday ? 'is-today' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
                 >
                   <header className="plan-day-header">
                     <h3>
                       <span className="plan-day-badge">{day.day}</span>
                       {day.sessionTitle || `重点：${day.focus}`}
+                      {row.isToday && (
+                        <span className="plan-day-today">今天</span>
+                      )}
                     </h3>
                     <p className="plan-day-muscles">
                       {day.sessionCode && (
@@ -472,8 +579,26 @@ export default function TrainingPlan() {
                                     </span>
                                   )}
                                 </div>
-                                {ex.advice && (
-                                  <p className="plan-ex-advice">{ex.advice}</p>
+                                <ExerciseCareBadges exercise={ex} />
+                                {(ex.advice || ex.injuryTip || ex.postureTip) && (
+                                  <details className="plan-ex-more">
+                                    <summary>要点</summary>
+                                    {ex.postureTip && (
+                                      <p className="plan-ex-posture-tip">
+                                        {ex.postureTip}
+                                      </p>
+                                    )}
+                                    {ex.injuryTip && (
+                                      <p className="plan-ex-injury-tip">
+                                        {ex.injuryTip}
+                                      </p>
+                                    )}
+                                    {ex.advice && (
+                                      <p className="plan-ex-advice">
+                                        {ex.advice}
+                                      </p>
+                                    )}
+                                  </details>
                                 )}
                                 <div className="plan-ex-links">
                                   {ex.primaryMuscleId && (
@@ -508,8 +633,24 @@ export default function TrainingPlan() {
                                   </span>
                                 )}
                               </div>
-                              {ex.advice && (
-                                <p className="plan-ex-advice">{ex.advice}</p>
+                              <ExerciseCareBadges exercise={ex} />
+                              {(ex.advice || ex.injuryTip || ex.postureTip) && (
+                                <details className="plan-ex-more">
+                                  <summary>要点</summary>
+                                  {ex.postureTip && (
+                                    <p className="plan-ex-posture-tip">
+                                      {ex.postureTip}
+                                    </p>
+                                  )}
+                                  {ex.injuryTip && (
+                                    <p className="plan-ex-injury-tip">
+                                      {ex.injuryTip}
+                                    </p>
+                                  )}
+                                  {ex.advice && (
+                                    <p className="plan-ex-advice">{ex.advice}</p>
+                                  )}
+                                </details>
                               )}
                               <div className="plan-ex-links">
                                 {ex.primaryMuscleId && (
@@ -531,6 +672,53 @@ export default function TrainingPlan() {
                       )
                     })}
                   </ul>
+
+                  {day.stretches?.length > 0 && (
+                    <section
+                      className="plan-day-stretch"
+                      aria-label={`${day.day}练后拉伸`}
+                    >
+                      <header className="plan-day-stretch-header">
+                        <h4>练后拉伸</h4>
+                        <span>各约 30 秒</span>
+                      </header>
+                      <ul className="plan-day-stretch-chips">
+                        {day.stretches.map((item) => (
+                          <li key={`${day.dayIndex}-${item.muscleId}`}>
+                            {item.muscleName || item.position}
+                          </li>
+                        ))}
+                      </ul>
+                      <details className="plan-day-stretch-details">
+                        <summary>拉伸做法</summary>
+                        <ul className="plan-day-stretch-list">
+                          {day.stretches.map((item) => {
+                            const demoUrl = stretchVideoUrl(item)
+                            return (
+                              <li key={`${day.dayIndex}-${item.muscleId}-cue`}>
+                                <div className="plan-day-stretch-top">
+                                  <strong>{item.position}</strong>
+                                  <span className="plan-day-stretch-hold">
+                                    {item.holdSeconds || 30} 秒
+                                  </span>
+                                </div>
+                                <p>{item.cue}</p>
+                                {demoUrl && (
+                                  <a
+                                    href={demoUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    看演示
+                                  </a>
+                                )}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </details>
+                    </section>
+                  )}
 
                   {dayBurn.kcal > 0 && (
                     <footer className="plan-burn-day">
@@ -554,14 +742,90 @@ export default function TrainingPlan() {
             })}
           </div>
 
-          <aside className="plan-rest">
-            <h3>休息日建议</h3>
-            <ul>
-              {plan.restDayHints.map((hint) => (
-                <li key={hint}>{hint}</li>
-              ))}
-            </ul>
-          </aside>
+          <PlanDetailModal
+            open={detailOpen}
+            title="计划详情"
+            onClose={() => setDetailOpen(false)}
+          >
+            {(plan.scienceNote || displayNote) && (
+              <section className="plan-detail-section">
+                <h4>计划说明</h4>
+                {plan.scienceNote && <p>{plan.scienceNote}</p>}
+                {displayNote && <p>{displayNote}</p>}
+              </section>
+            )}
+            {(plan.injuryCare || plan.injuries?.length > 0) && (
+              <section className="plan-detail-section">
+                <h4>不适部位 · {injurySummaryLabel || '减量安排'}</h4>
+                <p>
+                  {plan.injuryCare?.summary ||
+                    '相关动作会减重减次；尖锐痛、无力或不稳时停训。'}
+                </p>
+                <ul>
+                  {(plan.injuryCare?.warnings?.length
+                    ? plan.injuryCare.warnings
+                    : plan.injuryCare?.notes || []
+                  ).map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            {(plan.postureCare || plan.postures?.length > 0) && (
+              <section className="plan-detail-section">
+                <h4>体态问题 · {postureSummaryLabel || '矫正穿插'}</h4>
+                <p>
+                  {plan.postureCare?.summary ||
+                    '训练中会穿插矫正动作并标注「改善体态」。'}
+                </p>
+                <ul>
+                  {(plan.postureCare?.hints?.length
+                    ? plan.postureCare.hints
+                    : plan.postureCare?.notes || []
+                  ).map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            {plan.bodyLoad && (
+              <section className="plan-detail-section">
+                <h4>身体档案 · {plan.bodyLoad.goalLabel}</h4>
+                {plan.bodyLoad.summary && <p>{plan.bodyLoad.summary}</p>}
+                {plan.bodyLoad.tips?.length > 0 && (
+                  <ul>
+                    {plan.bodyLoad.tips.map((tip) => (
+                      <li key={tip}>{tip}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+            {weekBurn?.kcal > 0 && (
+              <section className="plan-detail-section">
+                <h4>热量对照</h4>
+                <p>
+                  本周约 {weekBurn.kcal} 千卡
+                  {weekBurn.foodLine ? `，大约相当于 ${weekBurn.foodLine}` : ''}
+                  。按动作类型与组数估算
+                  {weekBurn.usedDefaultWeight
+                    ? '（未填体重时按 65 kg）'
+                    : `（按你的 ${profile.weight} kg）`}
+                  ，仅作体感参考。
+                </p>
+              </section>
+            )}
+            {plan.restDayHints?.length > 0 && (
+              <section className="plan-detail-section">
+                <h4>休息日建议</h4>
+                <ul>
+                  {plan.restDayHints.map((hint) => (
+                    <li key={hint}>{hint}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </PlanDetailModal>
         </div>
       ) : (
         <div className="plan-empty">
@@ -575,9 +839,6 @@ export default function TrainingPlan() {
         <header className="plan-history-header">
           <div>
             <h2>训练记录</h2>
-            <p className="muted">
-              保存你勾选过的动作，可查看前几周练了什么（存在本机浏览器）。
-            </p>
           </div>
           <button
             type="button"
@@ -591,9 +852,7 @@ export default function TrainingPlan() {
         {historyOpen && (
           <>
             {!weekLog?.completed?.length && pastWeeks.length === 0 ? (
-              <p className="plan-history-empty">
-                还没有记录。在上方课表勾选「标记完成」后，本周与往期都会出现在这里。
-              </p>
+              <p className="plan-history-empty">勾选完成后会出现在这里。</p>
             ) : (
               <div className="plan-history-list">
                 {weekLog?.completed?.length > 0 && (

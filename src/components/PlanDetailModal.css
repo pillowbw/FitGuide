@@ -1,0 +1,132 @@
+.plan-detail-modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: end center;
+  padding: 0;
+}
+
+.plan-detail-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: rgba(18, 28, 24, 0.42);
+  cursor: pointer;
+}
+
+.plan-detail-modal {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 34rem);
+  max-height: min(82vh, 40rem);
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  border-radius: 18px 18px 0 0;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  background: var(--surface);
+  box-shadow: 0 -16px 40px rgba(20, 48, 40, 0.16);
+  animation: plan-modal-up 0.22s ease both;
+}
+
+.plan-detail-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.plan-detail-modal-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.plan-detail-modal-close {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-accent) 50%, var(--surface));
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.plan-detail-modal-close:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.plan-detail-modal-body {
+  overflow: auto;
+  padding: 1rem 1.1rem 1.35rem;
+  display: grid;
+  gap: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.plan-detail-section h4 {
+  margin: 0 0 0.4rem;
+  font-size: 0.92rem;
+}
+
+.plan-detail-section p,
+.plan-detail-section li {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.plan-detail-section ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.plan-detail-section + .plan-detail-section {
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+}
+
+@keyframes plan-modal-up {
+  from {
+    transform: translateY(18px);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 720px) {
+  .plan-detail-modal-root {
+    place-items: center;
+    padding: 1.5rem;
+  }
+
+  .plan-detail-modal {
+    border-radius: 16px;
+    border-bottom: 1px solid var(--line);
+    max-height: min(78vh, 36rem);
+    animation-name: plan-modal-fade;
+  }
+
+  @keyframes plan-modal-fade {
+    from {
+      transform: translateY(8px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}

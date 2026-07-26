@@ -19,6 +19,9 @@ const MAX_WEEK_LOGS = 8
  * @property {string[]} selectedMuscleIds
  * @property {string[]} selectedExerciseIds
  * @property {string[]} [blockedWeekdays] 不可安排训练的星期（如「周一」）
+ * @property {string[]} [dislikedExerciseIds] 不喜欢 / 不要再安排的动作 id
+ * @property {string[]} [injuries] 伤病部位 id（见 injuryRules.json）
+ * @property {string[]} [postures] 体态问题 id（见 postureRules.json）
  */
 
 /** @returns {UserProfile} */
@@ -38,6 +41,9 @@ export function createEmptyProfile() {
     selectedMuscleIds: [],
     selectedExerciseIds: [],
     blockedWeekdays: [],
+    dislikedExerciseIds: [],
+    injuries: [],
+    postures: [],
   }
 }
 
@@ -280,11 +286,19 @@ export function isExerciseCompleted(weekLog, dayIndex, exerciseId) {
   return weekLog.completed.some((item) => item.key === key)
 }
 
-/** 历史周（不含当前），按时间倒序 */
+/** 历史周（不含当前），按开始时间倒序（最近在前） */
 export function getPastWeekLogs(limit = 6) {
   const { weeks } = getWorkoutHistory()
   return weeks
-    .filter((w) => !w.isCurrent && (w.completed?.length > 0 || w.daySummaries?.length))
+    .filter(
+      (w) =>
+        !w.isCurrent && (w.completed?.length > 0 || w.daySummaries?.length),
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.startedAt || b.closedAt || 0).getTime() -
+        new Date(a.startedAt || a.closedAt || 0).getTime(),
+    )
     .slice(0, limit)
 }
 

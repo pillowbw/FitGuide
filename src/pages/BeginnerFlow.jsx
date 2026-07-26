@@ -5,6 +5,14 @@ import muscles from '../data/muscles.json'
 import BodyTypePicker from '../components/BodyTypePicker'
 import MuscleMap from '../components/MuscleMap'
 import { usePageReveal } from '../hooks/usePageReveal'
+import {
+  getRegionInjuryWarnings,
+  injuryLabelsText,
+} from '../utils/injurySafety'
+import {
+  getRegionPostureHints,
+  postureLabelsText,
+} from '../utils/postureSafety'
 import { getProfile, saveProfile } from '../utils/storage'
 
 const REGIONS = [
@@ -129,6 +137,26 @@ export default function BeginnerFlow() {
     [recommended],
   )
 
+  const injuryWarnings = useMemo(
+    () => getRegionInjuryWarnings(existing.injuries, goalRegion),
+    [existing.injuries, goalRegion],
+  )
+
+  const injuryLabelText = useMemo(
+    () => injuryLabelsText(existing.injuries),
+    [existing.injuries],
+  )
+
+  const postureHints = useMemo(
+    () => getRegionPostureHints(existing.postures, goalRegion),
+    [existing.postures, goalRegion],
+  )
+
+  const postureLabelText = useMemo(
+    () => postureLabelsText(existing.postures),
+    [existing.postures],
+  )
+
   function saveCurrentSelection() {
     if (!targetBodyTypeId || recommended.length === 0) {
       return
@@ -181,21 +209,90 @@ export default function BeginnerFlow() {
         <div className="region-grid">
           {REGIONS.map((region) => {
             const selected = goalRegion === region.id
+            const risk = getRegionInjuryWarnings(
+              existing.injuries,
+              region.id,
+            ).length
+            const posture = getRegionPostureHints(
+              existing.postures,
+              region.id,
+            ).length
 
             return (
               <button
                 key={region.id}
                 type="button"
-                className={`region-card${selected ? ' is-selected' : ''}`}
+                className={`region-card${selected ? ' is-selected' : ''}${risk ? ' has-injury-risk' : ''}${posture ? ' has-posture-hint' : ''}`}
                 aria-pressed={selected}
                 onClick={() => selectRegion(region.id)}
               >
                 <strong>{region.label}</strong>
                 <span>{region.description}</span>
+                {risk > 0 && (
+                  <em className="region-injury-tag">可练 · 减量</em>
+                )}
+                {posture > 0 && (
+                  <em className="region-posture-tag">含体态矫正</em>
+                )}
               </button>
             )
           })}
         </div>
+
+        {injuryWarnings.length > 0 && (
+          <aside className="injury-callout" role="status">
+            <strong>
+              训练怎么安排
+              {injuryLabelText ? `（${injuryLabelText}）` : ''}
+            </strong>
+            {injuryWarnings.map((item) => (
+              <div key={item.id} className="injury-callout-block">
+                <p>{item.warning}</p>
+                {item.expectedSensation && (
+                  <p className="injury-callout-expected">
+                    常见感受：{item.expectedSensation}
+                  </p>
+                )}
+                {item.loadGuidance && (
+                  <p className="injury-callout-focus">{item.loadGuidance}</p>
+                )}
+              </div>
+            ))}
+            <p className="injury-callout-focus">
+              生成计划时会在相关动作上自动减重减次
+              {injuryWarnings[0]?.safeFocus
+                ? ` · ${injuryWarnings[0].safeFocus}`
+                : ''}
+              。
+            </p>
+            <Link className="injury-callout-link" to="/profile">
+              修改不适部位
+            </Link>
+          </aside>
+        )}
+
+        {postureHints.length > 0 && (
+          <aside className="injury-callout posture-callout" role="status">
+            <strong>
+              体态矫正怎么穿插
+              {postureLabelText ? `（${postureLabelText}）` : ''}
+            </strong>
+            {postureHints.map((item) => (
+              <div key={item.id} className="injury-callout-block">
+                <p>{item.hint}</p>
+                {item.safeFocus && (
+                  <p className="injury-callout-focus">{item.safeFocus}</p>
+                )}
+              </div>
+            ))}
+            <p className="injury-callout-focus">
+              生成计划时会在训练中穿插矫正动作，并标注「改善体态」。
+            </p>
+            <Link className="injury-callout-link" to="/profile">
+              修改体态问题
+            </Link>
+          </aside>
+        )}
       </section>
 
       <section className="beginner-section" aria-labelledby="target-title">

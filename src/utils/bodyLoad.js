@@ -1,11 +1,17 @@
 /**
- * 根据身高体重、体脂、当前身材例图，评估训练负荷倾向。
+ * 根据身高体重、体脂、当前身材例图、性别，评估训练负荷倾向。
  * 用于调整组次数、每日动作量与休息日建议。
  */
+
+import planRules from '../data/planRules.json'
 
 /**
  * @typedef {'build' | 'balance' | 'cut'} LoadGoal
  * build = 增肌容量偏高；balance = 均衡；cut = 控脂 / 控制容量 + 有氧
+ */
+
+/**
+ * @typedef {'light' | 'mid' | 'heavy'} WeightBand
  */
 
 /**
@@ -18,6 +24,8 @@
  * @property {string} summary
  * @property {number} exerciseDelta  相对默认每日动作数的增减
  * @property {string} volumeKey     对应 planRules.volumeByGoal
+ * @property {WeightBand|null} weightBand
+ * @property {number|null} weightKg
  * @property {string[]} tips
  */
 
@@ -48,6 +56,38 @@ export function isHighBodyFat(profile) {
 }
 
 /**
+ * 相对性别参考体重的分档，用于微调每日动作量。
+ * @param {{ weight?: number|null, gender?: string }} profile
+ * @returns {WeightBand|null}
+ */
+export function resolveWeightBand(profile = {}) {
+  const weight = toNumber(profile.weight)
+  if (weight == null || weight <= 0) return null
+
+  const refs = planRules.weightBandRefs || {}
+  const gender = profile.gender || 'other'
+  const ref = refs[gender] ?? refs.other ?? 63
+
+  if (weight < ref * 0.88) return 'light'
+  if (weight > ref * 1.15) return 'heavy'
+  return 'mid'
+}
+
+/**
+ * 腰臀比偏高时略偏控脂（有填写腰围/臀围时）。
+ * @param {{ waist?: number|null, hip?: number|null, gender?: string }} profile
+ */
+function waistHipCutSignal(profile) {
+  const waist = toNumber(profile.waist)
+  const hip = toNumber(profile.hip)
+  if (!waist || !hip || hip <= 0) return false
+  const ratio = waist / hip
+  if (profile.gender === 'female') return ratio >= 0.85
+  if (profile.gender === 'male') return ratio >= 0.95
+  return ratio >= 0.9
+}
+
+/**
  * @param {import('./storage').UserProfile} profile
  * @returns {BodyLoadAssessment}
  */
@@ -56,6 +96,9 @@ export function assessBodyLoad(profile = {}) {
   const bodyFat = toNumber(profile.bodyFat)
   const bodyTypeId = profile.currentBodyTypeId || ''
   const highBf = isHighBodyFat(profile)
+  const weightKg = toNumber(profile.weight)
+  const weightBand = resolveWeightBand(profile)
+  const whrCut = waistHipCutSignal(profile)
 
   /** @type {LoadGoal} */
   let goal = 'balance'
@@ -70,17 +113,25 @@ export function assessBodyLoad(profile = {}) {
   if (
     bodyTypeId === 'heavy' ||
     (bmi != null && bmi >= 25) ||
-    highBf === true
+    highBf === true ||
+    whrCut
   ) {
     goal = 'cut'
     if (bodyTypeId === 'heavy') reasons.push('当前身材偏胖')
     if (bmi != null && bmi >= 25) reasons.push(`BMI ${bmi} 偏高`)
     if (highBf === true) reasons.push(`体脂 ${bodyFat}% 偏高`)
+    if (whrCut) reasons.push('腰臀比例偏高')
   }
 
   // 体型例图与 BMI 冲突时：体脂/BMI 权重大于例图「匀称」
   if (bodyTypeId === 'average' && goal === 'balance') {
     reasons.push('身材匀称，保持均衡容量')
+  }
+
+  if (weightKg != null && weightBand) {
+    const bandLabel =
+      weightBand === 'light' ? '偏轻' : weightBand === 'heavy' ? '偏重' : '中等'
+    reasons.push(`体重 ${weightKg} kg（相对同性别参考${bandLabel}）`)
   }
 
   if (!reasons.length) {
@@ -123,6 +174,31 @@ export function assessBodyLoad(profile = {}) {
     },
   }[goal]
 
+  let exerciseDelta = meta.exerciseDelta
+  if (weightBand === 'light') {
+    // 相对同性别偏轻：略减每日动作，降低恢复压力
+    exerciseDelta -= 1
+  } else if (weightBand === 'heavy' && goal !== 'cut') {
+    // 体重偏高但仍非控脂：可略增复合容量
+    exerciseDelta += 1
+  } else if (weightBand === 'heavy' && goal === 'cut') {
+    // 控脂且体重偏高：保持精简，不再额外减（已有 -1）
+    exerciseDelta -= 0
+  }
+
+  if (profile.gender === 'female' && goal === 'build') {
+    meta.tips = [
+      ...meta.tips,
+      '女性增肌同样需要渐进超负荷，不必回避复合动作',
+    ]
+  }
+  if (profile.gender === 'male' && goal === 'cut') {
+    meta.tips = [
+      ...meta.tips,
+      '男性控脂期仍保持推拉均衡，避免只练胸忽略背',
+    ]
+  }
+
   return {
     bmi,
     bodyFat,
@@ -130,8 +206,10 @@ export function assessBodyLoad(profile = {}) {
     goal,
     goalLabel: meta.goalLabel,
     summary: `${reasons.join('，')}。${meta.summary}`,
-    exerciseDelta: meta.exerciseDelta,
+    exerciseDelta,
     volumeKey: meta.volumeKey,
+    weightBand,
+    weightKg,
     tips: meta.tips,
   }
 }

@@ -1,0 +1,150 @@
+{
+  "options": [
+    {
+      "id": "kyphosis",
+      "label": "驼背",
+      "hint": "穿插面拉、弹力带开合、后束飞鸟等开胸拉背动作",
+      "affectsRegions": ["upper", "full"],
+      "regionHint": "驼背改善重点在中下斜方与后束：每次上肢课会穿插 1 个开胸拉背动作，并标为改善体态。",
+      "safeFocus": "开胸拉背优先，肩外旋控速"
+    },
+    {
+      "id": "rounded_shoulders",
+      "label": "圆肩",
+      "hint": "加强后束与肩外旋，少用耸肩借力",
+      "affectsRegions": ["upper", "full"],
+      "regionHint": "圆肩改善：计划会加入面拉、弹力带开合等，帮助肩胛后缩下沉。",
+      "safeFocus": "后束与肩胛稳定优先"
+    },
+    {
+      "id": "forward_head",
+      "label": "头前伸",
+      "hint": "推拉时颈中立，穿插上背激活",
+      "affectsRegions": ["upper", "full"],
+      "regionHint": "头前伸常与上背无力有关：训练中会穿插轻量上背动作，并提醒保持目视前方、颈中立。",
+      "safeFocus": "颈中立 + 上背激活"
+    },
+    {
+      "id": "anterior_pelvic_tilt",
+      "label": "骨盆前倾",
+      "hint": "加强臀与抗伸核心，减少过度塌腰",
+      "affectsRegions": ["core", "lower", "full"],
+      "regionHint": "骨盆前倾改善：穿插臀桥、死虫、鸟狗等，强化臀与核心抗伸，减少塌腰代偿。",
+      "safeFocus": "臀激活 + 核心抗伸"
+    },
+    {
+      "id": "disc_herniation",
+      "label": "腰间盘突出",
+      "hint": "避免弯腰大重量，穿插鸟狗、死虫、臀桥等稳定训练",
+      "affectsRegions": ["core", "lower", "upper", "full"],
+      "regionHint": "腰间盘相关：硬拉/弯腰划船先放下，改用支撑位与核心稳定动作，并标为改善体态/护腰。",
+      "safeFocus": "核心稳定优先，避免弯腰大重量"
+    }
+  ],
+  "correctiveCue": "改善体态",
+  "correctiveSetsLabel": {
+    "beginner": "2–3 组 × 10–15 次 · 控速，改善体态优先",
+    "strength": "2–3 组 × 8–12 次 · 轻中重量，质量优先",
+    "hypertrophy": "2–3 组 × 10–15 次 · 控速感受目标肌",
+    "isolation": "2–3 组 × 12–15 次 · 轻重量，体态矫正",
+    "core": "2–3 组 × 20–40 秒 / 8–12 次 · 稳定优先",
+    "carry": "2 组 × 15–20 米 · 姿态端正"
+  },
+  "constraints": {
+    "kyphosis": {
+      "correctiveExerciseIds": [
+        "face_pull",
+        "pull_apart",
+        "rear_delt_fly",
+        "chest_supported_row",
+        "seated_cable_row",
+        "inverted_row"
+      ],
+      "avoidPatterns": [],
+      "avoidExerciseIds": [],
+      "preferMuscles": ["shoulders", "traps", "lats"],
+      "careBadge": "改善体态 · 驼背",
+      "coachingTip": "驼背改善：拉向面部或肩外旋时收肩胛、下巴微收；胸部打开但不塌腰。酸胀正常，尖锐痛停。",
+      "sessionFocus": "开胸拉背 · 体态矫正",
+      "note": "已记录驼背：每周训练会穿插面拉/开合等开胸拉背动作，并标注「改善体态」。"
+    },
+    "rounded_shoulders": {
+      "correctiveExerciseIds": [
+        "face_pull",
+        "pull_apart",
+        "rear_delt_fly",
+        "inverted_row",
+        "dumbbell_row"
+      ],
+      "avoidPatterns": [],
+      "avoidExerciseIds": ["upright_row", "shrug"],
+      "preferMuscles": ["shoulders", "traps", "lats"],
+      "careBadge": "改善体态 · 圆肩",
+      "coachingTip": "圆肩改善：拉起时肩胛后缩下沉，肘略低于肩；避免耸肩借力。",
+      "sessionFocus": "后束与肩胛稳定 · 体态矫正",
+      "note": "已记录圆肩：计划会穿插后束/肩胛稳定动作，并标注「改善体态」。"
+    },
+    "forward_head": {
+      "correctiveExerciseIds": [
+        "face_pull",
+        "pull_apart",
+        "rear_delt_fly",
+        "chest_supported_row"
+      ],
+      "avoidPatterns": [],
+      "avoidExerciseIds": ["shrug", "upright_row"],
+      "preferMuscles": ["shoulders", "traps"],
+      "careBadge": "改善体态 · 头前伸",
+      "coachingTip": "头前伸改善：全程目视前方、颈保持中立，不要仰头或过度低头借力。",
+      "sessionFocus": "上背激活 · 颈中立",
+      "note": "已记录头前伸：穿插上背轻量激活，推拉时保持颈中立，并标注「改善体态」。"
+    },
+    "anterior_pelvic_tilt": {
+      "correctiveExerciseIds": [
+        "glute_bridge",
+        "hip_thrust",
+        "dead_bug",
+        "bird_dog",
+        "pallof_press",
+        "side_plank"
+      ],
+      "avoidPatterns": [],
+      "avoidExerciseIds": [],
+      "preferMuscles": ["glutes", "abs", "hamstrings"],
+      "careBadge": "改善体态 · 骨盆前倾",
+      "coachingTip": "骨盆前倾改善：臀桥顶峰轻夹臀、肋骨下压；死虫/鸟狗时腰贴地或脊柱中立，避免塌腰。",
+      "sessionFocus": "臀激活 + 核心抗伸 · 体态矫正",
+      "note": "已记录骨盆前倾：穿插臀桥与抗伸核心，并标注「改善体态」。"
+    },
+    "disc_herniation": {
+      "correctiveExerciseIds": [
+        "bird_dog",
+        "dead_bug",
+        "glute_bridge",
+        "side_plank",
+        "pallof_press",
+        "hip_thrust"
+      ],
+      "avoidPatterns": ["hinge"],
+      "avoidExerciseIds": [
+        "barbell_row",
+        "t_bar_row",
+        "good_morning",
+        "ab_wheel",
+        "russian_twist",
+        "hanging_leg_raise",
+        "hanging_knee_raise",
+        "deadlift",
+        "rdl",
+        "dumbbell_rdl",
+        "kettlebell_swing"
+      ],
+      "allowExerciseIds": ["hip_thrust", "glute_bridge", "bird_dog", "dead_bug"],
+      "preferMuscles": ["glutes", "abs"],
+      "careBadge": "改善体态 · 护腰",
+      "coachingTip": "腰间盘相关：优先鸟狗、死虫、臀桥等稳定动作；全程轻轻收腹，避免弯腰硬拉。轻微紧绷常见；尖锐痛、放射或腿麻停训就医。",
+      "sessionFocus": "核心稳定 / 臀桥 · 护腰体态",
+      "note": "已记录腰间盘突出倾向：避开弯腰大重量，穿插核心稳定与臀桥，并标注「改善体态」。"
+    }
+  }
+}

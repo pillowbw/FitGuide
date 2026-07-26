@@ -4,12 +4,12 @@
   --bg: #e8f1ec;
   --bg-accent: #d3e5db;
   --surface: #f7fbf8;
-  --ink: #143028;
-  --muted: #4d655a;
+  --ink: #0d221a;
+  --muted: #355248;
   --line: #b7cfc3;
-  --accent: #1f7a55;
-  --accent-strong: #145c3f;
-  --warn: #8a5a12;
+  --accent: #1a6b4a;
+  --accent-strong: #114a33;
+  --warn: #7a4f0f;
   --font-display: 'Syne', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --radius: 14px;
@@ -119,9 +119,15 @@ p {
 }
 
 .btn-ghost {
-  background: transparent;
-  border-color: var(--line);
-  color: var(--muted);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-color: color-mix(in srgb, var(--ink) 22%, var(--line));
+  color: var(--ink);
+  backdrop-filter: blur(8px);
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+  border-color: color-mix(in srgb, var(--ink) 32%, var(--line));
 }
 
 .form-grid {
@@ -609,26 +615,26 @@ p {
 /* Home page */
 .home-page {
   gap: 1.5rem;
+  position: relative;
 }
 
 .home-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.5fr);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 1.5rem;
+  padding: 2.5rem 2rem;
   border: 1px solid var(--line);
   border-radius: calc(var(--radius) + 8px);
   background:
     linear-gradient(
       135deg,
-      color-mix(in srgb, var(--surface) 94%, transparent),
-      color-mix(in srgb, var(--bg-accent) 76%, transparent)
+      color-mix(in srgb, var(--surface) 90%, transparent),
+      color-mix(in srgb, var(--bg-accent) 70%, transparent)
     );
-}
-
-.home-copy h1 {
-  max-width: 720px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .home-visual {
@@ -637,27 +643,45 @@ p {
   justify-content: center;
 }
 
-.home-visual img {
-  width: min(100%, 240px);
-  height: auto;
-  object-fit: contain;
+.home-copy {
+  text-align: center;
+  max-width: 540px;
+}
+
+.home-copy h1 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  max-width: 720px;
+}
+
+.home-copy .lede {
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 42rem;
+}
+
+.home-copy .eyebrow {
+  color: var(--accent);
 }
 
 .home-paths {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
 .path-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.4rem;
+  padding: 2rem 2.2rem;
   border: 1px solid var(--line);
   border-radius: calc(var(--radius) + 4px);
   background: var(--surface);
   box-shadow: 0 10px 30px rgba(20, 48, 40, 0.06);
+  min-height: 260px;
 }
 
 .path-card-primary {
@@ -693,6 +717,7 @@ p {
 }
 
 .path-card .btn {
+  margin-top: auto;
   width: 100%;
 }
 
@@ -700,6 +725,8 @@ p {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.7rem;
+  position: relative;
+  z-index: 1;
 }
 
 .home-steps span {
@@ -714,7 +741,6 @@ p {
 
 @media (max-width: 720px) {
   .home-hero {
-    grid-template-columns: 1fr;
     padding: 1.25rem;
   }
 
@@ -722,8 +748,18 @@ p {
     display: none;
   }
 
+  .home-copy {
+    text-align: center;
+  }
+
   .home-paths {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .path-card {
+    padding: 1.5rem;
+    min-height: auto;
   }
 
   .home-steps {
@@ -741,6 +777,25 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+}
+
+.injury-hint-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  display: grid;
+  gap: 0.35rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.injury-hint-list li::before {
+  content: '· ';
+  color: var(--accent);
+  font-weight: 700;
 }
 
 .field-label {
@@ -880,6 +935,103 @@ p {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 10%, var(--surface));
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+.region-injury-tag {
+  margin-top: 0.15rem;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #1f6b45;
+  background: color-mix(in srgb, var(--accent) 14%, #fff);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+}
+
+.region-posture-tag {
+  margin-top: 0.15rem;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #3d5a80;
+  background: color-mix(in srgb, #3d5a80 12%, #fff);
+  border: 1px solid color-mix(in srgb, #3d5a80 28%, transparent);
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+}
+
+.region-card.has-injury-risk {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+.region-card.has-posture-hint {
+  border-color: color-mix(in srgb, #3d5a80 40%, var(--line));
+}
+
+.injury-callout {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 8%, #fff),
+    color-mix(in srgb, var(--surface) 92%, #e8f5ee)
+  );
+  color: var(--ink);
+}
+
+.posture-callout {
+  border-color: color-mix(in srgb, #3d5a80 28%, var(--line));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, #3d5a80 8%, #fff),
+    color-mix(in srgb, var(--surface) 92%, #e8eef5)
+  );
+}
+
+.posture-callout strong {
+  color: #2c4566;
+}
+
+.injury-callout strong {
+  font-size: 0.98rem;
+  color: var(--accent-strong);
+}
+
+.injury-callout p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.injury-callout-block {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.injury-callout-expected {
+  color: var(--ink) !important;
+}
+
+.injury-callout-focus {
+  color: var(--ink) !important;
+  font-weight: 600;
+}
+
+.injury-callout-link {
+  width: fit-content;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.injury-callout-link:hover {
+  text-decoration: underline;
 }
 
 .recommendation-panel {

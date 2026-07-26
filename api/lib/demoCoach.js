@@ -5,6 +5,18 @@ const REGION_LABEL = {
   full: '全身',
 }
 
+const TARGET_BODY_LABEL = {
+  athletic: '匀称运动型',
+  v_taper: '倒三角型',
+  lower_strong: '下肢力量型',
+}
+
+const GENDER_LABEL = {
+  male: '男性',
+  female: '女性',
+  other: '其他',
+}
+
 const WEEKDAY_ALIASES = [
   { keys: ['周一', '星期一', '礼拜一'], label: '周一' },
   { keys: ['周二', '星期二', '礼拜二'], label: '周二' },
@@ -15,8 +27,35 @@ const WEEKDAY_ALIASES = [
   { keys: ['周日', '周天', '星期日', '星期天', '礼拜日'], label: '周日' },
 ]
 
+const INJURY_LABEL = {
+  knee: '膝盖',
+  shoulder: '肩部',
+  lower_back: '腰部',
+  wrist: '手腕',
+  elbow: '肘部',
+  ankle: '踝关节',
+  hip: '髋部',
+  neck: '颈部',
+}
+
+const POSTURE_LABEL = {
+  kyphosis: '驼背',
+  rounded_shoulders: '圆肩',
+  forward_head: '头前伸',
+  anterior_pelvic_tilt: '骨盆前倾',
+  disc_herniation: '腰间盘突出',
+}
+
 function profileHint(profile) {
   const parts = []
+
+  if (profile.gender && GENDER_LABEL[profile.gender]) {
+    parts.push(`性别 ${GENDER_LABEL[profile.gender]}`)
+  }
+
+  if (profile.targetBodyTypeId && TARGET_BODY_LABEL[profile.targetBodyTypeId]) {
+    parts.push(`目标体型是${TARGET_BODY_LABEL[profile.targetBodyTypeId]}`)
+  }
 
   if (profile.goalRegion && REGION_LABEL[profile.goalRegion]) {
     parts.push(`目标部位是${REGION_LABEL[profile.goalRegion]}`)
@@ -28,6 +67,24 @@ function profileHint(profile) {
 
   if (profile.height && profile.weight) {
     parts.push(`身高 ${profile.height} cm、体重 ${profile.weight} kg`)
+  }
+
+  if (profile.injuries?.length) {
+    const labels = profile.injuries
+      .map((id) => INJURY_LABEL[id] || id)
+      .filter(Boolean)
+    if (labels.length) {
+      parts.push(`需避开加重 ${labels.join('、')} 不适的动作`)
+    }
+  }
+
+  if (profile.postures?.length) {
+    const labels = profile.postures
+      .map((id) => POSTURE_LABEL[id] || id)
+      .filter(Boolean)
+    if (labels.length) {
+      parts.push(`体态问题含 ${labels.join('、')}，训练中会穿插改善体态动作`)
+    }
   }
 
   if (parts.length === 0) return ''
@@ -66,6 +123,63 @@ function summarizePlanDays(plan) {
       names,
     }
   })
+}
+
+function buildExerciseSwapReply(message, profile, plan) {
+  const isDislike =
+    /不喜欢|讨厌|不想做|做不来|换掉|换成|换一个|换成别的|别再安排|太难了|受不了|替代/.test(
+      message,
+    )
+  if (!isDislike) return null
+
+  const knownNames = []
+  const nameHints = [
+    '引体向上',
+    '反手引体向上',
+    '俯卧撑',
+    '深蹲',
+    '硬拉',
+    '卧推',
+    '高位下拉',
+    '坐姿划船',
+    '杠铃划船',
+  ]
+  for (const name of nameHints) {
+    if (message.includes(name)) knownNames.push(name)
+  }
+  if (/引体/.test(message) && !knownNames.some((n) => n.includes('引体'))) {
+    knownNames.push('引体向上')
+  }
+
+  if (knownNames.length === 0) {
+    return {
+      text: '可以。告诉我具体是哪个动作（例如「引体向上」），我就在计划里换成同类替代。',
+      action: null,
+    }
+  }
+
+  const planDays = summarizePlanDays(plan)
+  const lines = [
+    `收到。我会把「${knownNames.join('、')}」记成不喜欢的动作，并在页面计划里换成同类训练。`,
+    '',
+  ]
+
+  if (planDays.length > 0) {
+    lines.push('替换原则：优先同发力模式、同肌群（例如引体 → 高位下拉 / 反向划船）。')
+    lines.push('你现在可以直接看计划表，对应动作应已更新。')
+  } else {
+    lines.push('你还没有生成周计划；我先记下偏好，生成后会自动避开这些动作。')
+  }
+
+  lines.push(profileHint(profile))
+
+  return {
+    text: lines.filter(Boolean).join('\n'),
+    action: {
+      action: 'replace_exercise',
+      exerciseNames: knownNames,
+    },
+  }
 }
 
 function buildAdjustedPlanReply(message, profile, plan) {
@@ -308,9 +422,11 @@ function buildGeneralReply(message, profile) {
  * @param {Record<string, unknown>|null} [plan]
  */
 export function getDemoCoachReply(message, profile = {}, plan = null) {
+  const swap = buildExerciseSwapReply(message, profile, plan)
   const adjusted = buildAdjustedPlanReply(message, profile, plan)
   const text =
     buildEmotionReply(message, profile) ||
+    swap?.text ||
     adjusted?.text ||
     buildPainOrFormReply(message, profile) ||
     buildNutritionReply(message, profile) ||
@@ -320,6 +436,6 @@ export function getDemoCoachReply(message, profile = {}, plan = null) {
     text,
     responseId: `demo-${Date.now()}`,
     mode: 'demo',
-    action: adjusted?.action || null,
+    action: swap?.action || adjusted?.action || null,
   }
 }

@@ -1,64 +1,26 @@
-import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
-import heroImage from '../assets/hero.png'
+import BounceCards from '../components/BounceCards'
 import { saveProfile } from '../utils/storage'
 
-gsap.registerPlugin(useGSAP)
+const EXERCISE_THUMBS = [
+  'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=400&q=80',
+  'https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=400&q=80',
+  'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=400&q=80',
+  'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=400&q=80',
+  'https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=400&q=80',
+]
+
+const TRANSFORM_STYLES = [
+  'rotate(8deg) translate(-180px)',
+  'rotate(4deg) translate(-90px)',
+  'rotate(-2deg)',
+  'rotate(-8deg) translate(90px)',
+  'rotate(-4deg) translate(180px)',
+]
 
 /** 成员 A：首页路径选择 */
 export default function Home() {
   const navigate = useNavigate()
-  const pageRef = useRef(null)
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-
-        tl.from('.home-copy > *', {
-          opacity: 0,
-          y: 28,
-          duration: 0.65,
-          stagger: 0.1,
-        })
-          .from(
-            '.home-visual',
-            {
-              opacity: 0,
-              scale: 0.92,
-              duration: 0.75,
-              ease: 'power2.out',
-            },
-            '-=0.45',
-          )
-          .from(
-            '.path-card',
-            {
-              opacity: 0,
-              y: 36,
-              duration: 0.6,
-              stagger: 0.12,
-            },
-            '-=0.35',
-          )
-          .from(
-            '.home-steps span',
-            {
-              opacity: 0,
-              y: 16,
-              duration: 0.45,
-              stagger: 0.06,
-            },
-            '-=0.25',
-          )
-      })
-    },
-    { scope: pageRef },
-  )
 
   function choosePath(path) {
     saveProfile({ path })
@@ -66,8 +28,20 @@ export default function Home() {
   }
 
   return (
-    <section className="page home-page" ref={pageRef}>
+    <section className="page home-page">
       <div className="home-hero">
+        <div className="home-visual" aria-hidden="true">
+          <BounceCards
+            images={EXERCISE_THUMBS}
+            containerWidth={500}
+            containerHeight={320}
+            animationDelay={0.3}
+            animationStagger={0.1}
+            transformStyles={TRANSFORM_STYLES}
+            enableHover
+          />
+        </div>
+
         <div className="home-copy">
           <p className="eyebrow">FITGUIDE · 个性化健身指南</p>
           <h1>不需要记住肌肉名称，也能找到适合自己的训练方向</h1>
@@ -75,10 +49,6 @@ export default function Home() {
             先建立个人身体档案，再根据你的健身经验选择使用方式。
             我们会帮助你找到目标肌肉，并生成一份训练计划。
           </p>
-        </div>
-
-        <div className="home-visual" aria-hidden="true">
-          <img src={heroImage} alt="" />
         </div>
       </div>
 

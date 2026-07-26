@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
+import Prism from './Prism'
 import './Layout.css'
 
 gsap.registerPlugin(useGSAP)
@@ -42,6 +43,20 @@ export default function Layout() {
 
   return (
     <div className="app-shell" ref={shellRef}>
+      <div className="app-prism-bg" aria-hidden="true">
+        <Prism
+          animationType="rotate"
+          timeScale={0.3}
+          height={4}
+          baseWidth={6}
+          scale={4}
+          hueShift={0}
+          colorFrequency={2}
+          noise={0}
+          glow={0.5}
+        />
+      </div>
+
       <header className="app-header">
         <div className="header-inner">
           <NavLink to="/" end className="brand" aria-label="返回FitGuide首页">

@@ -1,0 +1,302 @@
+{
+  "options": [
+    {
+      "id": "knee",
+      "label": "膝盖",
+      "hint": "深蹲、弓步改轻或换成臀桥、腿弯举",
+      "affectsRegions": ["lower", "full"],
+      "regionWarning": "膝盖不适时仍可练腿：先把深蹲、弓步换成臀桥、腿弯举等；相关动作重量大约减到平时的 60%～70%，每组少做 2～4 次。蹲到一半发紧或轻响较常见，不等于立刻受伤。",
+      "safeFocus": "可练腿：后侧链优先，减重减次"
+    },
+    {
+      "id": "shoulder",
+      "label": "肩部",
+      "hint": "推举可做，但减重减次；过头大重量先放一放",
+      "affectsRegions": ["upper", "full"],
+      "regionWarning": "肩部不适（如肩周炎）时仍可练上肢：推举用轻至中等重量，活动范围做到舒适即可。推起时肩关节轻微弹响/咔哒声很常见，多与肌腱滑动有关，没有尖锐痛、无力或不稳时通常不必过度紧张。",
+      "safeFocus": "可练肩胸：减重减次，保留舒适幅度"
+    },
+    {
+      "id": "lower_back",
+      "label": "腰部",
+      "hint": "仍可练背，优先坐姿/支撑划船，弯腰大重量先放下",
+      "affectsRegions": ["upper", "core", "lower", "full"],
+      "regionWarning": "腰部不适时仍可练背：优先坐姿划船、胸口支撑划船、高位下拉；重量减约 30%，组数次数略少，全程收紧腹部。弯腰位可能感到轻微紧绷或酸胀，这很常见；若变成尖锐痛、向下放射或腿麻再停训。",
+      "safeFocus": "可练背：支撑划船优先，减重减次"
+    },
+    {
+      "id": "wrist",
+      "label": "手腕",
+      "hint": "推类改器械或减轻握力负荷",
+      "affectsRegions": ["upper", "full"],
+      "regionWarning": "手腕不适时仍可练上肢：优先器械或中立握，握力别攥死。手腕轻酸常见；刺痛或无力握物时再停。",
+      "safeFocus": "可练推拉：器械优先，减重减次"
+    },
+    {
+      "id": "elbow",
+      "label": "肘部",
+      "hint": "手臂动作减重，放慢离心",
+      "affectsRegions": ["upper", "full"],
+      "regionWarning": "肘部不适时手臂仍可练：重量减约三成，离心放慢，关节别锁死。动作末轻微牵扯感常见；夜间剧痛或明显无力时再停。",
+      "safeFocus": "可练手臂：中等握距，减重减次"
+    },
+    {
+      "id": "ankle",
+      "label": "踝关节",
+      "hint": "弓步、提踵改轻或换成髋主导动作",
+      "affectsRegions": ["lower", "full"],
+      "regionWarning": "踝不适时仍可练腿：减少弓步与提踵，多用髋主导动作；相关动作减重减次。踝部轻紧常见；刺痛或不稳时再停。",
+      "safeFocus": "可练腿：髋主导优先，减重减次"
+    },
+    {
+      "id": "hip",
+      "label": "髋部",
+      "hint": "深蹲、弓步改小幅度，优先臀桥类",
+      "affectsRegions": ["lower", "full"],
+      "regionWarning": "髋不适时仍可练臀腿：深蹲、弓步改小幅度或换成臀桥、髋外展；重量与次数先降一档。屈曲末轻微牵拉感常见；刺痛再停。",
+      "safeFocus": "可练臀腿：小幅度优先，减重减次"
+    },
+    {
+      "id": "neck",
+      "label": "颈部",
+      "hint": "保持颈中立，过头大重量先放一放",
+      "affectsRegions": ["upper", "full"],
+      "regionWarning": "颈部不适时仍可练上肢：推拉时目视前方、颈保持中立，相关动作减重减次。肩颈交界轻微紧绷常见；头晕、放射麻木时再停。",
+      "safeFocus": "可练上肢：颈中立，减重减次"
+    }
+  ],
+  "lightLoadCue": "减重减次",
+  "lightLoadAdvice": "相关动作建议比平时轻约 30%～40%，每组少做 2～4 次，结束时仍有余力；不追求力竭。",
+  "volumeByInjury": {
+    "light": {
+      "beginner": "2–3 组 × 10–12 次 · 比平时轻约 30%，留余力",
+      "strength": "3 组 × 6–8 次 · 中轻重量，不追求极限",
+      "hypertrophy": "2–3 组 × 10–12 次 · 比平时轻约 30%，控速",
+      "isolation": "2–3 组 × 10–12 次 · 轻重量，感受目标肌",
+      "core": "2–3 组 × 20–30 秒 / 8–12 次 · 质量优先",
+      "carry": "2 组 × 15–20 米 · 轻握，步态稳定"
+    }
+  },
+  "constraints": {
+    "knee": {
+      "avoidPatterns": ["squat", "lunge"],
+      "avoidExerciseIds": [
+        "leg_extension",
+        "mountain_climber",
+        "nordic_curl",
+        "box_squat"
+      ],
+      "allowExerciseIds": [],
+      "softCautionPatterns": ["hinge", "isolation"],
+      "softCautionMuscles": ["quads", "hamstrings", "glutes", "calves"],
+      "expectedSensation": "腿训时膝盖轻微发紧、关节轻响较常见，多与肌腱滑动或活动度有关，不等于马上受伤。",
+      "loadGuidance": "相关动作重量先减到平时约 60%～70%，每组少做 2～4 次；行程做到舒适即可。",
+      "stopIf": "出现尖锐痛、肿胀、打软腿或不稳时再停训，必要时就医。",
+      "careBadge": "膝盖相关 · 减量",
+      "slotFallback": {
+        "patterns": ["hinge", "isolation"],
+        "roles": ["compound", "accessory", "isolation"],
+        "preferMuscles": ["glutes", "hamstrings"]
+      },
+      "sessionTitle": "下肢 · 膝部减量",
+      "sessionFocus": "臀桥 / 腿弯举 · 减重减次",
+      "note": "膝盖不适：已把深蹲、弓步换成更友好动作，腿训改为减重减次；轻紧或轻响常见，尖锐痛再停。"
+    },
+    "shoulder": {
+      "avoidPatterns": [],
+      "avoidExerciseIds": [
+        "chest_dip",
+        "bench_dip",
+        "upright_row",
+        "overhead_tricep",
+        "ab_wheel",
+        "arnold_press"
+      ],
+      "allowExerciseIds": [],
+      "softCautionPatterns": [
+        "vertical_press",
+        "horizontal_press",
+        "vertical_pull",
+        "isolation"
+      ],
+      "softCautionMuscles": ["shoulders", "chest", "triceps"],
+      "expectedSensation": "推举或抬臂时肩关节轻微弹响/咔哒声很常见（尤其肩周炎恢复期），多与肌腱在骨性结构上滑动有关；没有尖锐痛、突然无力或不稳时，一般不必过度紧张。",
+      "loadGuidance": "推举、侧平举等先减到平时约 60%～70% 重量，每组少做 2～4 次；活动范围做到舒适即可，不必硬够最大行程。",
+      "stopIf": "夜间剧痛、明显无力抬臂、放射麻木或肿热时再停训就医。",
+      "careBadge": "肩部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["horizontal_press", "horizontal_pull"],
+        "roles": ["compound", "accessory"],
+        "preferMuscles": ["chest", "lats", "shoulders"]
+      },
+      "sessionTitle": "上肢 · 肩部减量",
+      "sessionFocus": "推拉可做 · 减重减次、舒适幅度",
+      "note": "肩部不适：推举类保留但减重减次；轻微弹响常见且通常不代表大损伤，尖锐痛或不力再停。"
+    },
+    "lower_back": {
+      "avoidPatterns": ["hinge"],
+      "avoidExerciseIds": [
+        "barbell_row",
+        "t_bar_row",
+        "good_morning",
+        "ab_wheel",
+        "russian_twist",
+        "hanging_leg_raise",
+        "hanging_knee_raise"
+      ],
+      "allowExerciseIds": ["hip_thrust", "glute_bridge"],
+      "softCautionPatterns": [
+        "horizontal_pull",
+        "vertical_pull",
+        "squat",
+        "lunge",
+        "core",
+        "carry"
+      ],
+      "softCautionMuscles": [
+        "lowerback",
+        "lats",
+        "traps",
+        "glutes",
+        "hamstrings",
+        "abs"
+      ],
+      "expectedSensation": "练背或核心时腰部轻微紧绷、酸胀较常见，尤其是久坐后刚开练；不等于一定加重损伤。",
+      "loadGuidance": "仍可练背：优先坐姿划船、胸口支撑划船、高位下拉。相关动作减重约 30%，组数次数略少，全程轻轻收腹，避免弯腰硬拽。",
+      "stopIf": "出现尖锐痛、向下放射、腿麻或痛到无法站直时再停训就医。",
+      "careBadge": "腰部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["horizontal_pull", "isolation"],
+        "roles": ["compound", "accessory", "isolation"],
+        "preferMuscles": ["lats", "glutes"]
+      },
+      "sessionTitle": "训练 · 腰部减量",
+      "sessionFocus": "支撑划船 / 下拉 / 臀桥 · 减重减次",
+      "note": "腰部不适：仍可练背，优先支撑/坐姿拉类并减重减次；硬拉与弯腰划船先放下。轻微紧绷常见，尖锐痛或放射再停。"
+    },
+    "wrist": {
+      "avoidPatterns": [],
+      "avoidExerciseIds": [
+        "push_up",
+        "decline_push_up",
+        "diamond_push_up",
+        "bench_dip",
+        "chest_dip",
+        "wrist_curl",
+        "reverse_wrist_curl",
+        "ab_wheel",
+        "farmer_carry"
+      ],
+      "allowExerciseIds": [],
+      "softCautionPatterns": ["horizontal_press", "vertical_press", "carry"],
+      "softCautionMuscles": ["forearms", "chest", "shoulders"],
+      "expectedSensation": "推类动作时手腕轻酸、发胀较常见，尤其刚换握法时。",
+      "loadGuidance": "优先器械或中立握，重量减约 30%，握力别攥死；次数略少即可。",
+      "stopIf": "刺痛、肿胀或握不住器械时再停。",
+      "careBadge": "手腕相关 · 减量",
+      "slotFallback": {
+        "patterns": ["horizontal_pull", "isolation"],
+        "roles": ["compound", "isolation"],
+        "preferMuscles": ["lats", "biceps"]
+      },
+      "sessionTitle": "上肢 · 腕部减量",
+      "sessionFocus": "器械推拉 · 减重减次",
+      "note": "手腕不适：推类改器械并减重减次；轻酸常见，刺痛再停。"
+    },
+    "elbow": {
+      "avoidPatterns": [],
+      "avoidExerciseIds": [
+        "skull_crusher",
+        "close_grip_bench",
+        "diamond_push_up",
+        "overhead_tricep",
+        "bench_dip",
+        "chest_dip",
+        "preacher_curl"
+      ],
+      "allowExerciseIds": [],
+      "softCautionPatterns": ["horizontal_press", "vertical_press", "isolation"],
+      "softCautionMuscles": ["biceps", "triceps", "forearms"],
+      "expectedSensation": "弯举、推类末段肘部轻微牵扯感较常见，不等于肌腱一定加重损伤。",
+      "loadGuidance": "手臂与推拉减重约 30%，离心放慢，关节不要完全锁死；每组少做 2～4 次。",
+      "stopIf": "夜间剧痛、明显无力或肿热时再停训就医。",
+      "careBadge": "肘部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["horizontal_pull", "isolation"],
+        "roles": ["compound", "isolation"],
+        "preferMuscles": ["lats", "shoulders"]
+      },
+      "sessionTitle": "上肢 · 肘部减量",
+      "sessionFocus": "中等握距推拉 · 减重减次",
+      "note": "肘部不适：高应力臂屈伸先放下，其余手臂训练减重减次；轻牵扯常见，剧痛再停。"
+    },
+    "ankle": {
+      "avoidPatterns": ["lunge"],
+      "avoidExerciseIds": [
+        "calf_raise",
+        "seated_calf_raise",
+        "donkey_calf_raise",
+        "mountain_climber",
+        "step_up"
+      ],
+      "allowExerciseIds": [],
+      "softCautionPatterns": ["squat", "hinge", "carry"],
+      "softCautionMuscles": ["calves", "quads", "glutes"],
+      "expectedSensation": "站姿腿训时踝部轻紧、活动末轻响较常见。",
+      "loadGuidance": "相关动作减重减次，减小踝背屈幅度；多用髋主导动作。",
+      "stopIf": "刺痛、明显肿胀或不稳时再停。",
+      "careBadge": "踝部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["hinge", "isolation"],
+        "roles": ["compound", "isolation"],
+        "preferMuscles": ["glutes", "hamstrings"]
+      },
+      "sessionTitle": "下肢 · 踝部减量",
+      "sessionFocus": "髋主导腿训 · 减重减次",
+      "note": "踝不适：弓步与提踵先放下，其余腿训减重减次；轻紧常见，刺痛再停。"
+    },
+    "hip": {
+      "avoidPatterns": ["squat", "lunge"],
+      "avoidExerciseIds": ["sumo_deadlift", "single_leg_rdl"],
+      "allowExerciseIds": ["glute_bridge", "hip_thrust", "hip_abduction"],
+      "softCautionPatterns": ["hinge", "isolation"],
+      "softCautionMuscles": ["glutes", "quads", "hamstrings"],
+      "expectedSensation": "髋屈曲末轻微牵拉或咔哒感较常见，尤其久坐人群。",
+      "loadGuidance": "深蹲、弓步改小幅度或换成臀桥类；重量与次数先降一档。",
+      "stopIf": "刺痛、绞锁感或走路跛行加重时再停。",
+      "careBadge": "髋部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["hinge", "isolation"],
+        "roles": ["accessory", "isolation"],
+        "preferMuscles": ["glutes", "hamstrings"]
+      },
+      "sessionTitle": "下肢 · 髋部减量",
+      "sessionFocus": "小幅度臀桥 / 髋外展 · 减重减次",
+      "note": "髋不适：深屈曲动作改小幅度并减重减次；轻牵拉常见，刺痛再停。"
+    },
+    "neck": {
+      "avoidPatterns": [],
+      "avoidExerciseIds": ["shrug", "upright_row"],
+      "allowExerciseIds": [],
+      "softCautionPatterns": [
+        "vertical_press",
+        "horizontal_press",
+        "isolation",
+        "carry"
+      ],
+      "softCautionMuscles": ["shoulders", "traps"],
+      "expectedSensation": "推拉时肩颈交界轻微紧绷较常见；保持目视前方通常即可缓解。",
+      "loadGuidance": "相关动作减重减次，全程颈中立，不要仰头借力。",
+      "stopIf": "头晕、放射麻木或疼痛明显加重时再停训就医。",
+      "careBadge": "颈部相关 · 减量",
+      "slotFallback": {
+        "patterns": ["horizontal_pull", "isolation"],
+        "roles": ["compound", "isolation"],
+        "preferMuscles": ["lats", "chest"]
+      },
+      "sessionTitle": "上肢 · 颈部减量",
+      "sessionFocus": "水平推拉 · 颈中立、减重减次",
+      "note": "颈部不适：耸肩等先放下，上肢训练减重减次并保持颈中立；轻紧常见，头晕麻木再停。"
+    }
+  }
+}

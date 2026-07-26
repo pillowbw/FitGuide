@@ -69,6 +69,93 @@
     "可做 20–30 分钟步行、轻度拉伸或泡沫轴",
     "同一肌群两次训练间隔约 48–72 小时，不要连日狂轰同一部位"
   ],
+  "postWorkoutStretchNote": "练后针对今日发力部位做静态拉伸：缓慢进入、不弹振，有紧但不痛；左右两侧各做一遍。",
+  "postWorkoutStretches": {
+    "chest": {
+      "position": "胸大肌（胸前侧）",
+      "cue": "侧立门框，前臂贴门框，躯干缓慢外旋至胸部有拉伸感",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=B9uY01NoqBg"
+    },
+    "shoulders": {
+      "position": "三角肌（肩部）",
+      "cue": "一臂横过胸前，另一手轻拉上臂，感受肩外侧与后侧拉伸",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=-1K0m5ywRcY"
+    },
+    "biceps": {
+      "position": "肱二头肌（上臂前侧）",
+      "cue": "手臂伸直手掌贴墙，身体略转离墙壁至上臂前侧拉伸",
+      "holdSeconds": 25,
+      "videoUrl": "https://us.physitrack.com/home-exercise-video/bicep-stretch-against-wall"
+    },
+    "triceps": {
+      "position": "肱三头肌（上臂后侧）",
+      "cue": "一手过头屈肘摸上背，另一手轻压肘尖向下",
+      "holdSeconds": 30,
+      "videoUrl": "https://grabgains.com/exercises/overhead-triceps-stretch"
+    },
+    "forearms": {
+      "position": "前臂屈肌（腕内侧）",
+      "cue": "手臂前伸掌心向上，另一手轻压手指向下至前臂内侧拉伸",
+      "holdSeconds": 20,
+      "videoUrl": "https://www.youtube.com/watch?v=oQpskjE937M"
+    },
+    "lats": {
+      "position": "背阔肌（侧背）",
+      "cue": "单手高抓固定物，髋向对侧推，侧肋与侧背拉长",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.peak-physio.com.au/exercise/doorway-lat-stretch/"
+    },
+    "traps": {
+      "position": "斜方肌（颈肩交界）",
+      "cue": "坐直，一手轻按头顶侧向对侧倾，对侧肩下沉",
+      "holdSeconds": 25,
+      "videoUrl": "https://www.youtube.com/watch?v=-r0eoFS7_5Q"
+    },
+    "abs": {
+      "position": "腹直肌（腹部）",
+      "cue": "俯卧撑起上身做眼镜蛇式，骨盆贴地，腹部轻柔拉伸",
+      "holdSeconds": 25,
+      "videoUrl": "https://www.youtube.com/watch?v=JDcdhTuycOI"
+    },
+    "obliques": {
+      "position": "腹斜肌（腰侧）",
+      "cue": "站姿或跪姿向一侧侧屈，对侧腰线拉长，勿塌腰",
+      "holdSeconds": 25,
+      "videoUrl": "https://www.youtube.com/watch?v=xt7-316u0M4"
+    },
+    "lowerback": {
+      "position": "竖脊肌（下背部）",
+      "cue": "仰卧抱膝向胸，或猫牛式缓慢拱背，感受腰背舒展",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=Yd9wY25koVk"
+    },
+    "quads": {
+      "position": "股四头肌（大腿前侧）",
+      "cue": "站立单脚，手握同侧脚踝拉向臀部，膝朝下、髋前推",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=kzAsm4WQqvQ"
+    },
+    "hamstrings": {
+      "position": "腘绳肌（大腿后侧）",
+      "cue": "一腿前伸足跟着地，髋后坐、脊柱延长，感受大腿后侧",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=LVY692zJK0A"
+    },
+    "glutes": {
+      "position": "臀大肌（臀部）",
+      "cue": "仰卧，踝搭对侧膝做数字4，轻拉支撑腿向胸",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=Xb5gHdYtHnk"
+    },
+    "calves": {
+      "position": "小腿三头肌（小腿后侧）",
+      "cue": "弓步踩墙或台阶，后脚跟下压，膝伸直与微屈各做一组",
+      "holdSeconds": 30,
+      "videoUrl": "https://www.youtube.com/watch?v=DfYaC807e94"
+    }
+  },
   "cardioHintsByBodyType": {
     "heavy": "休息日可加 20–30 分钟低强度有氧（快走 / 骑车），帮助控制体脂。",
     "slim": "休息日以恢复为主，不必额外长时间有氧。",
@@ -83,6 +170,96 @@
     "female": "若目标偏下肢线条，可在腿日略增臀推 / 髋铰链容量。",
     "male": "上肢推：拉容量建议至少 1:1，避免只练胸忽略背。",
     "other": "按自身感受调整容量，动作质量优先于重量。"
+  },
+  "notesByTargetBodyType": {
+    "athletic": "目标匀称运动型：推、拉、腿均衡安排，避免只练上肢或只练腿。",
+    "v_taper": "目标倒三角：优先肩宽与背阔肌厚度，腰腹以稳定与抗伸展为主，腿部容量克制。",
+    "lower_strong": "目标下肢力量型：深蹲 / 铰链 / 单侧交替推进，强化臀腿与稳定。"
+  },
+  "pairHints": {
+    "chest": ["triceps", "shoulders"],
+    "shoulders": ["triceps", "traps"],
+    "lats": ["biceps", "shoulders"],
+    "biceps": ["forearms"],
+    "triceps": ["chest", "shoulders"],
+    "abs": ["obliques"],
+    "obliques": ["abs"],
+    "quads": ["glutes", "calves"],
+    "hamstrings": ["glutes", "lowerback"],
+    "glutes": ["hamstrings", "quads"],
+    "calves": ["quads"],
+    "traps": ["shoulders"],
+    "lowerback": ["hamstrings", "glutes"],
+    "forearms": ["biceps"]
+  },
+  "physiqueGoals": {
+    "athletic": {
+      "templateKey": "athletic",
+      "preferRegion": "full",
+      "padMode": "balanced",
+      "maxMuscles": 10,
+      "muscleWeights": {
+        "chest": 2,
+        "shoulders": 2,
+        "lats": 2,
+        "quads": 2,
+        "glutes": 2,
+        "hamstrings": 2,
+        "abs": 1.5,
+        "biceps": 1,
+        "triceps": 1,
+        "calves": 1
+      },
+      "genderBias": {
+        "male": { "chest": 1.2, "lats": 1.2, "shoulders": 1.1 },
+        "female": { "glutes": 1.3, "quads": 1.15, "hamstrings": 1.15 },
+        "other": {}
+      }
+    },
+    "v_taper": {
+      "templateKey": "v_taper",
+      "preferRegion": "upper",
+      "padMode": "strict",
+      "maxMuscles": 6,
+      "muscleWeights": {
+        "shoulders": 3,
+        "lats": 3,
+        "chest": 1.6,
+        "abs": 1.4,
+        "traps": 1.3,
+        "triceps": 1.1,
+        "biceps": 1.1
+      },
+      "genderBias": {
+        "male": { "lats": 1.25, "shoulders": 1.25, "chest": 1.1 },
+        "female": { "shoulders": 1.15, "lats": 1.15, "abs": 1.2 },
+        "other": { "shoulders": 1.1, "lats": 1.1 }
+      }
+    },
+    "lower_strong": {
+      "templateKey": "lower_strong",
+      "preferRegion": "lower",
+      "padMode": "strict",
+      "maxMuscles": 6,
+      "muscleWeights": {
+        "glutes": 3,
+        "quads": 2.4,
+        "hamstrings": 2.4,
+        "calves": 1.5,
+        "abs": 1.2,
+        "lowerback": 1.3
+      },
+      "genderBias": {
+        "male": { "quads": 1.2, "hamstrings": 1.15, "glutes": 1.1 },
+        "female": { "glutes": 1.35, "hamstrings": 1.2, "calves": 1.1 },
+        "other": { "glutes": 1.15, "quads": 1.1 }
+      }
+    }
+  },
+  "weightBandRefs": {
+    "female": 55,
+    "male": 72,
+    "other": 63
   },
   "sessionTemplates": {
     "beginner": {
@@ -247,6 +424,129 @@
             { "patterns": ["core"] },
             { "patterns": ["isolation"], "preferMuscles": ["abs", "lowerback"] },
             { "patterns": ["lunge", "carry"] }
+          ]
+        }
+      ],
+      "athletic": [
+        {
+          "code": "AT-A",
+          "title": "运动型 A · 推拉腿均衡",
+          "focus": "水平推 + 垂直拉 + 深蹲",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["squat"], "roles": ["compound"], "preferMuscles": ["quads"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders", "triceps"] },
+            { "patterns": ["core"], "preferMuscles": ["abs"] }
+          ]
+        },
+        {
+          "code": "AT-B",
+          "title": "运动型 B · 推举铰链",
+          "focus": "推举 + 划船 + 髋铰链",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["vertical_press"], "roles": ["compound", "accessory"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"], "preferMuscles": ["lats"] },
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["hamstrings", "glutes"] },
+            { "patterns": ["lunge"], "roles": ["compound"], "preferMuscles": ["quads", "glutes"] },
+            { "patterns": ["isolation", "core"], "preferMuscles": ["biceps", "abs"] }
+          ]
+        },
+        {
+          "code": "AT-C",
+          "title": "运动型 C · 全身巩固",
+          "focus": "上斜推 + 单侧腿 + 核心",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"], "preferMuscles": ["lats"] },
+            { "patterns": ["lunge", "squat"], "roles": ["compound"], "preferMuscles": ["glutes", "quads"] },
+            { "patterns": ["isolation"], "preferMuscles": ["hamstrings", "calves"] },
+            { "patterns": ["core", "carry"], "preferMuscles": ["abs"] }
+          ]
+        }
+      ],
+      "v_taper": [
+        {
+          "code": "VT-A",
+          "title": "倒三角 A · 肩背加宽",
+          "focus": "垂直拉 + 推举 + 侧平举",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["vertical_press"], "roles": ["compound", "accessory"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["core"], "preferMuscles": ["abs"] }
+          ]
+        },
+        {
+          "code": "VT-B",
+          "title": "倒三角 B · 背厚胸型",
+          "focus": "划船 + 水平推 + 肩后束",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["horizontal_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound", "accessory"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders", "traps"] },
+            { "patterns": ["isolation", "core"], "preferMuscles": ["abs", "triceps"] }
+          ]
+        },
+        {
+          "code": "VT-C",
+          "title": "倒三角 C · 肩宽细节",
+          "focus": "推举变式 + 下拉 + 手臂",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["vertical_press"], "roles": ["compound", "accessory"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["isolation"], "preferMuscles": ["biceps", "triceps"] },
+            { "patterns": ["core", "carry"], "preferMuscles": ["abs"] }
+          ]
+        }
+      ],
+      "lower_strong": [
+        {
+          "code": "LS-A",
+          "title": "下肢力量 A · 蹲主导",
+          "focus": "深蹲 + 腘绳 + 核心",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["squat"], "roles": ["compound"], "preferMuscles": ["quads"] },
+            { "patterns": ["hinge"], "roles": ["compound", "accessory"], "preferMuscles": ["hamstrings", "glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"] },
+            { "patterns": ["core"], "preferMuscles": ["abs"] }
+          ]
+        },
+        {
+          "code": "LS-B",
+          "title": "下肢力量 B · 臀链主导",
+          "focus": "铰链 + 弓步 + 臀",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["glutes", "hamstrings"] },
+            { "patterns": ["lunge"], "roles": ["compound"], "preferMuscles": ["glutes", "quads"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["hamstrings"] },
+            { "patterns": ["core", "carry"], "preferMuscles": ["abs"] }
+          ]
+        },
+        {
+          "code": "LS-C",
+          "title": "下肢力量 C · 单侧巩固",
+          "focus": "弓步变式 + 蹲 + 小腿",
+          "scheme": "beginner",
+          "slots": [
+            { "patterns": ["lunge", "squat"], "roles": ["compound"], "preferMuscles": ["quads", "glutes"] },
+            { "patterns": ["hinge"], "roles": ["accessory", "compound"], "preferMuscles": ["hamstrings", "glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes", "hamstrings"] },
+            { "patterns": ["isolation"], "preferMuscles": ["calves", "quads"] },
+            { "patterns": ["core"], "preferMuscles": ["abs", "lowerback"] }
           ]
         }
       ]
@@ -487,6 +787,178 @@
             { "patterns": ["carry", "hinge"] },
             { "patterns": ["isolation"], "preferMuscles": ["abs", "obliques"], "scheme": "isolation" },
             { "patterns": ["lunge", "squat"] },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        }
+      ],
+      "athletic": [
+        {
+          "code": "AT-A",
+          "title": "运动型上肢力量",
+          "focus": "推拉均衡力量",
+          "scheme": "strength",
+          "slots": [
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["vertical_press"], "roles": ["compound", "accessory"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["triceps"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "AT-B",
+          "title": "运动型下肢力量",
+          "focus": "蹲 + 铰链",
+          "scheme": "strength",
+          "slots": [
+            { "patterns": ["squat"], "roles": ["compound"], "preferMuscles": ["quads"] },
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["hamstrings", "glutes"] },
+            { "patterns": ["lunge"], "roles": ["compound"], "preferMuscles": ["glutes", "quads"] },
+            { "patterns": ["isolation"], "preferMuscles": ["hamstrings"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "AT-C",
+          "title": "运动型上肢容量",
+          "focus": "角度变化 + 手臂",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["vertical_pull", "horizontal_pull"], "roles": ["compound", "accessory"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["biceps", "triceps"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "AT-D",
+          "title": "运动型下肢容量",
+          "focus": "单侧 + 臀链",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["glutes", "hamstrings"] },
+            { "patterns": ["squat", "lunge"], "roles": ["compound"], "preferMuscles": ["quads", "glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes", "hamstrings"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
+            { "patterns": ["core", "carry"], "scheme": "core" }
+          ]
+        }
+      ],
+      "v_taper": [
+        {
+          "code": "VT-A",
+          "title": "倒三角力量 · 肩背",
+          "focus": "下拉 + 推举力量",
+          "scheme": "strength",
+          "slots": [
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["vertical_press"], "roles": ["compound"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "VT-B",
+          "title": "倒三角容量 · 背厚",
+          "focus": "多角度拉 + 胸",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["horizontal_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "preferMuscles": ["chest"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders", "traps"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["biceps"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "VT-C",
+          "title": "倒三角容量 · 肩宽",
+          "focus": "推举 + 侧平举细节",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["vertical_press"], "roles": ["compound", "accessory"], "preferMuscles": ["shoulders"] },
+            { "patterns": ["vertical_pull"], "roles": ["compound"], "preferMuscles": ["lats"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders", "traps"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["triceps"], "scheme": "isolation" },
+            { "patterns": ["core", "carry"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "VT-D",
+          "title": "倒三角泵感 · 上肢塑形",
+          "focus": "肩背手臂泵感",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["horizontal_pull", "vertical_pull"], "preferMuscles": ["lats"] },
+            { "patterns": ["vertical_press", "horizontal_press"], "preferMuscles": ["shoulders", "chest"] },
+            { "patterns": ["isolation"], "preferMuscles": ["shoulders"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["lats", "biceps"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["triceps"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        }
+      ],
+      "lower_strong": [
+        {
+          "code": "LS-A",
+          "title": "下肢力量日",
+          "focus": "深蹲 + 硬拉模式",
+          "scheme": "strength",
+          "slots": [
+            { "patterns": ["squat"], "roles": ["compound"], "preferMuscles": ["quads"] },
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["glutes", "hamstrings"] },
+            { "patterns": ["lunge"], "roles": ["compound"], "preferMuscles": ["glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["hamstrings"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "LS-B",
+          "title": "臀链容量日",
+          "focus": "铰链 + 臀主导",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["hinge"], "roles": ["compound"], "preferMuscles": ["glutes", "hamstrings"] },
+            { "patterns": ["squat"], "roles": ["compound"], "preferMuscles": ["quads", "glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["hamstrings", "glutes"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
+            { "patterns": ["core"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "LS-C",
+          "title": "单侧下肢日",
+          "focus": "弓步 / 分腿蹲",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["lunge"], "roles": ["compound"], "preferMuscles": ["glutes", "quads"] },
+            { "patterns": ["hinge"], "roles": ["compound", "accessory"], "preferMuscles": ["hamstrings"] },
+            { "patterns": ["squat", "lunge"], "roles": ["compound"], "preferMuscles": ["quads"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
+            { "patterns": ["core", "carry"], "scheme": "core" }
+          ]
+        },
+        {
+          "code": "LS-D",
+          "title": "下肢细节日",
+          "focus": "臀腿孤立补充",
+          "scheme": "hypertrophy",
+          "slots": [
+            { "patterns": ["hinge"], "roles": ["accessory", "compound"], "preferMuscles": ["glutes"] },
+            { "patterns": ["squat", "lunge"], "preferMuscles": ["quads", "glutes"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes", "hamstrings"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["quads"], "scheme": "isolation" },
+            { "patterns": ["isolation"], "preferMuscles": ["calves"], "scheme": "isolation" },
             { "patterns": ["core"], "scheme": "core" }
           ]
         }

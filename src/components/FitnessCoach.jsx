@@ -8,21 +8,24 @@ import {
   sendFitnessCoachMessage,
 } from '../utils/fitnessAgent'
 import {
+  applyExerciseSwap,
   applyScheduleAdjustment,
+  describeExerciseSwap,
   describeScheduleAdjustment,
+  detectExerciseSwapIntent,
   detectScheduleAdjustIntent,
 } from '../utils/planAssistant'
 import './FitnessCoach.css'
 
 const QUICK_QUESTIONS = [
   '周一我有事练不了，帮我改计划',
+  '我不喜欢做引体向上，帮我换成别的',
   '我练了俯卧撑腰很酸是为什么？',
   '平时控制饮食的话是不是减脂效果更明显',
-  '锻炼一周好累，不想坚持了，感觉没效果',
 ]
 
 const WELCOME_MESSAGE =
-  '你好，我是 FitGuide 网站助手。你可以让我：① 直接改你的训练日（例如「周一练不了」）；② 解释练后酸痛；③ 回答饮食/减脂问题；④ 在你想放弃时给你务实鼓励。'
+  '你好，我是 FitGuide 网站助手。你可以让我：① 改训练日（「周一练不了」）；② 换掉不喜欢的动作（「不想做引体向上」）；③ 解释练后酸痛；④ 回答饮食问题或陪你坚持。'
 
 const DEMO_HINT =
   '当前是「演示模式」：回复来自本地模板，不是大模型。要真实多轮对话，请在 .env.local 配置 OPENAI_API_KEY 后重启 npm run dev。'
@@ -40,7 +43,7 @@ function mergeAssistantText(replyText, appliedNote) {
   const text = (replyText || '').trim()
   if (!appliedNote) return text
   if (!text) return appliedNote
-  if (text.includes('已避开') || text.includes('已帮你改') || text.includes('已处理')) {
+  if (text.includes('已避开') || text.includes('已帮你改') || text.includes('已处理') || text.includes('已把不喜欢')) {
     return text
   }
   return `${appliedNote}\n\n${text}`
@@ -104,14 +107,19 @@ export default function FitnessCoach() {
     abortRef.current = controller
 
     try {
-      const intent = detectScheduleAdjustIntent(message)
+      const scheduleIntent = detectScheduleAdjustIntent(message)
+      const swapIntent = detectExerciseSwapIntent(message)
       let appliedNote = ''
       let planApplied = false
 
-      if (intent) {
-        const result = applyScheduleAdjustment(intent)
-        appliedNote = describeScheduleAdjustment(result, intent)
+      if (scheduleIntent) {
+        const result = applyScheduleAdjustment(scheduleIntent)
+        appliedNote = describeScheduleAdjustment(result, scheduleIntent)
         planApplied = result.ok
+      } else if (swapIntent) {
+        const result = applyExerciseSwap(swapIntent)
+        appliedNote = describeExerciseSwap(result, swapIntent)
+        planApplied = Boolean(result.ok && (result.replacements?.length || result.restored || result.rememberedOnly))
       }
 
       const result = await sendFitnessCoachMessage({
@@ -139,6 +147,29 @@ export default function FitnessCoach() {
           const applied = applyScheduleAdjustment(fallbackIntent)
           appliedNote = describeScheduleAdjustment(applied, fallbackIntent)
           planApplied = applied.ok
+        }
+      }
+
+      if (
+        !planApplied &&
+        result.action?.action === 'replace_exercise'
+      ) {
+        const names = Array.isArray(result.action.exerciseNames)
+          ? result.action.exerciseNames.filter((n) => typeof n === 'string')
+          : []
+        const fallbackMessage = names.length
+          ? `我不喜欢${names.join('、')}，帮我换成别的`
+          : message
+        const fallbackIntent = detectExerciseSwapIntent(fallbackMessage)
+        if (fallbackIntent) {
+          const applied = applyExerciseSwap(fallbackIntent)
+          appliedNote = describeExerciseSwap(applied, fallbackIntent)
+          planApplied = Boolean(
+            applied.ok &&
+              (applied.replacements?.length ||
+                applied.restored ||
+                applied.rememberedOnly),
+          )
         }
       }
 
@@ -185,7 +216,7 @@ export default function FitnessCoach() {
             <div>
               <strong>AI 网站助手</strong>
               <p>
-                改计划 · 答疑 · 饮食 · 陪你坚持
+                改计划 · 换动作 · 答疑 · 饮食
                 {coachMode === 'demo' ? (
                   <span className="fitness-coach-mode-badge">模板演示</span>
                 ) : (
@@ -277,7 +308,7 @@ export default function FitnessCoach() {
               value={input}
               rows={2}
               maxLength={MAX_MESSAGE_LENGTH}
-              placeholder="例如：周一练不了 / 饮食减脂 / 腰酸 / 想放弃"
+              placeholder="例如：周一练不了 / 不喜欢引体向上 / 腰酸 / 饮食减脂"
               aria-label="输入健身问题"
               disabled={loading}
               onChange={(event) => setInput(event.target.value)}
@@ -294,7 +325,7 @@ export default function FitnessCoach() {
           </footer>
 
           <p className="fitness-coach-disclaimer">
-            一般健身参考，非医疗诊断。说「周几练不了」会直接改本机计划表。
+            一般健身参考，非医疗诊断。说「周几练不了」或「不喜欢某动作」会直接改本机计划表。
           </p>
         </section>
       )}

@@ -22,8 +22,8 @@ export default function WeeklyPlanOverview({ plan }) {
   return (
     <section className="weekly-plan-overview" aria-label="本周训练计划总览">
       <header className="weekly-plan-overview-header">
-        <h2>本周训练计划总览</h2>
-        <p className="muted">点击动作名称可跳转到下方对应视频</p>
+        <h2>本周课表</h2>
+        <p className="muted">点动作可跳到下方</p>
       </header>
 
       <div className="weekly-plan-overview-scroll">
@@ -70,7 +70,7 @@ export default function WeeklyPlanOverview({ plan }) {
                 </td>
                 <td>
                   {row.isRest ? (
-                    <span className="weekly-plan-rest-hint">{row.restHint}</span>
+                    <span className="weekly-plan-rest-hint">—</span>
                   ) : (
                     <ul className="weekly-plan-exercise-list">
                       {row.exercises.map((exercise) => (
