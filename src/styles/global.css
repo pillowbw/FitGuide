@@ -229,7 +229,7 @@ p {
   text-decoration: none;
 }
 
-/* ── Muscle Map (legacy placeholder — unused) ── */
+/* ── Muscle Map (Workout.cool illustration) ── */
 .muscle-map {
   position: relative;
   display: grid;
@@ -243,55 +243,46 @@ p {
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  /* 固定比例：300 : 739（图片渲染尺寸） */
   aspect-ratio: 300 / 739;
   overflow: hidden;
   border-radius: 12px;
 }
 
-.muscle-map-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
+.muscle-map-stage--illustration {
+  max-width: 560px;
+  aspect-ratio: 535 / 462;
+  overflow: visible;
+  background: var(--bg-elevated, #f3f4f6);
+  border: 1px solid var(--line, #e5e7eb);
 }
 
-.muscle-bg-img {
+.body-illustration-svg {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
-  /* 低透明度，使热区更清晰 */
-  opacity: 0.6;
 }
 
-.muscle-hotspots-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 1;
-}
-
-/* 肌肉热区样式 */
-.muscle-hotspot {
+.body-muscle-group {
   cursor: pointer;
-  transition: opacity 0.15s, fill 0.15s;
-  fill: var(--muscle-fill, #8fbcaa);
-  opacity: 0.75;
 }
 
-.muscle-hotspot:hover,
-.muscle-hotspot.is-hovered {
-  opacity: 1;
+.body-muscle-fill {
+  fill: #8aa89a;
+  transition: fill 0.12s ease;
+}
+
+.body-muscle-group:hover .body-muscle-fill,
+.body-muscle-fill.is-hovered {
+  fill: #3d9b6e;
+}
+
+.body-muscle-fill.is-selected {
   fill: var(--accent);
 }
 
-/* 区域颜色区分 */
-.region-upper { --muscle-fill: #5fa8d3; }
-.region-core  { --muscle-fill: #62a86c; }
-.region-lower { --muscle-fill: #d4906a; }
+.fill-transparent {
+  fill: transparent;
+}
 
 /* 悬停提示 */
 .muscle-map-tooltip {
@@ -336,8 +327,14 @@ p {
   transition: background 0.12s;
 }
 
-.legend-item:hover {
+.legend-item:hover,
+.legend-item.is-hovered {
   background: var(--bg-accent);
+}
+
+.legend-item.is-selected {
+  background: color-mix(in srgb, var(--accent, #3b82f6) 18%, transparent);
+  font-weight: 600;
 }
 
 .legend-dot {

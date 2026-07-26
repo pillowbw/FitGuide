@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Local reference clone / embedded DB (not part of FitGuide)
+workout-cool/
+workout-cool/**
+.data/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
