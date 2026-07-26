@@ -62,18 +62,26 @@ export async function sendFitnessCoachMessage({
     throw new Error(`问题过长，请控制在 ${MAX_MESSAGE_LENGTH} 字以内。`)
   }
 
-  const response = await fetch('/api/fitness-chat', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      message: trimmed,
-      previousResponseId,
-      profile,
-    }),
-    signal,
-  })
+  let response
+
+  try {
+    response = await fetch('/api/fitness-chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: trimmed,
+        previousResponseId,
+        profile,
+      }),
+      signal,
+    })
+  } catch {
+    throw new Error(
+      '无法连接 AI 服务。请重启 npm run dev，并确认 .env.local 已配置 OPENAI_API_KEY。',
+    )
+  }
 
   let payload = null
   try {
@@ -91,13 +99,16 @@ export async function sendFitnessCoachMessage({
   }
 
   if (!payload || typeof payload.text !== 'string') {
-    throw new Error('AI 教练返回格式异常，请稍后再试。')
+    throw new Error(
+      'AI 服务未就绪。请重启 npm run dev，并检查 .env.local 是否已填写 OPENAI_API_KEY。',
+    )
   }
 
   return {
     text: payload.text,
     responseId:
       typeof payload.responseId === 'string' ? payload.responseId : null,
+    mode: payload.mode === 'ai' ? 'ai' : 'demo',
   }
 }
 

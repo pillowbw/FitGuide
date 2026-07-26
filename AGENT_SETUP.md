@@ -19,26 +19,31 @@ copy .env.example .env.local
 
 在 `.env.local` 中填入真实 Key（该文件已被 `.gitignore` 忽略，**切勿提交**）。
 
-## 本地运行前端
+## 开箱即用（演示模式）
+
+项目已默认开启 **演示模式**（`FITGUIDE_COACH_DEMO=true`），**无需 OpenAI API Key** 即可在 `/plan` 页面与 AI 教练对话。
 
 ```powershell
 npm install
 npm run dev
 ```
 
-仅启动 Vite 时，`/api/fitness-chat` **不可用**。聊天会显示网络/服务错误。
+打开终端显示的地址（如 `http://localhost:5173/plan`），点击右下角 **AI 教练**。头部会显示「演示模式」标签。
 
-## 本地运行 Serverless Function（推荐）
+## 切换为完整 OpenAI 教练（可选）
 
-安装 Vercel CLI 后，在项目根目录：
+1. 在 https://platform.openai.com/api-keys 创建 API Key（`sk-` 开头）
+2. 编辑 `.env.local`：
 
-```powershell
-npm i -g vercel
-vercel login
-vercel dev
+```env
+OPENAI_API_KEY=sk-你的密钥
+OPENAI_MODEL=gpt-4o-mini
+FITGUIDE_COACH_DEMO=true
 ```
 
-`vercel dev` 会同时提供前端与 `/api/fitness-chat`。浏览器打开 CLI 提示的地址，进入 **训练计划** 页面（`/plan`），点击右下角 **AI 教练** 测试。
+3. **重启** `npm run dev`（修改 .env 后必须重启）
+
+配置有效 Key 后，将自动使用 OpenAI；若 Key 无效或网络失败，会回退到演示模式。
 
 ## Vercel 部署
 

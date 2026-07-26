@@ -33,6 +33,7 @@ export default function FitnessCoach() {
   const [messages, setMessages] = useState(() => [createMessage('assistant', WELCOME_MESSAGE)])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [coachMode, setCoachMode] = useState('demo')
   const [previousResponseId, setPreviousResponseId] = useState(() => {
     try {
       return sessionStorage.getItem(RESPONSE_ID_KEY)
@@ -77,6 +78,7 @@ export default function FitnessCoach() {
     setInput('')
     setMessages([createMessage('assistant', WELCOME_MESSAGE)])
     persistResponseId(null)
+    setCoachMode('demo')
     textareaRef.current?.focus()
   }
 
@@ -114,7 +116,8 @@ export default function FitnessCoach() {
         ...current,
         createMessage('assistant', result.text),
       ])
-      persistResponseId(result.responseId)
+      persistResponseId(result.mode === 'ai' ? result.responseId : null)
+      setCoachMode(result.mode)
     } catch (sendError) {
       if (sendError instanceof Error && sendError.name === 'AbortError') {
         return
@@ -148,7 +151,12 @@ export default function FitnessCoach() {
           <header className="fitness-coach-header">
             <div>
               <strong>AI 健身教练</strong>
-              <p>训练 · 动作 · 恢复 · 基础营养</p>
+              <p>
+                训练 · 动作 · 恢复 · 基础营养
+                {coachMode === 'demo' && (
+                  <span className="fitness-coach-mode-badge">演示模式</span>
+                )}
+              </p>
             </div>
             <div className="fitness-coach-header-actions">
               <button

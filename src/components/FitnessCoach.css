@@ -78,6 +78,17 @@
   color: var(--muted);
 }
 
+.fitness-coach-mode-badge {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: #fff4ea;
+  color: #8a4a12;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
 .fitness-coach-header-actions {
   display: flex;
   gap: 0.35rem;
