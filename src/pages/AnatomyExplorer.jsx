@@ -92,7 +92,7 @@ export default function AnatomyExplorer() {
               <ExerciseCard
                 key={ex.id}
                 exercise={ex}
-                thumb={getThumb(ex.id, ex.name) || youtubeThumb(ex.videoUrl)}
+                thumb={getThumb(ex.id, ex.name, ex.videoUrl)}
                 isSelected={selectedExercises.includes(ex.id)}
                 onToggle={() => toggleExercise(ex.id)}
               />
@@ -129,12 +129,6 @@ export default function AnatomyExplorer() {
       </div>
     </section>
   )
-}
-
-function youtubeThumb(url) {
-  if (!url) return null
-  const match = url.match(/[?&]v=([^&]+)/)
-  return match ? `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg` : null
 }
 
 function ExerciseCard({ exercise, thumb, isSelected, onToggle }) {

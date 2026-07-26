@@ -86,14 +86,30 @@ export function getVideoForExercise(exerciseId, exerciseName) {
 }
 
 /**
- * 获取视频缩略图 URL
+ * 从 YouTube URL 提取视频 ID
  */
-export function getThumb(exerciseId, exerciseName) {
-  const video = getVideoForExercise(exerciseId, exerciseName)
-  return video?.thumb || null
-}
-
-function extractYouTubeId(url) {
+export function extractYouTubeId(url) {
+  if (!url) return null
   const match = url.match(/[?&]v=([^&]+)/)
   return match ? match[1] : null
+}
+
+/**
+ * 从 YouTube URL 生成缩略图（动作自带 videoUrl 的兜底）
+ * @param {string} url
+ * @param {'hq'|'mq'} [quality='hq']
+ */
+export function youtubeThumbFromUrl(url, quality = 'hq') {
+  const id = extractYouTubeId(url)
+  if (!id) return null
+  const size = quality === 'mq' ? 'mqdefault' : 'hqdefault'
+  return `https://img.youtube.com/vi/${id}/${size}.jpg`
+}
+
+/**
+ * 获取视频缩略图 URL；无映射时回退到动作自带 videoUrl
+ */
+export function getThumb(exerciseId, exerciseName, videoUrl) {
+  const video = getVideoForExercise(exerciseId, exerciseName)
+  return video?.thumb || youtubeThumbFromUrl(videoUrl) || null
 }

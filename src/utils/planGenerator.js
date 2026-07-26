@@ -3,7 +3,11 @@ import muscles from '../data/muscles.json'
 import planRules from '../data/planRules.json'
 import { assessBodyLoad } from './bodyLoad'
 import { getPlan, getProfile, savePlan } from './storage'
-import { getVideoForExercise } from './videoMap'
+import {
+  extractYouTubeId,
+  getVideoForExercise,
+  youtubeThumbFromUrl,
+} from './videoMap'
 
 /** 计划结构版本：旧 localStorage 计划会自动按新规则重算 */
 export const PLAN_VERSION = 5
@@ -244,6 +248,8 @@ function pickForSlot(
 function toPlanExercise(ex, setsLabel, primaryMuscleId) {
   const primary = primaryMuscleId || ex.muscleIds[0]
   const video = getVideoForExercise(ex.id, ex.name)
+  const videoUrl = video?.url || ex.videoUrl
+  const youtubeId = video?.youtubeId || extractYouTubeId(videoUrl)
   return {
     id: ex.id,
     name: ex.name,
@@ -252,11 +258,11 @@ function toPlanExercise(ex, setsLabel, primaryMuscleId) {
     role: ex.role,
     pattern: ex.pattern,
     advice: ex.advice,
-    videoUrl: video?.url || ex.videoUrl,
+    videoUrl,
     videoSource: video ? 'youtube' : ex.videoSource,
-    videoThumb: video?.thumb || null,
+    videoThumb: video?.thumb || youtubeThumbFromUrl(videoUrl),
     videoTitle: video?.title || null,
-    youtubeId: video?.youtubeId || null,
+    youtubeId,
     setsLabel,
     primaryMuscleId: primary,
     primaryMuscleName: muscleName(primary),
