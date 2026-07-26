@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FitnessCoach from '../components/FitnessCoach'
+import WeeklyPlanOverview from '../components/WeeklyPlanOverview'
 import { describeDayBurn, describeWeekBurn } from '../utils/calorieEstimate'
 import {
   generatePlan,
@@ -22,6 +23,7 @@ import {
   toggleExerciseCompleted,
 } from '../utils/storage'
 import { youtubeThumbFromUrl } from '../utils/videoMap'
+import { getDayAnchorId, getExerciseAnchorId } from '../utils/planOverview'
 import './TrainingPlan.css'
 
 const PATH_LABEL = {
@@ -276,6 +278,8 @@ export default function TrainingPlan() {
             )}
           </header>
 
+          <WeeklyPlanOverview plan={plan} />
+
           {plan.bodyLoad && (
             <aside className="plan-body-load" aria-label="根据身体档案的运动量建议">
               <div className="plan-body-load-top">
@@ -359,6 +363,7 @@ export default function TrainingPlan() {
               return (
                 <article
                   key={`${day.day}-${day.sessionCode || day.focus}`}
+                  id={getDayAnchorId(day.dayIndex)}
                   className="plan-day"
                 >
                   <header className="plan-day-header">
@@ -390,6 +395,7 @@ export default function TrainingPlan() {
                       return (
                         <li
                           key={`${day.day}-${ex.id}`}
+                          id={getExerciseAnchorId(day.dayIndex, ex.id)}
                           className={done ? 'is-done' : undefined}
                         >
                           <div className="plan-ex-top">
