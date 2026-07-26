@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FitnessCoach from '../components/FitnessCoach'
 import WeeklyPlanOverview from '../components/WeeklyPlanOverview'
+import ExerciseCompletionModal from '../components/ExerciseCompletionModal'
 import { describeDayBurn, describeWeekBurn } from '../utils/calorieEstimate'
 import {
   generatePlan,
@@ -21,7 +22,12 @@ import {
   hasPlanSource,
   isExerciseCompleted,
   toggleExerciseCompleted,
+  markExerciseRewardShown,
 } from '../utils/storage'
+import {
+  getExerciseEncouragement,
+  shouldShowExerciseReward,
+} from '../utils/exerciseCompletion'
 import { youtubeThumbFromUrl } from '../utils/videoMap'
 import { getDayAnchorId, getExerciseAnchorId } from '../utils/planOverview'
 import './TrainingPlan.css'
@@ -102,6 +108,10 @@ export default function TrainingPlan() {
   const [pastWeeks, setPastWeeks] = useState(() => getPastWeekLogs(6))
   const [historyOpen, setHistoryOpen] = useState(true)
   const [syncedFromProfile, setSyncedFromProfile] = useState(false)
+  const [exerciseRewardOpen, setExerciseRewardOpen] = useState(false)
+  const [exerciseRewardMessage, setExerciseRewardMessage] = useState('')
+  const [exerciseRewardName, setExerciseRewardName] = useState('')
+  const [exerciseRewardKey, setExerciseRewardKey] = useState('')
 
   function applyPlanState(nextPlan, nextProfile, { toast } = {}) {
     if (nextProfile) setProfile(nextProfile)
@@ -159,6 +169,23 @@ export default function TrainingPlan() {
   )
   const doneCount = weekLog?.completed?.length || 0
 
+  function handleCloseExerciseReward() {
+    if (plan && exerciseRewardKey) {
+      const updated = markExerciseRewardShown(plan, exerciseRewardKey)
+      if (updated) refreshHistoryViews(updated)
+    }
+    setExerciseRewardOpen(false)
+    setExerciseRewardKey('')
+  }
+
+  function showExerciseReward(exercise, item) {
+    if (!shouldShowExerciseReward(item)) return
+    setExerciseRewardName(exercise.name || item.exerciseName || '')
+    setExerciseRewardMessage(getExerciseEncouragement(exercise))
+    setExerciseRewardKey(item.key)
+    setExerciseRewardOpen(true)
+  }
+
   function refreshHistoryViews(nextWeek) {
     setWeekLog(nextWeek)
     setPastWeeks(getPastWeekLogs(6))
@@ -171,6 +198,8 @@ export default function TrainingPlan() {
     const next = generatePlan(latest)
     setPlan(next)
     setJustGenerated(true)
+    setExerciseRewardOpen(false)
+    setExerciseRewardKey('')
     refreshHistoryViews(ensureCurrentWeekLog(next))
   }
 
@@ -180,12 +209,17 @@ export default function TrainingPlan() {
     setJustGenerated(false)
     setWeekLog(null)
     setPastWeeks(getPastWeekLogs(6))
+    setExerciseRewardOpen(false)
+    setExerciseRewardKey('')
   }
 
   function handleToggleDone(day, exercise) {
     if (!plan) return
-    const { week } = toggleExerciseCompleted(plan, day, exercise)
+    const { week, done, item } = toggleExerciseCompleted(plan, day, exercise)
     refreshHistoryViews(week)
+    if (done && item) {
+      showExerciseReward(exercise, item)
+    }
   }
 
   return (
@@ -643,6 +677,13 @@ export default function TrainingPlan() {
       </section>
 
       <FitnessCoach />
+
+      <ExerciseCompletionModal
+        open={exerciseRewardOpen}
+        exerciseName={exerciseRewardName}
+        message={exerciseRewardMessage}
+        onClose={handleCloseExerciseReward}
+      />
     </section>
   )
 }

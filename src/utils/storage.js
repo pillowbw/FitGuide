@@ -113,6 +113,7 @@ export function hasPlanSource(profile = getProfile()) {
  * @property {string} [sessionTitle]
  * @property {string} [setsLabel]
  * @property {string} completedAt
+ * @property {boolean} [rewardShown] 该动作完成鼓励弹窗是否已展示
  */
 
 /**
@@ -124,6 +125,7 @@ export function hasPlanSource(profile = getProfile()) {
  * @property {string|null} closedAt
  * @property {boolean} isCurrent
  * @property {CompletedExercise[]} completed
+ * @property {boolean} [weeklyRewardShown] 本周完成庆祝弹窗是否已展示
  * @property {{ day: string, dayIndex: number, sessionTitle: string, exerciseNames: string[] }[]} daySummaries
  */
 
@@ -190,6 +192,7 @@ export function ensureCurrentWeekLog(plan) {
       closedAt: null,
       isCurrent: true,
       completed: [],
+      weeklyRewardShown: false,
       daySummaries: buildDaySummaries(plan),
     }
     history.weeks.unshift(current)
@@ -230,11 +233,11 @@ export function archiveCurrentWeekLog() {
 
 /**
  * 勾选 / 取消勾选某个动作已完成。
- * @returns {{ week: WeekLog, done: boolean }}
+ * @returns {{ week: WeekLog|null, done: boolean, item: CompletedExercise|null }}
  */
 export function toggleExerciseCompleted(plan, day, exercise) {
   if (!plan || !day || !exercise) {
-    return { week: null, done: false }
+    return { week: null, done: false, item: null }
   }
 
   const week = ensureCurrentWeekLog(plan)
@@ -243,12 +246,13 @@ export function toggleExerciseCompleted(plan, day, exercise) {
   const list = [...(week.completed || [])]
   const existing = list.findIndex((item) => item.key === key)
   let done = false
+  let item = null
 
   if (existing >= 0) {
     list.splice(existing, 1)
     done = false
   } else {
-    list.push({
+    item = {
       key,
       exerciseId: exercise.id,
       exerciseName: exercise.name,
@@ -257,14 +261,16 @@ export function toggleExerciseCompleted(plan, day, exercise) {
       sessionTitle: day.sessionTitle || day.focus || '',
       setsLabel: exercise.setsLabel || '',
       completedAt: new Date().toISOString(),
-    })
+      rewardShown: false,
+    }
+    list.push(item)
     done = true
   }
 
   const nextWeek = { ...week, completed: list }
   history.weeks = history.weeks.map((w) => (w.id === week.id ? nextWeek : w))
   saveWorkoutHistory(history)
-  return { week: nextWeek, done }
+  return { week: nextWeek, done, item }
 }
 
 /** 某动作是否已在当前周勾选完成 */
@@ -280,4 +286,25 @@ export function getPastWeekLogs(limit = 6) {
   return weeks
     .filter((w) => !w.isCurrent && (w.completed?.length > 0 || w.daySummaries?.length))
     .slice(0, limit)
+}
+
+/** 标记某个已完成动作的鼓励弹窗已展示 */
+export function markExerciseRewardShown(plan, completionKeyValue) {
+  if (!plan?.generatedAt || !completionKeyValue) return null
+
+  const history = getWorkoutHistory()
+  const id = plan.generatedAt
+  let updated = null
+
+  history.weeks = history.weeks.map((week) => {
+    if (week.id !== id) return week
+    const completed = (week.completed || []).map((item) =>
+      item.key === completionKeyValue ? { ...item, rewardShown: true } : item,
+    )
+    updated = { ...week, completed }
+    return updated
+  })
+
+  if (updated) saveWorkoutHistory(history)
+  return updated
 }

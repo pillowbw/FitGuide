@@ -1,0 +1,114 @@
+.exercise-completion-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(20, 48, 40, 0.45);
+  backdrop-filter: blur(4px);
+  animation: exercise-completion-fade-in 0.28s ease;
+}
+
+.exercise-completion-modal {
+  position: relative;
+  width: min(44rem, 100%);
+  max-height: min(90vh, 720px);
+  overflow: auto;
+  padding: 1.35rem 1.25rem 1.15rem;
+  border-radius: calc(var(--radius) + 4px);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  background:
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--surface) 88%, #cfe8da),
+      var(--surface)
+    );
+  box-shadow: 0 24px 60px rgba(20, 48, 40, 0.22);
+  animation: exercise-completion-scale-in 0.32s ease;
+}
+
+.exercise-completion-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.exercise-completion-modal h2 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.45rem;
+}
+
+.exercise-completion-subtitle {
+  margin: 0.35rem 0 0.85rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.exercise-completion-message-panel {
+  margin-bottom: 1rem;
+  padding: 1.25rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-accent) 22%, var(--surface));
+}
+
+.exercise-completion-message {
+  margin: 0;
+  text-align: center;
+  line-height: 1.55;
+  font-size: clamp(1.05rem, 3.2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.exercise-completion-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.exercise-completion-actions .btn {
+  min-width: 9rem;
+}
+
+@keyframes exercise-completion-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes exercise-completion-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .exercise-completion-modal {
+    padding: 1rem 0.85rem;
+  }
+
+  .exercise-completion-message-panel {
+    padding: 1rem 0.85rem;
+  }
+
+  .exercise-completion-message {
+    font-size: 1rem;
+  }
+
+  .exercise-completion-actions .btn {
+    width: 100%;
+  }
+}
