@@ -13,6 +13,8 @@ npm run dev
 
 组员协作（克隆 / 拉取 / 推送）见 [TEAM.md](TEAM.md)。
 
+AI 健身教练（环境变量、本地 API、部署）见 [AGENT_SETUP.md](AGENT_SETUP.md)。
+
 ## 当前组装状态
 
 - 成员 A：建档 + 业余路径（已合并）

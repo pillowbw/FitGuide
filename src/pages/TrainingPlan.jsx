@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import FitnessCoach from '../components/FitnessCoach'
 import { generatePlan } from '../utils/planGenerator'
 import { usePageReveal } from '../hooks/usePageReveal'
 import {
@@ -224,6 +225,7 @@ export default function TrainingPlan() {
           </p>
         </div>
       )}
+      <FitnessCoach />
     </section>
   )
 }
