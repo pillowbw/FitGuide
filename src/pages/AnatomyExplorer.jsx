@@ -1,11 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import muscles from '../data/muscles.json'
 import MuscleMap from '../components/MuscleMap'
+import { usePageReveal } from '../hooks/usePageReveal'
 import { getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 B：进阶 — 正反肌肉解剖图 */
 export default function AnatomyExplorer() {
   const navigate = useNavigate()
+  const pageRef = usePageReveal()
   const selectedIds = getProfile().selectedMuscleIds || []
   const selectedCount = selectedIds.length
 
@@ -21,10 +23,10 @@ export default function AnatomyExplorer() {
   }
 
   return (
-    <section className="page">
-      <h1>人体肌肉解剖图</h1>
+    <section className="page" ref={pageRef}>
+      <h1>自选肌肉</h1>
       <p className="lede">
-        左正面、右背面。点击肌肉查看介绍与教学动作。
+        在人体解剖图上直接点选目标肌肉，查看介绍与教学动作。
       </p>
 
       <MuscleMap

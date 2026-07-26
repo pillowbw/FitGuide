@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { generatePlan } from '../utils/planGenerator'
+import { usePageReveal } from '../hooks/usePageReveal'
 import {
   clearPlan,
   getPlan,
@@ -11,8 +12,8 @@ import {
 import './TrainingPlan.css'
 
 const PATH_LABEL = {
-  beginner: '业余入门',
-  advanced: '进阶训练',
+  beginner: '新手推荐',
+  advanced: '自选肌肉',
   '': '未选择',
 }
 
@@ -40,6 +41,7 @@ function formatGeneratedAt(iso) {
 
 /** 成员 C：个性化训练计划 */
 export default function TrainingPlan() {
+  const pageRef = usePageReveal()
   const [profile, setProfile] = useState(() => getProfile())
   const [plan, setPlan] = useState(() => getPlan())
   const [justGenerated, setJustGenerated] = useState(false)
@@ -48,7 +50,7 @@ export default function TrainingPlan() {
   const missingSource = !hasPlanSource(profile)
   const nextPath = profile.path === 'advanced' ? '/anatomy' : '/beginner'
   const nextPathLabel =
-    profile.path === 'advanced' ? '解剖图选肌肉' : '业余路径选目标'
+    profile.path === 'advanced' ? '自选肌肉' : '新手推荐'
 
   function handleGenerate() {
     const latest = getProfile()
@@ -65,12 +67,12 @@ export default function TrainingPlan() {
   }
 
   return (
-    <section className="page plan-page">
+    <section className="page plan-page" ref={pageRef}>
       <header className="plan-hero">
         <p className="eyebrow">Training Plan</p>
         <h1>个性化训练计划</h1>
         <p className="lede">
-          根据你的档案、路径与目标肌肉，自动排出一周训练安排。可随时重新生成。
+          按科学分化排课：业余 3 日全身轮换，进阶 4 日上/下肢 A·B。每天动作尽量不重复，覆盖不同发力模式。
         </p>
       </header>
 
@@ -101,7 +103,7 @@ export default function TrainingPlan() {
 
       {missingBasics && (
         <p className="banner">
-          档案不完整，建议先去 <Link to="/profile">完善建档</Link>
+          档案不完整，建议先去 <Link to="/profile">完善身体档案</Link>
           （性别 / 身高 / 体重），计划提示会更准确。
         </p>
       )}
@@ -138,6 +140,9 @@ export default function TrainingPlan() {
           <header className="plan-board-header">
             <div>
               <h2>{plan.weekLabel}</h2>
+              {plan.scienceNote && (
+                <p className="plan-science">{plan.scienceNote}</p>
+              )}
               <p className="plan-note">{plan.note}</p>
             </div>
             {plan.generatedAt && (
@@ -149,17 +154,21 @@ export default function TrainingPlan() {
 
           <div className="plan-days">
             {plan.days.map((day) => (
-              <article key={day.day} className="plan-day">
+              <article key={`${day.day}-${day.sessionCode || day.focus}`} className="plan-day">
                 <header className="plan-day-header">
                   <h3>
                     <span className="plan-day-badge">{day.day}</span>
-                    重点：{day.focus}
+                    {day.sessionTitle || `重点：${day.focus}`}
                   </h3>
-                  {day.muscleNames?.length > 1 && (
-                    <p className="plan-day-muscles">
-                      顺带：{day.muscleNames.slice(1).join('、')}
-                    </p>
-                  )}
+                  <p className="plan-day-muscles">
+                    {day.sessionCode && (
+                      <span className="plan-session-code">{day.sessionCode}</span>
+                    )}
+                    <span>{day.focus}</span>
+                    {day.exercises?.length > 0 && (
+                      <span>· {day.exercises.length} 个动作</span>
+                    )}
+                  </p>
                 </header>
 
                 <ul className="plan-exercise-list">
@@ -168,6 +177,15 @@ export default function TrainingPlan() {
                       <div className="plan-ex-main">
                         <strong>{ex.name}</strong>
                         <span className="plan-ex-sets">{ex.setsLabel}</span>
+                        {ex.role && (
+                          <span className="plan-ex-role">
+                            {ex.role === 'compound'
+                              ? '复合'
+                              : ex.role === 'isolation'
+                                ? '孤立'
+                                : '辅助'}
+                          </span>
+                        )}
                       </div>
                       {ex.advice && (
                         <p className="plan-ex-advice">{ex.advice}</p>

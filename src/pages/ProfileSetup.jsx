@@ -2,11 +2,13 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import bodyTypes from '../data/bodyTypes.json'
 import BodyTypePicker from '../components/BodyTypePicker'
+import { usePageReveal } from '../hooks/usePageReveal'
 import { getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 A：用户身材建档 */
 export default function ProfileSetup() {
   const navigate = useNavigate()
+  const pageRef = usePageReveal()
   const [existing] = useState(getProfile)
 
   const currentTypes = useMemo(
@@ -135,7 +137,7 @@ export default function ProfileSetup() {
   }
 
   return (
-    <section className="page profile-page">
+    <section className="page profile-page" ref={pageRef}>
       <div>
         <p className="eyebrow">第 1 步 · 建立个人档案</p>
         <h1>完善基础信息</h1>

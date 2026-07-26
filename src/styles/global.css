@@ -280,6 +280,22 @@ p {
   fill: var(--accent);
 }
 
+.body-muscle-fill.is-locked {
+  fill: #c5d4cb;
+  opacity: 0.7;
+}
+
+.muscle-map--restricted .body-muscle-group:has(.is-locked) {
+  cursor: default;
+}
+
+.muscle-map-legend-note {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .fill-transparent {
   fill: transparent;
 }

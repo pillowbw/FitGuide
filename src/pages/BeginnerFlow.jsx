@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import bodyTypes from '../data/bodyTypes.json'
 import muscles from '../data/muscles.json'
 import BodyTypePicker from '../components/BodyTypePicker'
+import MuscleMap from '../components/MuscleMap'
+import { usePageReveal } from '../hooks/usePageReveal'
 import { getProfile, saveProfile } from '../utils/storage'
 
 const REGIONS = [
@@ -28,9 +30,10 @@ const REGIONS = [
   },
 ]
 
-/** 成员 A：业余路径——部位 + 目标身材 → 推荐肌肉 */
+/** 成员 A：新手推荐——部位 + 目标身材 → 解剖图高亮推荐肌肉 */
 export default function BeginnerFlow() {
   const navigate = useNavigate()
+  const pageRef = usePageReveal()
   const [existing] = useState(getProfile)
 
   const targetTypes = useMemo(
@@ -121,12 +124,23 @@ export default function BeginnerFlow() {
     }
   }
 
+  const recommendedIds = useMemo(
+    () => recommended.map((muscle) => muscle.id),
+    [recommended],
+  )
+
   function saveCurrentSelection() {
     if (!targetBodyTypeId || recommended.length === 0) {
       return
     }
 
     saveProfile(buildProfilePatch())
+  }
+
+  function openRecommendedMuscle(muscleId) {
+    if (!recommendedIds.includes(muscleId)) return
+    saveCurrentSelection()
+    navigate(`/muscle/${muscleId}`)
   }
 
   function generatePlan() {
@@ -145,7 +159,7 @@ export default function BeginnerFlow() {
   }
 
   return (
-    <section className="page beginner-page">
+    <section className="page beginner-page" ref={pageRef}>
       <div>
         <p className="eyebrow">第 2 步 · 选择训练目标</p>
         <h1>你大概想练哪个部位？</h1>
@@ -211,7 +225,7 @@ export default function BeginnerFlow() {
           <div>
             <h2 id="recommendation-title">推荐训练的肌肉</h2>
             <p className="muted">
-              点击肌肉名称，可以查看介绍和相关训练动作。
+              下方解剖图会高亮推荐肌肉；只能点击高亮部位查看详情，其他肌肉不可选。
             </p>
           </div>
         </div>
@@ -221,37 +235,20 @@ export default function BeginnerFlow() {
             <p className="recommendation-summary">
               根据你的选择，建议重点训练以下
               <strong> {recommended.length} </strong>
-              个肌肉部位：
+              个肌肉部位（已在图中高亮）：
             </p>
 
-            <ul className="recommended-muscle-grid">
-              {recommended.map((muscle) => (
-                <li key={muscle.id} className="recommended-muscle-card">
-                  <div>
-                    <Link
-                      to={`/muscle/${muscle.id}`}
-                      onClick={saveCurrentSelection}
-                    >
-                      {muscle.name}
-                    </Link>
-                    <p>{muscle.summary}</p>
-                  </div>
-
-                  <Link
-                    className="muscle-detail-link"
-                    to={`/muscle/${muscle.id}`}
-                    onClick={saveCurrentSelection}
-                  >
-                    查看详情
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <MuscleMap
+              muscles={muscles}
+              selectedIds={recommendedIds}
+              interactiveIds={recommendedIds}
+              onSelect={openRecommendedMuscle}
+            />
           </>
         ) : (
           <div className="empty-recommendation">
             <strong>等待选择目标身材</strong>
-            <p>选择上方的一张目标身材例图后，这里会显示推荐肌肉。</p>
+            <p>选择上方的一张目标身材例图后，这里会用解剖图高亮推荐肌肉。</p>
           </div>
         )}
       </section>

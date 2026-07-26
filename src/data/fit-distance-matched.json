@@ -1,0 +1,158 @@
+[
+  {
+    "id": "push_up",
+    "name": "俯卧撑",
+    "title": "Pompes normales",
+    "url": "https://www.youtube.com/watch?v=VHH05Wq-Q94"
+  },
+  {
+    "id": "bench_press",
+    "name": "杠铃卧推",
+    "title": "Developpe couche alterne avec halteres",
+    "url": "https://www.youtube.com/watch?v=c5MKgisg9Us"
+  },
+  {
+    "id": "dumbbell_chest_press",
+    "name": "哑铃卧推",
+    "title": "Developpe couche alterne avec halteres",
+    "url": "https://www.youtube.com/watch?v=c5MKgisg9Us"
+  },
+  {
+    "id": "lateral_raise",
+    "name": "侧平举",
+    "title": "Elevations laterales assises avec halteres",
+    "url": "https://www.youtube.com/watch?v=jUw5OCUU0bU"
+  },
+  {
+    "id": "face_pull",
+    "name": "面拉",
+    "title": "Tirage front avec corde a la poulie haute",
+    "url": "https://www.youtube.com/watch?v=3ZViIERC1QQ"
+  },
+  {
+    "id": "reverse_lunge",
+    "name": "杠铃交替后撤箭步蹲",
+    "title": "Fentes arrieres a la barre",
+    "url": "https://www.youtube.com/watch?v=NmfQzqGktgs"
+  },
+  {
+    "id": "bench_hops",
+    "name": "跳凳两侧交替跳",
+    "title": "Sauts alternes aux cotes du banc",
+    "url": "https://www.youtube.com/watch?v=R3TCOHRwCl8"
+  },
+  {
+    "id": "pull_up",
+    "name": "引体向上",
+    "title": "Tractions prise pronation",
+    "url": "https://www.youtube.com/watch?v=zNTJuBFcX_8"
+  },
+  {
+    "id": "lat_pulldown",
+    "name": "高位下拉",
+    "title": "Tirage vertical �� la barre prise pronation",
+    "url": "https://www.youtube.com/watch?v=vtB2Zp8MajA"
+  },
+  {
+    "id": "barbell_row",
+    "name": "杠铃划船",
+    "title": "Rowing barre en prise invers��e",
+    "url": "https://www.youtube.com/watch?v=2liNZPExGK0"
+  },
+  {
+    "id": "bicep_curl",
+    "name": "哑铃弯举",
+    "title": "Curl biceps debout avec halt��res sans rotation",
+    "url": "https://www.youtube.com/watch?v=wt6Yp07CL80"
+  },
+  {
+    "id": "hammer_curl",
+    "name": "锤式弯举",
+    "title": "Curl marteau assis avec halt��res",
+    "url": "https://www.youtube.com/watch?v=5dZi0YVhYSg"
+  },
+  {
+    "id": "tricep_pushdown",
+    "name": "绳索下压",
+    "title": "Pushdown incline a la poulie",
+    "url": "https://www.youtube.com/watch?v=bJY6lm95j4I"
+  },
+  {
+    "id": "overhead_tricep",
+    "name": "哑铃过顶臂屈伸",
+    "title": "Extensions triceps derriere la tete sur banc incline (magic triceps)",
+    "url": "https://www.youtube.com/watch?v=iSrBs1kyKkA"
+  },
+  {
+    "id": "plank",
+    "name": "平板支撑",
+    "title": "Planche normale (gainage)",
+    "url": "https://www.youtube.com/watch?v=fldSXH9ZCtI"
+  },
+  {
+    "id": "cable_crunch",
+    "name": "绳索卷腹",
+    "title": "Crunch debout �� la poulie",
+    "url": "https://www.youtube.com/watch?v=hTdyAvT9k4g"
+  },
+  {
+    "id": "russian_twist",
+    "name": "俄式转体",
+    "title": "Russian Twist sur ballon (Swiss Ball)",
+    "url": "https://www.youtube.com/watch?v=gbkrZUi0rbc"
+  },
+  {
+    "id": "squat",
+    "name": "杠铃深蹲",
+    "title": "Squat avec barre",
+    "url": "https://www.youtube.com/watch?v=cnYy6JPmXVg"
+  },
+  {
+    "id": "leg_extension",
+    "name": "腿屈伸",
+    "title": "Leg extension",
+    "url": "https://www.youtube.com/watch?v=qLzCjZOuP40"
+  },
+  {
+    "id": "rdl",
+    "name": "罗马尼亚硬拉",
+    "title": "Souleve de terre roumain a la barre",
+    "url": "https://www.youtube.com/watch?v=BJKya_6nFvs"
+  },
+  {
+    "id": "leg_curl",
+    "name": "腿弯举",
+    "title": "Flexion des ischio-jambiers en position assise (Leg curl assis)",
+    "url": "https://www.youtube.com/watch?v=se2txMEXqNM"
+  },
+  {
+    "id": "hip_thrust",
+    "name": "臀推",
+    "title": "Hip thrust machine",
+    "url": "https://www.youtube.com/watch?v=pA5kg0ZrDhI"
+  },
+  {
+    "id": "glute_bridge",
+    "name": "臀桥",
+    "title": "Ponts au poids du corps",
+    "url": "https://www.youtube.com/watch?v=_uL8BJbX4eg"
+  },
+  {
+    "id": "calf_raise",
+    "name": "站姿提踵",
+    "title": "l��vation des mollets debout �� la machine",
+    "url": "https://www.youtube.com/watch?v=cC2IsZTeAAQ"
+  },
+  {
+    "id": "deadlift",
+    "name": "传统硬拉",
+    "title": "Souleve de terre avec pause",
+    "url": "https://www.youtube.com/watch?v=PBupLIlY1Ic"
+  },
+  {
+    "id": "shrug",
+    "name": "耸肩",
+    "title": "Shrugs avec halt��res",
+    "url": "https://www.youtube.com/watch?v=XVF-1m99svA"
+  }
+]

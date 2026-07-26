@@ -48,10 +48,39 @@
   align-items: flex-start;
 }
 
+.plan-science {
+  margin: 0 0 0.5rem;
+  max-width: 44rem;
+  font-size: 0.92rem;
+  color: var(--accent-strong);
+  line-height: 1.45;
+}
+
 .plan-note {
   color: var(--muted);
-  max-width: 40rem;
+  max-width: 44rem;
   margin: 0;
+  font-size: 0.9rem;
+}
+
+.plan-session-code {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--bg) 40%, var(--surface));
+}
+
+.plan-ex-role {
+  font-size: 0.75rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
 }
 
 .plan-time {

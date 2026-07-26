@@ -19,16 +19,26 @@ import { TricepsGroup } from './muscles/triceps-group'
 
 export function MuscleIllustration({
   selectedMuscles = [],
+  interactiveMuscles,
   onToggleMuscle,
   hoveredMuscle,
   onHoverMuscle,
 }) {
+  const canInteract = (muscle) =>
+    !interactiveMuscles || interactiveMuscles.includes(muscle)
+
+  const handleToggle = (muscle) => {
+    if (!canInteract(muscle)) return
+    onToggleMuscle?.(muscle)
+  }
+
   const getMuscleClasses = (muscle) => {
     const isSelected = selectedMuscles.includes(muscle);
-    const isHovered = hoveredMuscle === muscle;
+    const isHovered = canInteract(muscle) && hoveredMuscle === muscle;
     const parts = ["body-muscle-fill"];
     if (isSelected) parts.push("is-selected");
     if (isHovered) parts.push("is-hovered");
+    if (interactiveMuscles && !canInteract(muscle)) parts.push("is-locked");
     return parts.join(" ");
   };
 
@@ -933,19 +943,19 @@ export function MuscleIllustration({
         strokeWidth="1"
       />
 
-      <BicepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <ForearmsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <ChestGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <TricepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <AbdominalsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <ObliquesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <QuadricepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <ShouldersGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <CalvesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <TrapsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <BackGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <HamstringsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
-      <GlutesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={onToggleMuscle} onHoverMuscle={onHoverMuscle} />
+      <BicepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <ForearmsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <ChestGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <TricepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <AbdominalsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <ObliquesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <QuadricepsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <ShouldersGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <CalvesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <TrapsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <BackGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <HamstringsGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
+      <GlutesGroup getMuscleClasses={getMuscleClasses} onToggleMuscle={handleToggle} onHoverMuscle={onHoverMuscle} />
       <path
         d="M 104.03,61.80
            C 103.06,61.49 102.16,60.94 100.91,60.35

@@ -1,16 +1,47 @@
+import { useRef } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import './Layout.css'
 
+gsap.registerPlugin(useGSAP)
+
 const NAV_ITEMS = [
-  { to: '/profile', label: '建档' },
-  { to: '/beginner', label: '业余路径' },
-  { to: '/anatomy', label: '解剖图' },
+  { to: '/profile', label: '身体档案' },
+  { to: '/beginner', label: '新手推荐' },
+  { to: '/anatomy', label: '自选肌肉' },
   { to: '/plan', label: '训练计划' },
 ]
 
 export default function Layout() {
+  const shellRef = useRef(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from('.app-header', {
+          y: -16,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+        })
+        gsap.from('.nav-link', {
+          opacity: 0,
+          y: -8,
+          duration: 0.4,
+          stagger: 0.05,
+          delay: 0.15,
+          ease: 'power2.out',
+        })
+      })
+    },
+    { scope: shellRef },
+  )
+
   return (
-    <div className="app-shell">
+    <div className="app-shell" ref={shellRef}>
       <header className="app-header">
         <div className="header-inner">
           <NavLink to="/" end className="brand" aria-label="返回FitGuide首页">

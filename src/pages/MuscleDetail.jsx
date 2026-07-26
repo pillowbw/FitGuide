@@ -3,25 +3,32 @@ import { Link, useParams } from 'react-router-dom'
 import muscles from '../data/muscles.json'
 import exercises from '../data/exercises.json'
 import VideoList from '../components/VideoList'
+import { usePageReveal } from '../hooks/usePageReveal'
 import { getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 B：单块肌肉介绍 + 视频 */
 export default function MuscleDetail() {
   const { id } = useParams()
   const muscle = muscles.find((m) => m.id === id)
+  const pageRef = usePageReveal([id])
   const related = exercises.filter((ex) => ex.muscleIds.includes(id))
   const [added, setAdded] = useState(false)
+
+  const profile = getProfile()
+  const backTo =
+    profile.path === 'beginner'
+      ? { to: '/beginner', label: '返回新手推荐' }
+      : { to: '/anatomy', label: '返回自选肌肉' }
 
   if (!muscle) {
     return (
       <section className="page">
         <h1>未找到该肌肉</h1>
-        <Link to="/anatomy">返回解剖图</Link>
+        <Link to={backTo.to}>{backTo.label}</Link>
       </section>
     )
   }
 
-  const profile = getProfile()
   const isAlreadyAdded = (profile.selectedMuscleIds || []).includes(muscle.id)
 
   function addToPlan() {
@@ -37,7 +44,7 @@ export default function MuscleDetail() {
   const sideLabel = { front: '正面', back: '背面' }[muscle.side] || muscle.side
 
   return (
-    <section className="page">
+    <section className="page" ref={pageRef}>
       {/* 顶部元信息 */}
       <div className="muscle-meta">
         <span className="muscle-badge">{regionLabel}</span>
@@ -83,8 +90,8 @@ export default function MuscleDetail() {
         <Link className="btn btn-primary" to="/plan">
           查看 / 生成计划
         </Link>
-        <Link className="btn btn-ghost" to="/anatomy">
-          返回解剖图
+        <Link className="btn btn-ghost" to={backTo.to}>
+          {backTo.label}
         </Link>
       </div>
     </section>

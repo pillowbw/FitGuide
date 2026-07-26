@@ -4,77 +4,220 @@ import planRules from '../data/planRules.json'
 import { getProfile, savePlan } from './storage'
 
 function unique(ids) {
-  return [...new Set(ids.filter(Boolean))]
+  return [...new Set((ids || []).filter(Boolean))]
 }
 
 function muscleName(id) {
   return muscles.find((m) => m.id === id)?.name || id
 }
 
-/**
- * 按路径筛选动作：业余优先 beginner；进阶优先 advanced，再补 beginner。
- */
-function pickExercisesForMuscle(muscleId, path, limit, usedIds) {
-  const matched = exercises.filter((ex) => ex.muscleIds.includes(muscleId))
-  if (!matched.length) return []
-
-  let pool
-  if (path === 'beginner') {
-    const easy = matched.filter((ex) => ex.level === 'beginner')
-    pool = easy.length ? easy : matched
-  } else {
-    const hard = matched.filter((ex) => ex.level === 'advanced')
-    pool = [...hard, ...matched.filter((ex) => ex.level !== 'advanced')]
-  }
-
-  const picked = []
-  for (const ex of pool) {
-    if (usedIds.has(ex.id)) continue
-    picked.push(ex)
-    usedIds.add(ex.id)
-    if (picked.length >= limit) break
-  }
-  return picked
+function regionOfMuscle(id) {
+  return muscles.find((m) => m.id === id)?.region || ''
 }
 
 /**
- * 解析本周要练的肌肉列表。
- * 优先 selectedMuscleIds；否则按 goalRegion；再兜底全身。
+ * 解析本周目标肌群：优先 selectedMuscleIds，否则按 goalRegion。
  */
 export function resolveMuscleIds(profile) {
   if (profile.selectedMuscleIds?.length) {
     return unique(profile.selectedMuscleIds)
   }
-
   const region = profile.goalRegion || 'full'
-  const fromRegion =
-    planRules.regionFocusOrder[region] || planRules.regionFocusOrder.full
-  return [...fromRegion]
+  return [...(planRules.regionFocusOrder[region] || planRules.regionFocusOrder.full)]
 }
 
 /**
- * 为一天选主次肌群：主肌 + 协同肌（pairHints），再回退列表轮转。
+ * 根据档案推断课表分区：full / upper / lower / core
  */
-function resolveDayMuscles(muscleIds, dayIndex, count) {
-  const focusId = muscleIds[dayIndex % muscleIds.length]
-  const chosen = [focusId]
-  const pairs = planRules.pairHints[focusId] || []
+function resolveTemplateRegion(profile, muscleIds) {
+  if (profile.goalRegion && planRules.sessionTemplates.beginner[profile.goalRegion]) {
+    return profile.goalRegion
+  }
 
-  for (const pairId of pairs) {
-    if (chosen.length >= count) break
-    if (muscleIds.includes(pairId) && !chosen.includes(pairId)) {
-      chosen.push(pairId)
+  const regions = unique(muscleIds.map(regionOfMuscle).filter(Boolean))
+  if (regions.length === 1) return regions[0]
+  if (regions.length === 0) return 'full'
+  // 多部位或上下都有 → 全身/上下分化模板
+  return 'full'
+}
+
+function getSessionTemplates(path, region) {
+  const pack = planRules.sessionTemplates[path] || planRules.sessionTemplates.beginner
+  return pack[region] || pack.full
+}
+
+function setsLabelFor(schemeKey, path) {
+  const schemes = planRules.setSchemes
+  if (schemeKey && schemes[schemeKey]) return schemes[schemeKey]
+  if (path === 'beginner') return schemes.beginner
+  return schemes.hypertrophy
+}
+
+function levelAllowed(ex, path) {
+  if (path === 'beginner') return ex.level === 'beginner'
+  return true
+}
+
+/**
+ * 给候选动作打分：越贴合目标肌群、越符合 slot、本周未用过分越高。
+ */
+function scoreExercise(ex, slot, targetMuscles, weekUsed, path) {
+  let score = 0
+  const overlap = ex.muscleIds.filter((id) => targetMuscles.includes(id)).length
+  score += overlap * 8
+
+  if (slot.preferMuscles?.length) {
+    const preferHit = ex.muscleIds.filter((id) =>
+      slot.preferMuscles.includes(id),
+    ).length
+    score += preferHit * 12
+  }
+
+  if (slot.roles?.length) {
+    const roleIdx = slot.roles.indexOf(ex.role)
+    if (roleIdx === 0) score += 14
+    else if (roleIdx > 0) score += 6
+    else score -= 2
+  }
+
+  if (slot.patterns?.includes(ex.pattern)) score += 6
+
+  // 主项槽位优先真正的复合动作
+  if (ex.role === 'compound') score += 4
+
+  // 进阶略偏好 advanced 复合动作做主项
+  if (path === 'advanced' && ex.level === 'advanced' && ex.role === 'compound') {
+    score += 3
+  }
+
+  // 强烈避免本周重复
+  if (weekUsed.has(ex.id)) score -= 100
+
+  // 轻微偏好尚未用过的模式组合多样性已由模板保证
+  return score
+}
+
+function matchesSlot(ex, slot, path) {
+  if (!levelAllowed(ex, path)) return false
+  if (slot.patterns?.length && !slot.patterns.includes(ex.pattern)) return false
+  if (slot.roles?.length && !slot.roles.includes(ex.role)) {
+    // roles 为软约束：isolation slot 若写了 roles 则严格；否则上面已用 patterns
+    // 若同时有 preferMuscles，允许 role 不完全匹配
+    if (!slot.preferMuscles?.length) return false
+  }
+  return true
+}
+
+function pickForSlot(slot, path, targetMuscles, weekUsed, dayUsed) {
+  const candidates = exercises.filter(
+    (ex) =>
+      matchesSlot(ex, slot, path) &&
+      !dayUsed.has(ex.id) &&
+      // 至少与目标肌群有关，或是 core/carry 这类通用支持项
+      (ex.muscleIds.some((id) => targetMuscles.includes(id)) ||
+        ex.pattern === 'core' ||
+        ex.pattern === 'carry' ||
+        slot.preferMuscles?.some((id) => ex.muscleIds.includes(id))),
+  )
+
+  if (!candidates.length) {
+    // 放宽：忽略 role，只看 pattern + 未使用
+    const loose = exercises.filter(
+      (ex) =>
+        levelAllowed(ex, path) &&
+        !dayUsed.has(ex.id) &&
+        !weekUsed.has(ex.id) &&
+        (!slot.patterns?.length || slot.patterns.includes(ex.pattern)),
+    )
+    if (!loose.length) return null
+    loose.sort(
+      (a, b) =>
+        scoreExercise(b, slot, targetMuscles, weekUsed, path) -
+        scoreExercise(a, slot, targetMuscles, weekUsed, path),
+    )
+    return loose[0]
+  }
+
+  // 先尽量选本周没用过的
+  const fresh = candidates.filter((ex) => !weekUsed.has(ex.id))
+  const pool = fresh.length ? fresh : candidates
+
+  pool.sort(
+    (a, b) =>
+      scoreExercise(b, slot, targetMuscles, weekUsed, path) -
+      scoreExercise(a, slot, targetMuscles, weekUsed, path),
+  )
+  return pool[0]
+}
+
+function toPlanExercise(ex, setsLabel, primaryMuscleId) {
+  const primary =
+    primaryMuscleId ||
+    ex.muscleIds[0]
+  return {
+    id: ex.id,
+    name: ex.name,
+    muscleIds: ex.muscleIds,
+    level: ex.level,
+    role: ex.role,
+    pattern: ex.pattern,
+    advice: ex.advice,
+    videoUrl: ex.videoUrl,
+    videoSource: ex.videoSource,
+    setsLabel,
+    primaryMuscleId: primary,
+    primaryMuscleName: muscleName(primary),
+  }
+}
+
+function fillDayFromTemplate(template, path, targetMuscles, weekUsed) {
+  const dayUsed = new Set()
+  const picked = []
+  const dayScheme = template.scheme
+
+  for (const slot of template.slots) {
+    const ex = pickForSlot(slot, path, targetMuscles, weekUsed, dayUsed)
+    if (!ex) continue
+    dayUsed.add(ex.id)
+    weekUsed.add(ex.id)
+
+    const label = setsLabelFor(slot.scheme || dayScheme, path)
+    const preferred =
+      slot.preferMuscles?.find((id) => ex.muscleIds.includes(id)) ||
+      ex.muscleIds.find((id) => targetMuscles.includes(id)) ||
+      ex.muscleIds[0]
+
+    picked.push(toPlanExercise(ex, label, preferred))
+  }
+
+  // 当天动作偏少时，用尚未用过、且命中目标肌群的动作补齐
+  const minCount = template.slots.length
+  if (picked.length < minCount) {
+    const fillers = exercises
+      .filter(
+        (ex) =>
+          levelAllowed(ex, path) &&
+          !dayUsed.has(ex.id) &&
+          !weekUsed.has(ex.id) &&
+          ex.muscleIds.some((id) => targetMuscles.includes(id)),
+      )
+      .sort((a, b) => {
+        const ao = a.muscleIds.filter((id) => targetMuscles.includes(id)).length
+        const bo = b.muscleIds.filter((id) => targetMuscles.includes(id)).length
+        return bo - ao
+      })
+
+    for (const ex of fillers) {
+      if (picked.length >= minCount) break
+      dayUsed.add(ex.id)
+      weekUsed.add(ex.id)
+      const primary =
+        ex.muscleIds.find((id) => targetMuscles.includes(id)) || ex.muscleIds[0]
+      picked.push(toPlanExercise(ex, setsLabelFor(dayScheme, path), primary))
     }
   }
 
-  let offset = 1
-  while (chosen.length < count && offset < muscleIds.length) {
-    const next = muscleIds[(dayIndex + offset) % muscleIds.length]
-    if (!chosen.includes(next)) chosen.push(next)
-    offset += 1
-  }
-
-  return chosen
+  return picked
 }
 
 function buildPlanNote(profile) {
@@ -82,7 +225,7 @@ function buildPlanNote(profile) {
     planRules.notesByBodyType[profile.currentBodyTypeId] ||
     '按自身感受调整重量，动作质量优先于重量。'
   const genderNote = planRules.notesByGender[profile.gender] || ''
-  return [bodyNote, genderNote].filter(Boolean).join(' ')
+  return [planRules.scienceNote, bodyNote, genderNote].filter(Boolean).join(' ')
 }
 
 function buildRestHints(profile) {
@@ -96,94 +239,59 @@ function buildRestHints(profile) {
 export function buildPlan(profileInput) {
   const profile = profileInput || getProfile()
   const path = profile.path === 'advanced' ? 'advanced' : 'beginner'
-  const daysCount = planRules.daysPerWeek[path]
-  const musclesPerDay = planRules.musclesPerDay[path]
-  const exercisesPerDay = planRules.exercisesPerDay[path]
   const muscleIds = resolveMuscleIds(profile)
-  const setsLabel = planRules.defaultSets[path]
+  const region = resolveTemplateRegion(profile, muscleIds)
+  const templates = getSessionTemplates(path, region)
+  const daysCount = planRules.daysPerWeek[path]
   const weekdayLabels =
     planRules.weekdayLabels[path] ||
     Array.from({ length: daysCount }, (_, i) => `第 ${i + 1} 天`)
 
+  const weekUsed = new Set()
   const days = []
-  const weekUsedExerciseIds = new Set()
 
   for (let i = 0; i < daysCount; i += 1) {
-    const dayMuscles = resolveDayMuscles(muscleIds, i, musclesPerDay)
-    const dayUsed = new Set()
-    const perMuscleLimit = Math.max(
-      1,
-      Math.ceil(exercisesPerDay / dayMuscles.length),
+    const template = templates[i % templates.length]
+    const dayExercises = fillDayFromTemplate(
+      template,
+      path,
+      muscleIds,
+      weekUsed,
     )
 
-    let dayExercises = dayMuscles.flatMap((id) =>
-      pickExercisesForMuscle(id, path, perMuscleLimit, dayUsed).map((ex) => ({
-        id: ex.id,
-        name: ex.name,
-        muscleIds: ex.muscleIds,
-        level: ex.level,
-        advice: ex.advice,
-        videoUrl: ex.videoUrl,
-        videoSource: ex.videoSource,
-        setsLabel,
-        primaryMuscleId: id,
-        primaryMuscleName: muscleName(id),
-      })),
+    const focusMuscles = unique(
+      dayExercises.flatMap((ex) =>
+        ex.muscleIds.filter((id) => muscleIds.includes(id)),
+      ),
     )
 
-    if (dayExercises.length < exercisesPerDay) {
-      const fillers = exercises.filter(
-        (ex) =>
-          !dayUsed.has(ex.id) &&
-          !weekUsedExerciseIds.has(ex.id) &&
-          ex.muscleIds.some((id) => muscleIds.includes(id)) &&
-          (path !== 'beginner' || ex.level === 'beginner'),
-      )
-      for (const ex of fillers) {
-        if (dayExercises.length >= exercisesPerDay) break
-        dayUsed.add(ex.id)
-        const primary =
-          ex.muscleIds.find((id) => muscleIds.includes(id)) || ex.muscleIds[0]
-        dayExercises.push({
-          id: ex.id,
-          name: ex.name,
-          muscleIds: ex.muscleIds,
-          level: ex.level,
-          advice: ex.advice,
-          videoUrl: ex.videoUrl,
-          videoSource: ex.videoSource,
-          setsLabel,
-          primaryMuscleId: primary,
-          primaryMuscleName: muscleName(primary),
-        })
-      }
-    }
-
-    dayExercises = dayExercises.slice(0, exercisesPerDay)
-    dayExercises.forEach((ex) => weekUsedExerciseIds.add(ex.id))
-
-    const focusId = dayMuscles[0]
     days.push({
       day: weekdayLabels[i] || `第 ${i + 1} 天`,
       dayIndex: i + 1,
-      focus: muscleName(focusId),
-      focusMuscleId: focusId,
-      muscleIds: dayMuscles,
-      muscleNames: dayMuscles.map(muscleName),
+      sessionCode: template.code,
+      sessionTitle: template.title,
+      focus: template.focus,
+      focusMuscleId: focusMuscles[0] || muscleIds[0],
+      muscleIds: focusMuscles,
+      muscleNames: focusMuscles.map(muscleName),
       exercises: dayExercises,
     })
   }
 
+  const uniqueExerciseCount = weekUsed.size
+
   return {
     weekLabel:
       path === 'beginner'
-        ? `入门周计划（${daysCount} 练）`
-        : `进阶周计划（${daysCount} 练）`,
+        ? `入门全身轮换（${daysCount} 练 · ${uniqueExerciseCount} 个动作）`
+        : `进阶上下分化（${daysCount} 练 · ${uniqueExerciseCount} 个动作）`,
     path,
-    goalRegion: profile.goalRegion || 'full',
+    split: region,
+    goalRegion: profile.goalRegion || region,
     sourceMuscleIds: muscleIds,
     generatedAt: new Date().toISOString(),
     note: buildPlanNote(profile),
+    scienceNote: planRules.scienceNote,
     restDayHints: buildRestHints(profile),
     days,
   }

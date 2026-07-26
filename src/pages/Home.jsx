@@ -1,10 +1,64 @@
+import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 import heroImage from '../assets/hero.png'
 import { saveProfile } from '../utils/storage'
+
+gsap.registerPlugin(useGSAP)
 
 /** 成员 A：首页路径选择 */
 export default function Home() {
   const navigate = useNavigate()
+  const pageRef = useRef(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+        tl.from('.home-copy > *', {
+          opacity: 0,
+          y: 28,
+          duration: 0.65,
+          stagger: 0.1,
+        })
+          .from(
+            '.home-visual',
+            {
+              opacity: 0,
+              scale: 0.92,
+              duration: 0.75,
+              ease: 'power2.out',
+            },
+            '-=0.45',
+          )
+          .from(
+            '.path-card',
+            {
+              opacity: 0,
+              y: 36,
+              duration: 0.6,
+              stagger: 0.12,
+            },
+            '-=0.35',
+          )
+          .from(
+            '.home-steps span',
+            {
+              opacity: 0,
+              y: 16,
+              duration: 0.45,
+              stagger: 0.06,
+            },
+            '-=0.25',
+          )
+      })
+    },
+    { scope: pageRef },
+  )
 
   function choosePath(path) {
     saveProfile({ path })
@@ -12,7 +66,7 @@ export default function Home() {
   }
 
   return (
-    <section className="page home-page">
+    <section className="page home-page" ref={pageRef}>
       <div className="home-hero">
         <div className="home-copy">
           <p className="eyebrow">FITGUIDE · 个性化健身指南</p>
@@ -31,15 +85,15 @@ export default function Home() {
       <div className="home-paths">
         <article className="path-card path-card-primary">
           <p className="path-kicker">适合健身新手</p>
-          <h2>我是业余者</h2>
+          <h2>新手推荐</h2>
           <p>
-            我不知道具体肌肉名称，只知道自己想练哪个部位，或者想拥有怎样的身材。
+            不需要知道肌肉名称。选择想练的部位和目标身材，系统会在解剖图上高亮推荐肌肉。
           </p>
 
           <ul>
             <li>选择上肢、核心、下肢或全身</li>
             <li>通过例图选择目标身材</li>
-            <li>获得系统推荐的训练肌肉</li>
+            <li>在解剖图上查看推荐肌肉</li>
           </ul>
 
           <button
@@ -47,15 +101,15 @@ export default function Home() {
             className="btn btn-primary"
             onClick={() => choosePath('beginner')}
           >
-            从简单选择开始
+            开始新手推荐
           </button>
         </article>
 
         <article className="path-card">
           <p className="path-kicker">适合有一定基础的用户</p>
-          <h2>我有健身基础</h2>
+          <h2>自选肌肉</h2>
           <p>
-            我已经知道自己想训练的肌肉，希望通过人体肌肉图直接进行选择。
+            已经知道想练哪块肌肉时，可直接在人体解剖图上点选目标肌肉。
           </p>
 
           <ul>
@@ -69,7 +123,7 @@ export default function Home() {
             className="btn btn-secondary"
             onClick={() => choosePath('advanced')}
           >
-            使用进阶选择
+            打开自选肌肉
           </button>
         </article>
       </div>
