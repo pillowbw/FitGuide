@@ -3,28 +3,28 @@
     "id": "slim",
     "label": "偏瘦",
     "description": "整体较瘦，希望逐步增加肌肉量",
-    "image": "/body/current-slim.svg",
+    "image": "/body/current-slim.png",
     "kind": "current"
   },
   {
     "id": "average",
     "label": "匀称",
     "description": "整体比例较均衡，希望进一步塑形",
-    "image": "/body/current-average.svg",
+    "image": "/body/current-average.png",
     "kind": "current"
   },
   {
     "id": "heavy",
     "label": "偏重",
     "description": "体重相对较高，希望改善体能与身体线条",
-    "image": "/body/current-heavy.svg",
+    "image": "/body/current-heavy.png",
     "kind": "current"
   },
   {
     "id": "athletic",
     "label": "匀称运动型",
     "description": "全身肌肉发展较均衡，整体线条清晰",
-    "image": "/body/target-athletic.svg",
+    "image": "/body/target-athletic.png",
     "kind": "target",
     "recommendedMuscleIds": [
       "chest",
@@ -44,7 +44,7 @@
     "id": "v_taper",
     "label": "倒三角型",
     "description": "重点发展肩部和背部，塑造宽肩窄腰的视觉效果",
-    "image": "/body/target-v-taper.svg",
+    "image": "/body/target-v-taper.png",
     "kind": "target",
     "recommendedMuscleIds": [
       "shoulders",
@@ -58,7 +58,7 @@
     "id": "lower_strong",
     "label": "下肢力量型",
     "description": "重点发展臀腿力量，改善下肢线条与稳定性",
-    "image": "/body/target-lower.svg",
+    "image": "/body/target-lower.png",
     "kind": "target",
     "recommendedMuscleIds": [
       "quads",
