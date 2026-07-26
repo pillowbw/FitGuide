@@ -3,6 +3,10 @@
     "beginner": 3,
     "advanced": 4
   },
+  "exercisesPerDay": {
+    "beginner": 5,
+    "advanced": 6
+  },
   "weekdayLabels": {
     "beginner": ["周一", "周三", "周五"],
     "advanced": ["周一", "周二", "周四", "周五"]
@@ -14,6 +18,44 @@
     "isolation": "3 组 × 12–15 次",
     "core": "3 组 × 30–45 秒 / 12–15 次",
     "carry": "3 组 × 20–40 米"
+  },
+  "volumeByGoal": {
+    "build": {
+      "beginner": "4 组 × 8–12 次",
+      "strength": "4 组 × 5–8 次",
+      "hypertrophy": "4 组 × 8–12 次",
+      "isolation": "3 组 × 10–12 次",
+      "core": "3 组 × 40–60 秒 / 12–15 次",
+      "carry": "3 组 × 30–40 米",
+      "minExercisesPerDay": {
+        "beginner": 5,
+        "advanced": 6
+      }
+    },
+    "balance": {
+      "beginner": "3 组 × 10–12 次",
+      "strength": "4 组 × 5–8 次",
+      "hypertrophy": "3–4 组 × 8–12 次",
+      "isolation": "3 组 × 12–15 次",
+      "core": "3 组 × 30–45 秒 / 12–15 次",
+      "carry": "3 组 × 20–40 米",
+      "minExercisesPerDay": {
+        "beginner": 5,
+        "advanced": 6
+      }
+    },
+    "cut": {
+      "beginner": "3 组 × 12–15 次",
+      "strength": "3 组 × 6–8 次",
+      "hypertrophy": "3 组 × 10–15 次",
+      "isolation": "2–3 组 × 12–15 次",
+      "core": "3 组 × 30–45 秒 / 15–20 次",
+      "carry": "3 组 × 20–30 米",
+      "minExercisesPerDay": {
+        "beginner": 4,
+        "advanced": 5
+      }
+    }
   },
   "regionFocusOrder": {
     "upper": ["chest", "shoulders", "lats", "biceps", "triceps", "traps"],
@@ -47,58 +89,54 @@
       "full": [
         {
           "code": "FB-A",
-          "title": "全身 A · 水平推 + 垂直拉",
-          "focus": "胸推 / 背拉 / 深蹲",
+          "title": "全身 A · 水平推日",
+          "focus": "俯卧撑类 + 下拉 + 深蹲",
           "scheme": "beginner",
           "slots": [
-            { "patterns": ["horizontal_press"], "roles": ["compound"] },
+            { "patterns": ["horizontal_press"], "roles": ["compound"], "avoidIds": [] },
             { "patterns": ["vertical_pull"], "roles": ["compound", "accessory"] },
             { "patterns": ["squat"], "roles": ["compound"] },
-            { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
             { "patterns": ["isolation"], "preferMuscles": ["shoulders", "triceps"] },
             { "patterns": ["core"], "roles": ["accessory", "isolation"] }
           ]
         },
         {
           "code": "FB-B",
-          "title": "全身 B · 垂直推 + 水平拉",
-          "focus": "推举 / 划船 / 弓步",
+          "title": "全身 B · 推举划船日",
+          "focus": "推举 + 划船 + 弓步",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["vertical_press"], "roles": ["compound", "accessory"] },
             { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"] },
-            { "patterns": ["lunge", "squat"], "roles": ["compound"] },
+            { "patterns": ["lunge"], "roles": ["compound"] },
             { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
-            { "patterns": ["isolation"], "preferMuscles": ["biceps", "forearms"] },
-            { "patterns": ["core", "carry"] }
+            { "patterns": ["isolation", "core"], "preferMuscles": ["biceps", "abs"] }
           ]
         },
         {
           "code": "FB-C",
-          "title": "全身 C · 模式补充日",
-          "focus": "上斜推 / 拉变式 / 臀链",
+          "title": "全身 C · 臀链补充日",
+          "focus": "上斜推 + 划船变式 + 铰链",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["horizontal_press"], "roles": ["compound"] },
-            { "patterns": ["horizontal_pull", "vertical_pull"], "roles": ["compound", "accessory"] },
+            { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"] },
             { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
-            { "patterns": ["squat", "lunge"], "roles": ["compound"] },
-            { "patterns": ["isolation"], "preferMuscles": ["calves", "abs"] },
-            { "patterns": ["core", "isolation"], "preferMuscles": ["shoulders", "triceps", "abs"] }
+            { "patterns": ["isolation"], "preferMuscles": ["glutes", "calves"] },
+            { "patterns": ["core", "carry"] }
           ]
         }
       ],
       "upper": [
         {
           "code": "UP-A",
-          "title": "上肢 A · 推拉均衡",
-          "focus": "卧推模式 + 下拉",
+          "title": "上肢 A · 推拉基础",
+          "focus": "水平推 + 垂直拉",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["horizontal_press"], "roles": ["compound"] },
             { "patterns": ["vertical_pull"], "roles": ["compound"] },
             { "patterns": ["vertical_press"], "roles": ["compound", "accessory"] },
-            { "patterns": ["horizontal_pull"], "roles": ["compound", "accessory"] },
             { "patterns": ["isolation"], "preferMuscles": ["triceps"] },
             { "patterns": ["isolation", "core"], "preferMuscles": ["biceps", "abs"] }
           ]
@@ -106,29 +144,27 @@
         {
           "code": "UP-B",
           "title": "上肢 B · 角度轮换",
-          "focus": "上斜推 + 划船",
+          "focus": "另一套推 + 划船",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["horizontal_press"], "roles": ["compound"] },
             { "patterns": ["horizontal_pull"], "roles": ["compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["shoulders"] },
-            { "patterns": ["vertical_pull", "horizontal_pull"] },
             { "patterns": ["isolation"], "preferMuscles": ["biceps", "forearms"] },
-            { "patterns": ["isolation", "core"], "preferMuscles": ["triceps", "abs"] }
+            { "patterns": ["core"] }
           ]
         },
         {
           "code": "UP-C",
-          "title": "上肢 C · 细节强化",
-          "focus": "后束 / 手臂 / 核心",
+          "title": "上肢 C · 后束与手臂",
+          "focus": "推举变式 + 后束",
           "scheme": "beginner",
           "slots": [
-            { "patterns": ["vertical_press", "horizontal_press"] },
+            { "patterns": ["vertical_press"] },
             { "patterns": ["horizontal_pull"], "roles": ["accessory", "compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["shoulders", "traps"] },
             { "patterns": ["isolation"], "preferMuscles": ["triceps"] },
-            { "patterns": ["isolation", "carry"], "preferMuscles": ["biceps", "forearms"] },
-            { "patterns": ["core"] }
+            { "patterns": ["isolation", "carry"], "preferMuscles": ["biceps", "forearms"] }
           ]
         }
       ],
@@ -136,12 +172,11 @@
         {
           "code": "LO-A",
           "title": "下肢 A · 蹲主导",
-          "focus": "深蹲模式 + 腘绳",
+          "focus": "深蹲 + 腘绳",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["squat"], "roles": ["compound"] },
             { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
-            { "patterns": ["lunge", "squat"], "roles": ["compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["hamstrings"] },
             { "patterns": ["isolation"], "preferMuscles": ["calves"] },
             { "patterns": ["core"] }
@@ -154,22 +189,20 @@
           "scheme": "beginner",
           "slots": [
             { "patterns": ["hinge"], "roles": ["compound"] },
-            { "patterns": ["squat", "lunge"], "roles": ["compound"] },
-            { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
+            { "patterns": ["lunge"], "roles": ["compound"] },
+            { "patterns": ["isolation"], "preferMuscles": ["glutes"] },
             { "patterns": ["isolation"], "preferMuscles": ["quads"] },
-            { "patterns": ["isolation"], "preferMuscles": ["calves"] },
             { "patterns": ["core", "carry"] }
           ]
         },
         {
           "code": "LO-C",
-          "title": "下肢 C · 单侧与细节",
-          "focus": "弓步 / 臀推 / 小腿",
+          "title": "下肢 C · 单侧日",
+          "focus": "弓步 / 箱蹲 / 小腿",
           "scheme": "beginner",
           "slots": [
-            { "patterns": ["lunge"], "roles": ["compound"] },
-            { "patterns": ["hinge"], "roles": ["compound", "accessory"] },
-            { "patterns": ["squat"], "roles": ["compound"] },
+            { "patterns": ["lunge", "squat"], "roles": ["compound"] },
+            { "patterns": ["hinge"], "roles": ["accessory", "compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["hamstrings", "glutes"] },
             { "patterns": ["isolation"], "preferMuscles": ["calves"] },
             { "patterns": ["core"] }
@@ -180,43 +213,40 @@
         {
           "code": "CO-A",
           "title": "核心 A · 抗伸展",
-          "focus": "稳定 + 轻负荷复合",
+          "focus": "平板类稳定",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["core"], "roles": ["accessory"] },
             { "patterns": ["core"], "roles": ["isolation", "accessory"] },
             { "patterns": ["hinge"], "roles": ["accessory", "compound"] },
             { "patterns": ["carry", "core"] },
-            { "patterns": ["horizontal_press", "squat"], "roles": ["compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["abs", "obliques"] }
           ]
         },
         {
           "code": "CO-B",
-          "title": "核心 B · 旋转与侧链",
-          "focus": "斜肌 + 躯干控制",
+          "title": "核心 B · 旋转侧链",
+          "focus": "斜肌控制",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["core"] },
             { "patterns": ["core"] },
-            { "patterns": ["carry", "hinge"] },
             { "patterns": ["horizontal_pull", "squat"], "roles": ["compound"] },
             { "patterns": ["isolation"], "preferMuscles": ["obliques", "abs"] },
-            { "patterns": ["core", "isolation"] }
+            { "patterns": ["carry", "core"] }
           ]
         },
         {
           "code": "CO-C",
           "title": "核心 C · 综合巩固",
-          "focus": "屈曲 / 稳定交替",
+          "focus": "另一组核心动作",
           "scheme": "beginner",
           "slots": [
             { "patterns": ["core"] },
             { "patterns": ["hinge", "squat"], "roles": ["compound", "accessory"] },
-            { "patterns": ["core", "carry"] },
-            { "patterns": ["horizontal_press", "horizontal_pull"] },
+            { "patterns": ["core"] },
             { "patterns": ["isolation"], "preferMuscles": ["abs", "lowerback"] },
-            { "patterns": ["core"] }
+            { "patterns": ["lunge", "carry"] }
           ]
         }
       ]

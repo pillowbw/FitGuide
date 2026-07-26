@@ -61,11 +61,15 @@ npm run dev
 
 API：`getProfile()` / `saveProfile(patch)` / `getPlan()` / `savePlan(plan)`（`storage.js`）；`generatePlan()`（`planGenerator.js`，生成后自动 `savePlan`）。
 
+计划会按档案调整运动量：`assessBodyLoad()`（`bodyLoad.js`）综合 BMI、体脂、当前身材例图，分为增肌 / 均衡 / 控脂，影响组次数与每天动作数。修改档案并 `saveProfile` 后，若已有计划会经 `syncPlanWithProfile` 自动重算。
+
+训练记录（本机）：`ensureCurrentWeekLog` / `toggleExerciseCompleted` / `getPastWeekLogs` — key 为 `fitguide_workout_history`，最多保留 8 周。
+
 ### JSON 文件
 
 - `bodyTypes.json`：`kind` 为 `current` 或 `target`；目标身材可带 `recommendedMuscleIds`
 - `muscles.json`：`id`, `name`, `side`(`front`|`back`), `region`, `summary`, `tips`
-- `exercises.json`：`muscleIds`, `videoUrl`, `advice`, `level`
+- `exercises.json`：`muscleIds`, `videoUrl`, `advice`, `level`, `role`, `pattern`（动作库参考了 [wger](https://github.com/wger-project/wger) 与 [workout-cool](https://github.com/Snouzy/workout-cool) 的常见力量动作分类；文案与字段为本项目自写，视频为 YouTube 外链）
 - `planRules.json`：每周训练天数、组次数、部位优先顺序
 
 ## 资源

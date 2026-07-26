@@ -89,6 +89,153 @@
   white-space: nowrap;
 }
 
+.plan-body-load {
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--bg-accent) 55%, var(--surface)),
+      var(--surface)
+    );
+  display: grid;
+  gap: 0.4rem;
+}
+
+.plan-body-load-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
+.plan-body-load-goal {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--accent-strong);
+}
+
+.plan-body-load-summary {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.plan-body-load-meta {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.plan-body-load-meta li {
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+}
+
+.plan-body-load-tips {
+  margin: 0.15rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.plan-burn-week {
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--accent) 10%, var(--surface)),
+      var(--surface) 55%
+    );
+  display: grid;
+  gap: 0.35rem;
+}
+
+.plan-burn-week-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
+.plan-burn-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.plan-burn-kcal {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--accent-strong);
+  letter-spacing: -0.02em;
+}
+
+.plan-burn-food {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.plan-burn-food > span:first-of-type {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.plan-burn-or-note {
+  margin-left: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.plan-burn-hint {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.plan-burn-day {
+  margin-top: 0.9rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  display: grid;
+  gap: 0.25rem;
+}
+
+.plan-burn-day-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.55rem;
+}
+
+.plan-burn-day-top strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--accent-strong);
+}
+
+.plan-burn-mins {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
 .plan-days {
   display: grid;
   gap: 1rem;
@@ -231,6 +378,237 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.plan-progress {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.plan-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.plan-progress-meta strong {
+  color: var(--accent-strong);
+  font-size: 1.05rem;
+}
+
+.plan-progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 70%, transparent);
+  overflow: hidden;
+}
+
+.plan-progress-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.25s ease;
+}
+
+.plan-ex-top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 带视频缩略图的动作卡片 */
+.plan-ex-video {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.plan-ex-video .plan-ex-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.plan-ex-video > a {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.plan-ex-video img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  background: var(--bg-accent);
+  transition: transform 0.2s ease;
+}
+
+.plan-ex-video > a:hover img {
+  transform: scale(1.03);
+}
+
+.plan-ex-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.plan-ex-video > a:hover .plan-ex-play {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .plan-ex-video {
+    grid-template-columns: 1fr;
+  }
+}
+
+.plan-ex-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.plan-ex-check input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.plan-exercise-list li.is-done {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.plan-exercise-list li.is-done .plan-ex-main strong {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--muted) 55%, transparent);
+}
+
+.plan-exercise-list li.is-done .plan-ex-check {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.plan-history {
+  margin-top: 0.5rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.plan-history-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.plan-history-header h2 {
+  margin-bottom: 0.25rem;
+}
+
+.plan-history-header .muted {
+  margin: 0;
+}
+
+.plan-history-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.plan-history-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.plan-history-week {
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: grid;
+  gap: 0.55rem;
+}
+
+.plan-history-week.is-current {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.plan-history-week header h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  margin-bottom: 0.2rem;
+  font-size: 1.05rem;
+}
+
+.plan-history-week header p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.plan-history-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.plan-history-days {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.plan-history-days strong {
+  display: block;
+  font-size: 0.88rem;
+  margin-bottom: 0.2rem;
+}
+
+.plan-history-days ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.plan-history-days li span {
+  color: color-mix(in srgb, var(--muted) 80%, var(--ink));
 }
 
 @media (max-width: 560px) {

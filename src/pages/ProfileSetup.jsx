@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import bodyTypes from '../data/bodyTypes.json'
 import BodyTypePicker from '../components/BodyTypePicker'
 import { usePageReveal } from '../hooks/usePageReveal'
-import { getProfile, saveProfile } from '../utils/storage'
+import { getPlan, getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 A：用户身材建档 */
 export default function ProfileSetup() {
@@ -123,12 +123,18 @@ export default function ProfileSetup() {
       path,
     })
 
+    const planSynced = Boolean(getPlan())
+
     if (shouldContinue) {
       navigate(path === 'advanced' ? '/anatomy' : '/beginner')
       return
     }
 
-    setStatus('档案已成功保存。')
+    setStatus(
+      planSynced
+        ? '档案已保存，训练计划已按新的身体数据自动更新。'
+        : '档案已成功保存。',
+    )
   }
 
   function handleSubmit(event) {

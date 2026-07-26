@@ -1,0 +1,14 @@
+[
+  { "id": "banana", "name": "一根香蕉", "shortName": "香蕉", "kcal": 90 },
+  { "id": "cola", "name": "一罐可乐", "shortName": "可乐", "kcal": 140 },
+  { "id": "egg_tart", "name": "一个蛋挞", "shortName": "蛋挞", "kcal": 220 },
+  { "id": "milk_tea", "name": "一杯奶茶", "shortName": "奶茶", "kcal": 350 },
+  { "id": "burger", "name": "一个汉堡", "shortName": "汉堡", "kcal": 400 },
+  { "id": "fried_chicken", "name": "一份炸鸡", "shortName": "炸鸡", "kcal": 480 },
+  { "id": "dumpling", "name": "一盘饺子（约 10 个）", "shortName": "饺子", "kcal": 450 },
+  { "id": "malatang", "name": "一碗麻辣烫", "shortName": "麻辣烫", "kcal": 550 },
+  { "id": "rice_bowl", "name": "一碗盖饭", "shortName": "盖饭", "kcal": 650 },
+  { "id": "pizza_slice", "name": "两块披萨", "shortName": "披萨", "kcal": 520 },
+  { "id": "bbq", "name": "一顿烧烤（人均）", "shortName": "烧烤", "kcal": 800 },
+  { "id": "hotpot", "name": "一顿火锅（人均）", "shortName": "火锅", "kcal": 900 }
+]

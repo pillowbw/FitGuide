@@ -1105,3 +1105,148 @@ p {
     grid-template-columns: 1fr;
   }
 }
+
+/* ── 动作选择面板（解剖页） ── */
+.selected-muscles-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.selected-muscles-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.selected-muscles-chips .chip.is-selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  color: var(--accent-strong);
+}
+
+.exercise-selector {
+  margin-top: 0.5rem;
+}
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.exercise-card {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.exercise-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 12px rgba(31, 122, 85, 0.12);
+}
+
+.exercise-card.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.exercise-card-img {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--bg-accent);
+}
+
+.exercise-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.exercise-card-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-accent);
+}
+
+.exercise-card-check {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.exercise-card-body {
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.exercise-card-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.exercise-card-advice {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.exercise-level {
+  font-size: 0.72rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  width: fit-content;
+}
+
+.level-beginner {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.level-intermediate {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.level-advanced {
+  background: #fee2e2;
+  color: #b91c1c;
+}

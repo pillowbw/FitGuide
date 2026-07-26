@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
+import { usePlanProfileSync } from './hooks/usePlanProfileSync'
 import Home from './pages/Home'
 import ProfileSetup from './pages/ProfileSetup'
 import BeginnerFlow from './pages/BeginnerFlow'
@@ -8,6 +9,8 @@ import MuscleDetail from './pages/MuscleDetail'
 import TrainingPlan from './pages/TrainingPlan'
 
 export default function App() {
+  usePlanProfileSync()
+
   return (
     <BrowserRouter>
       <Routes>
