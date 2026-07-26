@@ -10,7 +10,74 @@ import {
 } from './videoMap'
 
 /** 计划结构版本：旧 localStorage 计划会自动按新规则重算 */
-export const PLAN_VERSION = 5
+export const PLAN_VERSION = 6
+
+const ALL_WEEKDAYS = [
+  '周一',
+  '周二',
+  '周三',
+  '周四',
+  '周五',
+  '周六',
+  '周日',
+]
+
+/**
+ * 按路径默认训练日，避开用户屏蔽的星期，并尽量拉开间隔。
+ * @param {'beginner'|'advanced'} path
+ * @param {string[]} [blockedWeekdays]
+ * @param {number} [daysCount]
+ */
+export function resolveWeekdayLabels(path, blockedWeekdays = [], daysCount) {
+  const count =
+    daysCount ||
+    planRules.daysPerWeek[path] ||
+    planRules.daysPerWeek.beginner
+  const blocked = new Set(
+    (blockedWeekdays || []).filter((day) => ALL_WEEKDAYS.includes(day)),
+  )
+  const defaults = (
+    planRules.weekdayLabels[path] ||
+    planRules.weekdayLabels.beginner ||
+    []
+  ).filter((day) => !blocked.has(day))
+
+  const picked = []
+
+  for (const day of defaults) {
+    if (picked.length >= count) break
+    if (!picked.includes(day)) picked.push(day)
+  }
+
+  while (picked.length < count) {
+    let best = null
+    let bestScore = -Infinity
+
+    for (const day of ALL_WEEKDAYS) {
+      if (blocked.has(day) || picked.includes(day)) continue
+      const index = ALL_WEEKDAYS.indexOf(day)
+      const minDistance = picked.length
+        ? Math.min(
+            ...picked.map((item) =>
+              Math.abs(ALL_WEEKDAYS.indexOf(item) - index),
+            ),
+          )
+        : 3
+      const score = minDistance * 10 - index
+      if (score > bestScore) {
+        bestScore = score
+        best = day
+      }
+    }
+
+    if (!best) break
+    picked.push(best)
+  }
+
+  return picked
+    .slice(0, count)
+    .sort((a, b) => ALL_WEEKDAYS.indexOf(a) - ALL_WEEKDAYS.indexOf(b))
+}
 
 function unique(ids) {
   return [...new Set((ids || []).filter(Boolean))]
@@ -419,9 +486,15 @@ export function buildPlan(profileInput) {
   const templates = getSessionTemplates(path, region)
   const daysCount = planRules.daysPerWeek[path]
   const perDay = exercisesPerDayFor(path, load)
-  const weekdayLabels =
-    planRules.weekdayLabels[path] ||
-    Array.from({ length: daysCount }, (_, i) => `第 ${i + 1} 天`)
+  const weekdayLabels = resolveWeekdayLabels(
+    path,
+    profile.blockedWeekdays || [],
+    daysCount,
+  )
+  const labels =
+    weekdayLabels.length > 0
+      ? weekdayLabels
+      : Array.from({ length: daysCount }, (_, i) => `第 ${i + 1} 天`)
 
   const weekUsed = new Set()
   const days = []
@@ -445,7 +518,7 @@ export function buildPlan(profileInput) {
     )
 
     days.push({
-      day: weekdayLabels[i] || `第 ${i + 1} 天`,
+      day: labels[i] || `第 ${i + 1} 天`,
       dayIndex: i + 1,
       sessionCode: template.code,
       sessionTitle: template.title,
@@ -493,6 +566,7 @@ export function profileFingerprint(profileInput) {
   const p = profileInput || getProfile()
   const muscles = [...(p.selectedMuscleIds || [])].sort().join(',')
   const exerciseIds = [...(p.selectedExerciseIds || [])].sort().join(',')
+  const blocked = [...(p.blockedWeekdays || [])].sort().join(',')
   return [
     p.gender || '',
     p.height ?? '',
@@ -504,6 +578,7 @@ export function profileFingerprint(profileInput) {
     p.targetBodyTypeId || '',
     muscles,
     exerciseIds,
+    blocked,
   ].join('|')
 }
 

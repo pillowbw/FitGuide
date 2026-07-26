@@ -7,7 +7,9 @@ import { usePageReveal } from '../hooks/usePageReveal'
 import { getProfile, saveProfile } from '../utils/storage'
 import { getThumb } from '../utils/videoMap'
 
-/** 成员 B：进阶 — 正反肌肉解剖图 + 动作选择 */
+const EQUIPMENT_ORDER = ['哑铃', '杠铃', '器械', '自重', '壶铃', '弹力带', 'TRX', '其他']
+
+/** 成员 B：进阶 — 正反肌肉解剖图 + 动作选择（按器材分组） */
 export default function AnatomyExplorer() {
   const navigate = useNavigate()
   const pageRef = usePageReveal()
@@ -37,11 +39,28 @@ export default function AnatomyExplorer() {
     )
   }
 
-  const availableExercises = useMemo(() => {
+  const groupedExercises = useMemo(() => {
     if (selectedMuscleIds.length === 0) return []
-    return exercises.filter((ex) =>
+    const filtered = exercises.filter((ex) =>
       ex.muscleIds.some((id) => selectedMuscleIds.includes(id)),
     )
+    const groups = {}
+    for (const ex of filtered) {
+      const eq = ex.equipment || '其他'
+      if (!groups[eq]) groups[eq] = []
+      groups[eq].push(ex)
+    }
+    const ordered = []
+    for (const eq of EQUIPMENT_ORDER) {
+      if (groups[eq]) {
+        ordered.push({ equipment: eq, exercises: groups[eq] })
+        delete groups[eq]
+      }
+    }
+    for (const eq of Object.keys(groups).sort()) {
+      ordered.push({ equipment: eq, exercises: groups[eq] })
+    }
+    return ordered
   }, [selectedMuscleIds])
 
   function handleAddToPlan() {
@@ -84,20 +103,30 @@ export default function AnatomyExplorer() {
         <div className="exercise-selector">
           <h2 className="section-heading">
             选择训练动作
-            <span className="section-count">{availableExercises.length}</span>
+            <span className="section-count">
+              {groupedExercises.reduce((s, g) => s + g.exercises.length, 0)}
+            </span>
           </h2>
 
-          <div className="exercise-grid">
-            {availableExercises.map((ex) => (
-              <ExerciseCard
-                key={ex.id}
-                exercise={ex}
-                thumb={getThumb(ex.id, ex.name, ex.videoUrl)}
-                isSelected={selectedExercises.includes(ex.id)}
-                onToggle={() => toggleExercise(ex.id)}
-              />
-            ))}
-          </div>
+          {groupedExercises.map(({ equipment, exercises: groupExs }) => (
+            <div key={equipment} className="exercise-group">
+              <h3 className="exercise-group-title">
+                {equipment}
+                <span className="exercise-group-count">{groupExs.length}</span>
+              </h3>
+              <div className="exercise-grid">
+                {groupExs.map((ex) => (
+                  <ExerciseCard
+                    key={ex.id}
+                    exercise={ex}
+                    thumb={getThumb(ex.id, ex.name, ex.videoUrl)}
+                    isSelected={selectedExercises.includes(ex.id)}
+                    onToggle={() => toggleExercise(ex.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
 
           {selectedExercises.length > 0 && (
             <div className="cta-row">
@@ -132,6 +161,20 @@ export default function AnatomyExplorer() {
 }
 
 function ExerciseCard({ exercise, thumb, isSelected, onToggle }) {
+  const REGION_COLORS = {
+    upper: '#5fa8d3',
+    core: '#62a86c',
+    lower: '#d4906a',
+  }
+
+  const primaryMuscle = exercise.muscleIds?.[0]
+    ? muscles.find((m) => m.id === exercise.muscleIds[0])
+    : null
+  const primaryRegion = ['upper', 'core', 'lower'].includes(primaryMuscle?.region)
+    ? primaryMuscle.region
+    : 'upper'
+  const accentColor = REGION_COLORS[primaryRegion] || '#5fa8d3'
+
   return (
     <button
       type="button"
@@ -140,18 +183,86 @@ function ExerciseCard({ exercise, thumb, isSelected, onToggle }) {
     >
       <div className="exercise-card-img">
         {thumb ? (
-          <img src={thumb} alt={exercise.name} loading="lazy" />
-        ) : (
-          <div className="exercise-card-placeholder" />
+          <img
+            src={thumb}
+            alt={exercise.name}
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
+          />
+        ) : null}
+        {!thumb && (
+          <div
+            className="exercise-card-placeholder"
+            style={{
+              background: `linear-gradient(135deg, ${accentColor}22, ${accentColor}44)`,
+            }}
+          >
+            <svg viewBox="0 0 60 60" className="exercise-placeholder-icon">
+              <circle cx="30" cy="20" r="10" fill={accentColor} opacity="0.7" />
+              <rect
+                x="22"
+                y="30"
+                width="16"
+                height="20"
+                rx="4"
+                fill={accentColor}
+                opacity="0.5"
+              />
+              <rect
+                x="14"
+                y="32"
+                width="8"
+                height="14"
+                rx="3"
+                fill={accentColor}
+                opacity="0.4"
+              />
+              <rect
+                x="38"
+                y="32"
+                width="8"
+                height="14"
+                rx="3"
+                fill={accentColor}
+                opacity="0.4"
+              />
+              <rect
+                x="24"
+                y="50"
+                width="5"
+                height="10"
+                rx="2"
+                fill={accentColor}
+                opacity="0.35"
+              />
+              <rect
+                x="31"
+                y="50"
+                width="5"
+                height="10"
+                rx="2"
+                fill={accentColor}
+                opacity="0.35"
+              />
+            </svg>
+            <span className="exercise-placeholder-label">{exercise.name}</span>
+          </div>
         )}
         {isSelected && <span className="exercise-card-check">✓</span>}
       </div>
       <div className="exercise-card-body">
         <strong className="exercise-card-name">{exercise.name}</strong>
         <p className="exercise-card-advice">{exercise.advice}</p>
-        <span className={`exercise-level level-${exercise.level}`}>
-          {exercise.level === 'beginner' ? '入门' : '进阶'}
-        </span>
+        <div className="exercise-card-meta">
+          <span className={`exercise-level level-${exercise.level}`}>
+            {exercise.level === 'beginner' ? '入门' : '进阶'}
+          </span>
+          {exercise.equipment && (
+            <span className="exercise-equipment">{exercise.equipment}</span>
+          )}
+        </div>
       </div>
     </button>
   )

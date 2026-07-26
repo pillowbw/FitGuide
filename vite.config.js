@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => {
     process.env.OPENAI_MODEL = env.OPENAI_MODEL
   }
 
+  if (env.OPENAI_BASE_URL) {
+    process.env.OPENAI_BASE_URL = env.OPENAI_BASE_URL
+  }
+
   if (env.FITGUIDE_COACH_DEMO) {
     process.env.FITGUIDE_COACH_DEMO = env.FITGUIDE_COACH_DEMO
   }

@@ -89,6 +89,21 @@
   font-weight: 700;
 }
 
+.fitness-coach-mode-badge.is-ai {
+  background: color-mix(in srgb, var(--accent) 18%, white);
+  color: var(--accent-strong);
+}
+
+.fitness-coach-demo-hint {
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  background: #fff8f0;
+  color: #7a4a1a;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
 .fitness-coach-header-actions {
   display: flex;
   gap: 0.35rem;
@@ -159,6 +174,17 @@
   word-break: break-word;
   font-size: 0.92rem;
   line-height: 1.45;
+}
+
+.fitness-coach-applied-badge {
+  display: inline-block;
+  margin-top: 0.45rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 16%, white);
+  color: var(--accent-strong);
+  font-size: 0.68rem;
+  font-weight: 700;
 }
 
 .fitness-coach-quick {

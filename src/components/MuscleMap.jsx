@@ -18,8 +18,8 @@ export default function MuscleMap({
   const [hovered, setHovered] = useState(null)
   const isRestricted = Array.isArray(interactiveIds)
 
-  const muscleNames = muscles.reduce((acc, m) => {
-    acc[m.id] = m.name
+  const muscleById = muscles.reduce((acc, m) => {
+    acc[m.id] = m
     return acc
   }, {})
 
@@ -42,7 +42,10 @@ export default function MuscleMap({
     >
       {hovered && (
         <div className="muscle-map-tooltip">
-          {muscleNames[hovered] || hovered}
+          <strong>{muscleById[hovered]?.name || hovered}</strong>
+          {muscleById[hovered]?.benefit && (
+            <span className="muscle-tooltip-benefit">{muscleById[hovered].benefit}</span>
+          )}
           {isRestricted && !canInteract(hovered) ? '（非推荐）' : ''}
         </div>
       )}

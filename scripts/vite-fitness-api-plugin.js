@@ -52,7 +52,10 @@ export function fitnessChatDevPlugin(env = {}) {
           const { status, payload } = await handleFitnessChat(rawBody, {
             apiKey: env.OPENAI_API_KEY || process.env.OPENAI_API_KEY,
             model: env.OPENAI_MODEL || process.env.OPENAI_MODEL,
-            demoEnabled: (env.FITGUIDE_COACH_DEMO ?? process.env.FITGUIDE_COACH_DEMO) !== 'false',
+            baseURL: env.OPENAI_BASE_URL || process.env.OPENAI_BASE_URL,
+            demoEnabled:
+              (env.FITGUIDE_COACH_DEMO ?? process.env.FITGUIDE_COACH_DEMO) !==
+              'false',
           })
           sendJson(res, status, payload)
         } catch {

@@ -53,6 +53,7 @@ export default function MuscleDetail() {
 
       <h1 className="muscle-title">{muscle.name}</h1>
       <p className="muscle-summary">{muscle.summary}</p>
+      {muscle.benefit && <p className="muscle-benefit">{muscle.benefit}</p>}
 
       {/* 训练建议 */}
       <div className="muscle-section">

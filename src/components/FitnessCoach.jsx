@@ -2,45 +2,59 @@ import { useEffect, useRef, useState } from 'react'
 import { getProfile } from '../utils/storage'
 import {
   MAX_MESSAGE_LENGTH,
+  pickHistoryForCoach,
+  pickPlanForCoach,
   pickProfileForCoach,
   sendFitnessCoachMessage,
 } from '../utils/fitnessAgent'
+import {
+  applyScheduleAdjustment,
+  describeScheduleAdjustment,
+  detectScheduleAdjustIntent,
+} from '../utils/planAssistant'
 import './FitnessCoach.css'
 
-const RESPONSE_ID_KEY = 'fitguide_coach_response_id'
-
 const QUICK_QUESTIONS = [
-  '我每周只能练3天，怎么安排？',
-  '练完不酸是不是没效果？',
-  '减脂期间还需要力量训练吗？',
-  '如何判断动作重量是否合适？',
+  '周一我有事练不了，帮我改计划',
+  '我练了俯卧撑腰很酸是为什么？',
+  '平时控制饮食的话是不是减脂效果更明显',
+  '锻炼一周好累，不想坚持了，感觉没效果',
 ]
 
 const WELCOME_MESSAGE =
-  '你好，我是 FitGuide AI 教练。训练、动作、恢复或基础营养问题都可以问我；我会结合你的档案尽量给出能马上执行的建议。'
+  '你好，我是 FitGuide 网站助手。你可以让我：① 直接改你的训练日（例如「周一练不了」）；② 解释练后酸痛；③ 回答饮食/减脂问题；④ 在你想放弃时给你务实鼓励。'
 
-function createMessage(role, content) {
+const DEMO_HINT =
+  '当前是「演示模式」：回复来自本地模板，不是大模型。要真实多轮对话，请在 .env.local 配置 OPENAI_API_KEY 后重启 npm run dev。'
+
+function createMessage(role, content, meta = {}) {
   return {
     id: `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     role,
     content,
+    ...meta,
   }
+}
+
+function mergeAssistantText(replyText, appliedNote) {
+  const text = (replyText || '').trim()
+  if (!appliedNote) return text
+  if (!text) return appliedNote
+  if (text.includes('已避开') || text.includes('已帮你改') || text.includes('已处理')) {
+    return text
+  }
+  return `${appliedNote}\n\n${text}`
 }
 
 export default function FitnessCoach() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
-  const [messages, setMessages] = useState(() => [createMessage('assistant', WELCOME_MESSAGE)])
+  const [messages, setMessages] = useState(() => [
+    createMessage('assistant', WELCOME_MESSAGE),
+  ])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [coachMode, setCoachMode] = useState('demo')
-  const [previousResponseId, setPreviousResponseId] = useState(() => {
-    try {
-      return sessionStorage.getItem(RESPONSE_ID_KEY)
-    } catch {
-      return null
-    }
-  })
 
   const listRef = useRef(null)
   const textareaRef = useRef(null)
@@ -57,19 +71,6 @@ export default function FitnessCoach() {
     }
   }, [])
 
-  function persistResponseId(nextId) {
-    setPreviousResponseId(nextId)
-    try {
-      if (nextId) {
-        sessionStorage.setItem(RESPONSE_ID_KEY, nextId)
-      } else {
-        sessionStorage.removeItem(RESPONSE_ID_KEY)
-      }
-    } catch {
-      // ignore storage failures
-    }
-  }
-
   function handleNewConversation() {
     abortRef.current?.abort()
     abortRef.current = null
@@ -77,7 +78,6 @@ export default function FitnessCoach() {
     setError('')
     setInput('')
     setMessages([createMessage('assistant', WELCOME_MESSAGE)])
-    persistResponseId(null)
     setCoachMode('demo')
     textareaRef.current?.focus()
   }
@@ -92,12 +92,11 @@ export default function FitnessCoach() {
       return
     }
 
+    const history = pickHistoryForCoach(messages, WELCOME_MESSAGE)
+
     setError('')
     setInput('')
-    setMessages((current) => [
-      ...current,
-      createMessage('user', message),
-    ])
+    setMessages((current) => [...current, createMessage('user', message)])
     setLoading(true)
 
     abortRef.current?.abort()
@@ -105,18 +104,52 @@ export default function FitnessCoach() {
     abortRef.current = controller
 
     try {
+      const intent = detectScheduleAdjustIntent(message)
+      let appliedNote = ''
+      let planApplied = false
+
+      if (intent) {
+        const result = applyScheduleAdjustment(intent)
+        appliedNote = describeScheduleAdjustment(result, intent)
+        planApplied = result.ok
+      }
+
       const result = await sendFitnessCoachMessage({
         message,
-        previousResponseId,
+        history,
         profile: pickProfileForCoach(getProfile()),
+        plan: pickPlanForCoach(),
         signal: controller.signal,
       })
 
+      // API 若带回结构化动作，且本轮尚未应用，再补一次
+      if (
+        !planApplied &&
+        result.action?.action === 'adjust_schedule' &&
+        Array.isArray(result.action.blockedWeekdays) &&
+        result.action.blockedWeekdays.length > 0
+      ) {
+        const fallbackIntent = {
+          type: 'block',
+          weekdays: result.action.blockedWeekdays.filter(
+            (day) => typeof day === 'string',
+          ),
+        }
+        if (fallbackIntent.weekdays.length > 0) {
+          const applied = applyScheduleAdjustment(fallbackIntent)
+          appliedNote = describeScheduleAdjustment(applied, fallbackIntent)
+          planApplied = applied.ok
+        }
+      }
+
       setMessages((current) => [
         ...current,
-        createMessage('assistant', result.text),
+        createMessage(
+          'assistant',
+          mergeAssistantText(result.text, appliedNote),
+          { planApplied },
+        ),
       ])
-      persistResponseId(result.mode === 'ai' ? result.responseId : null)
       setCoachMode(result.mode)
     } catch (sendError) {
       if (sendError instanceof Error && sendError.name === 'AbortError') {
@@ -150,11 +183,13 @@ export default function FitnessCoach() {
         >
           <header className="fitness-coach-header">
             <div>
-              <strong>AI 健身教练</strong>
+              <strong>AI 网站助手</strong>
               <p>
-                训练 · 动作 · 恢复 · 基础营养
-                {coachMode === 'demo' && (
-                  <span className="fitness-coach-mode-badge">演示模式</span>
+                改计划 · 答疑 · 饮食 · 陪你坚持
+                {coachMode === 'demo' ? (
+                  <span className="fitness-coach-mode-badge">模板演示</span>
+                ) : (
+                  <span className="fitness-coach-mode-badge is-ai">真实 AI</span>
                 )}
               </p>
             </div>
@@ -180,6 +215,12 @@ export default function FitnessCoach() {
             </div>
           </header>
 
+          {coachMode === 'demo' && (
+            <p className="fitness-coach-demo-hint" role="status">
+              {DEMO_HINT}
+            </p>
+          )}
+
           <div className="fitness-coach-messages" ref={listRef}>
             {messages.map((message) => (
               <div
@@ -187,9 +228,14 @@ export default function FitnessCoach() {
                 className={`fitness-coach-message is-${message.role}`}
               >
                 <span className="fitness-coach-message-label">
-                  {message.role === 'assistant' ? '教练' : '你'}
+                  {message.role === 'assistant' ? '助手' : '你'}
                 </span>
                 <p>{message.content}</p>
+                {message.planApplied && (
+                  <span className="fitness-coach-applied-badge">
+                    已更新计划表
+                  </span>
+                )}
               </div>
             ))}
 
@@ -198,8 +244,8 @@ export default function FitnessCoach() {
                 className="fitness-coach-message is-assistant is-loading"
                 aria-live="polite"
               >
-                <span className="fitness-coach-message-label">教练</span>
-                <p>正在思考…</p>
+                <span className="fitness-coach-message-label">助手</span>
+                <p>正在处理…</p>
               </div>
             )}
           </div>
@@ -231,7 +277,7 @@ export default function FitnessCoach() {
               value={input}
               rows={2}
               maxLength={MAX_MESSAGE_LENGTH}
-              placeholder="输入健身问题，Enter 发送，Shift+Enter 换行"
+              placeholder="例如：周一练不了 / 饮食减脂 / 腰酸 / 想放弃"
               aria-label="输入健身问题"
               disabled={loading}
               onChange={(event) => setInput(event.target.value)}
@@ -248,7 +294,7 @@ export default function FitnessCoach() {
           </footer>
 
           <p className="fitness-coach-disclaimer">
-            一般健身参考，非医疗诊断。如有持续疼痛或紧急症状，请咨询专业人员。
+            一般健身参考，非医疗诊断。说「周几练不了」会直接改本机计划表。
           </p>
         </section>
       )}
@@ -256,11 +302,11 @@ export default function FitnessCoach() {
       <button
         type="button"
         className={`fitness-coach-fab${open ? ' is-open' : ''}`}
-        aria-label={open ? '关闭 AI 教练' : '打开 AI 教练'}
+        aria-label={open ? '关闭 AI 助手' : '打开 AI 助手'}
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
       >
-        {open ? '收起' : 'AI 教练'}
+        {open ? '收起' : 'AI 助手'}
       </button>
     </div>
   )

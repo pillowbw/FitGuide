@@ -1,4 +1,4 @@
-import { getProfile } from './storage'
+import { getPlan, getProfile } from './storage'
 
 const MAX_MESSAGE_LENGTH = 2000
 
@@ -15,6 +15,7 @@ const PROFILE_FIELDS = [
   'goalRegion',
   'targetBodyTypeId',
   'selectedMuscleIds',
+  'blockedWeekdays',
 ]
 
 /**
@@ -25,31 +26,81 @@ export function pickProfileForCoach(profile = getProfile()) {
   const picked = {}
 
   for (const key of PROFILE_FIELDS) {
-    if (key === 'selectedMuscleIds') {
-      picked[key] = Array.isArray(profile.selectedMuscleIds)
-        ? profile.selectedMuscleIds
-        : []
+    if (key === 'selectedMuscleIds' || key === 'blockedWeekdays') {
+      picked[key] = Array.isArray(profile[key]) ? profile[key] : []
       continue
     }
 
-    picked[key] = profile[key] ?? (key.includes('Id') || key === 'path' || key === 'gender' || key === 'goalRegion' ? '' : null)
+    picked[key] =
+      profile[key] ??
+      (key.includes('Id') ||
+      key === 'path' ||
+      key === 'gender' ||
+      key === 'goalRegion'
+        ? ''
+        : null)
   }
 
   return picked
 }
 
 /**
+ * 压缩当前计划，供教练做日程微调（避免把完整动作库塞进请求）。
+ * @param {ReturnType<typeof getPlan>} [plan]
+ */
+export function pickPlanForCoach(plan = getPlan()) {
+  if (!plan?.days?.length) return null
+
+  return {
+    weekLabel: plan.weekLabel || '',
+    path: plan.path || '',
+    goalRegion: plan.goalRegion || '',
+    days: plan.days.slice(0, 7).map((day) => ({
+      day: day.day || '',
+      sessionTitle: day.sessionTitle || '',
+      focus: day.focus || '',
+      exercises: (day.exercises || []).slice(0, 8).map((ex) => ({
+        name: ex.name || ex.exerciseName || '动作',
+        setsLabel: ex.setsLabel || '',
+      })),
+    })),
+  }
+}
+
+/**
+ * @param {Array<{ role: string, content: string }>} messages
+ * @param {string} [welcomeMessage]
+ */
+export function pickHistoryForCoach(messages = [], welcomeMessage = '') {
+  return messages
+    .filter(
+      (item) =>
+        (item.role === 'user' || item.role === 'assistant') &&
+        typeof item.content === 'string' &&
+        item.content.trim() &&
+        item.content !== welcomeMessage,
+    )
+    .slice(-12)
+    .map((item) => ({
+      role: item.role,
+      content: item.content.trim().slice(0, MAX_MESSAGE_LENGTH),
+    }))
+}
+
+/**
  * @param {object} params
  * @param {string} params.message
- * @param {string|null} [params.previousResponseId]
+ * @param {Array<{ role: string, content: string }>} [params.history]
  * @param {Record<string, unknown>} [params.profile]
+ * @param {Record<string, unknown>|null} [params.plan]
  * @param {AbortSignal} [params.signal]
- * @returns {Promise<{ text: string, responseId: string|null }>}
+ * @returns {Promise<{ text: string, responseId: string|null, mode: 'ai'|'demo', action: object|null }>}
  */
 export async function sendFitnessCoachMessage({
   message,
-  previousResponseId = null,
+  history = [],
   profile = pickProfileForCoach(),
+  plan = pickPlanForCoach(),
   signal,
 }) {
   const trimmed = message.trim()
@@ -72,8 +123,9 @@ export async function sendFitnessCoachMessage({
       },
       body: JSON.stringify({
         message: trimmed,
-        previousResponseId,
+        history,
         profile,
+        plan,
       }),
       signal,
     })
@@ -109,6 +161,10 @@ export async function sendFitnessCoachMessage({
     responseId:
       typeof payload.responseId === 'string' ? payload.responseId : null,
     mode: payload.mode === 'ai' ? 'ai' : 'demo',
+    action:
+      payload.action && typeof payload.action === 'object'
+        ? payload.action
+        : null,
   }
 }
 

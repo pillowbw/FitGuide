@@ -18,6 +18,7 @@ const MAX_WEEK_LOGS = 8
  * @property {string} targetBodyTypeId
  * @property {string[]} selectedMuscleIds
  * @property {string[]} selectedExerciseIds
+ * @property {string[]} [blockedWeekdays] 不可安排训练的星期（如「周一」）
  */
 
 /** @returns {UserProfile} */
@@ -36,6 +37,7 @@ export function createEmptyProfile() {
     targetBodyTypeId: '',
     selectedMuscleIds: [],
     selectedExerciseIds: [],
+    blockedWeekdays: [],
   }
 }
 
