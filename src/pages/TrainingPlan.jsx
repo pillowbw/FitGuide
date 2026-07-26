@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import FitnessCoach from '../components/FitnessCoach'
 import { describeDayBurn, describeWeekBurn } from '../utils/calorieEstimate'
 import {
   generatePlan,
@@ -20,6 +21,7 @@ import {
   isExerciseCompleted,
   toggleExerciseCompleted,
 } from '../utils/storage'
+import { youtubeThumbFromUrl } from '../utils/videoMap'
 import './TrainingPlan.css'
 
 const PATH_LABEL = {
@@ -71,6 +73,11 @@ function planNoteWithoutScience(plan) {
     return plan.note.slice(science.length).trim()
   }
   return plan.note
+}
+
+/** 兼容旧计划：无 videoThumb 时从 videoUrl 生成 YouTube 封面 */
+function resolveExerciseThumb(ex) {
+  return ex.videoThumb || youtubeThumbFromUrl(ex.videoUrl)
 }
 
 function groupCompletedByDay(completed) {
@@ -379,6 +386,7 @@ export default function TrainingPlan() {
                         day.dayIndex,
                         ex.id,
                       )
+                      const thumb = resolveExerciseThumb(ex)
                       return (
                         <li
                           key={`${day.day}-${ex.id}`}
@@ -394,7 +402,7 @@ export default function TrainingPlan() {
                               <span>{done ? '已完成' : '标记完成'}</span>
                             </label>
                           </div>
-                          {ex.videoThumb ? (
+                          {thumb ? (
                             <div className="plan-ex-video">
                               <a
                                 href={ex.videoUrl}
@@ -402,7 +410,7 @@ export default function TrainingPlan() {
                                 rel="noreferrer"
                               >
                                 <img
-                                  src={ex.videoThumb}
+                                  src={thumb}
                                   alt={ex.name}
                                   loading="lazy"
                                 />
@@ -523,7 +531,6 @@ export default function TrainingPlan() {
           </p>
         </div>
       )}
-
       <section className="plan-history" aria-label="训练历史">
         <header className="plan-history-header">
           <div>
@@ -628,6 +635,8 @@ export default function TrainingPlan() {
           </>
         )}
       </section>
+
+      <FitnessCoach />
     </section>
   )
 }
