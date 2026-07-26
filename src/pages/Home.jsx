@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import heroImage from '../assets/hero.png'
 import { saveProfile } from '../utils/storage'
 
 /** 成员 A：首页路径选择 */
@@ -23,7 +24,7 @@ export default function Home() {
         </div>
 
         <div className="home-visual" aria-hidden="true">
-          <img src="/hero.png" alt="" />
+          <img src={heroImage} alt="" />
         </div>
       </div>
 

@@ -20,8 +20,8 @@
     "advanced": ["周一", "周二", "周四", "周六"]
   },
   "regionFocusOrder": {
-    "upper": ["chest", "shoulders", "lats", "biceps", "triceps"],
-    "core": ["abs", "chest", "lats"],
+    "upper": ["chest", "shoulders", "lats", "biceps", "triceps", "traps"],
+    "core": ["abs", "obliques", "lowerback"],
     "lower": ["quads", "glutes", "hamstrings", "calves"],
     "full": ["chest", "lats", "quads", "shoulders", "glutes", "abs"]
   },
@@ -29,9 +29,13 @@
     "chest": ["triceps", "shoulders"],
     "lats": ["biceps", "shoulders"],
     "shoulders": ["triceps", "chest"],
-    "biceps": ["lats", "shoulders"],
+    "biceps": ["lats", "forearms"],
     "triceps": ["chest", "shoulders"],
-    "abs": ["chest", "lats"],
+    "forearms": ["biceps", "triceps"],
+    "abs": ["obliques", "lowerback"],
+    "obliques": ["abs", "lowerback"],
+    "lowerback": ["glutes", "abs"],
+    "traps": ["lats", "shoulders"],
     "quads": ["glutes", "calves"],
     "glutes": ["hamstrings", "quads"],
     "hamstrings": ["glutes", "calves"],

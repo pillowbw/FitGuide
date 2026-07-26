@@ -4,107 +4,215 @@
     "name": "俯卧撑",
     "muscleIds": ["chest", "triceps", "shoulders"],
     "level": "beginner",
-    "advice": "身体成一条直线，胸部接近地面再推起。膝撑版适合入门。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "双手撑地比肩略宽，身体从头到脚成一条直线。屈肘下降至胸部接近地面，然后推起。膝撑版适合初学者逐步进阶。",
+    "videoUrl": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+    "videoSource": "youtube"
   },
   {
     "id": "bench_press",
     "name": "杠铃卧推",
     "muscleIds": ["chest", "triceps", "shoulders"],
     "level": "advanced",
-    "advice": "肩胛骨下沉后收，脚踩实，杠铃下落至胸部中下再推起。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "平躺在凳上，肩胛骨全程收紧下沉，脚踩实地面。杠铃下落至胸部中下段（乳头附近），推起时胸部发力夹紧。握距比肩宽20-30厘米。",
+    "videoUrl": "https://www.youtube.com/watch?v=VmB1G1K7v94",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "dumbbell_chest_press",
+    "name": "哑铃卧推",
+    "muscleIds": ["chest", "triceps", "shoulders"],
+    "level": "beginner",
+    "advice": "相比杠铃，哑铃卧推活动范围更大，手腕更自由。下落时控制速度，推起时用力夹胸。",
+    "videoUrl": "https://www.youtube.com/watch?v=VmB1G1K7v94",
+    "videoSource": "youtube"
   },
   {
     "id": "lateral_raise",
     "name": "侧平举",
     "muscleIds": ["shoulders"],
     "level": "beginner",
-    "advice": "轻重量，肘微屈，举至略低于肩高，避免耸肩。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "双手持哑铃，肘部微屈（保持10-15度），举至肩平或略低于肩高，避免耸肩和借力。下放时控制速度。",
+    "videoUrl": "https://www.youtube.com/watch?v=3GwdMf7LCRk",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "face_pull",
+    "name": "面拉",
+    "muscleIds": ["shoulders", "traps"],
+    "level": "beginner",
+    "advice": "用绳索器械，将绳索向面部方向拉，分离肩外旋。重点感受后束与中斜方肌收缩。",
+    "videoUrl": "https://www.youtube.com/watch?v=rep-qVOkqgk",
+    "videoSource": "youtube"
   },
   {
     "id": "pull_up",
     "name": "引体向上",
     "muscleIds": ["lats", "biceps"],
     "level": "advanced",
-    "advice": "从死挂开始，肩胛下沉后拉至下巴过杠。可用弹力带辅助。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "双手握杆略比肩宽，从悬垂姿势启动。先下沉肩胛骨，再屈肘将身体拉起至下巴过杆。弹力带或辅助机可帮助进阶。",
+    "videoUrl": "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+    "videoSource": "youtube"
   },
   {
     "id": "lat_pulldown",
     "name": "高位下拉",
     "muscleIds": ["lats", "biceps"],
     "level": "beginner",
-    "advice": "胸微挺，将杆拉至锁骨附近，感受背阔肌收缩。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "坐姿挺胸，将杆拉至锁骨上方，感受背阔肌收缩。切勿过度后仰，下放时控制速度，充分拉伸背阔。",
+    "videoUrl": "https://www.youtube.com/watch?v=CAwf7n6Luuc",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "barbell_row",
+    "name": "杠铃划船",
+    "muscleIds": ["lats", "traps", "biceps"],
+    "level": "advanced",
+    "advice": "屈髋俯身约45度，握杠铃垂直下放。利用背阔收缩将杠铃拉向小腹，肘部贴近身体。",
+    "videoUrl": "https://www.youtube.com/watch?v=FJ-RnB5K3e8",
+    "videoSource": "youtube"
   },
   {
     "id": "bicep_curl",
     "name": "哑铃弯举",
     "muscleIds": ["biceps"],
     "level": "beginner",
-    "advice": "上臂贴身，只屈肘，下放时控制速度。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "站姿或坐姿，上臂贴近体侧不移动，只屈肘将哑铃举起。顶峰收缩1秒，下放时控制离心至少2秒。",
+    "videoUrl": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "hammer_curl",
+    "name": "锤式弯举",
+    "muscleIds": ["biceps", "forearms"],
+    "level": "beginner",
+    "advice": "掌心相对握哑铃，弯举时保持掌心朝内。可同时刺激肱肌与前臂肌群。",
+    "videoUrl": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
+    "videoSource": "youtube"
   },
   {
     "id": "tricep_pushdown",
     "name": "绳索下压",
     "muscleIds": ["triceps"],
     "level": "beginner",
-    "advice": "肘固定在体侧，完全伸直后再缓慢回放。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "肘部固定于体侧，绳索握法（掌心相对）。下压至手臂完全伸直，顶峰夹紧1秒，缓慢回放。",
+    "videoUrl": "https://www.youtube.com/watch?v=2-LAMcpjOD8",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "overhead_tricep",
+    "name": "哑铃过顶臂屈伸",
+    "muscleIds": ["triceps"],
+    "level": "beginner",
+    "advice": "单手握哑铃举过头顶，大臂贴近耳朵，屈肘将哑铃下放至肩侧，再伸直。可充分拉伸肱三头肌长头。",
+    "videoUrl": "https://www.youtube.com/watch?v=2-LAMcpjOD8",
+    "videoSource": "youtube"
   },
   {
     "id": "plank",
     "name": "平板支撑",
     "muscleIds": ["abs"],
     "level": "beginner",
-    "advice": "核心收紧，臀部不塌不翘，保持均匀呼吸。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "前臂撑地，肘在肩正下方。收紧腹部、夹紧臀部，身体从头到脚成直线。保持均匀呼吸，不要塌腰或撅臀。",
+    "videoUrl": "https://www.youtube.com/watch?v=ASdvN_XEl_c",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "cable_crunch",
+    "name": "绳索卷腹",
+    "muscleIds": ["abs"],
+    "level": "beginner",
+    "advice": "跪姿，双手握绳索在头侧，利用腹肌屈曲将上半身向地面卷动。注意力集中在腹肌收缩，而非手臂发力。",
+    "videoUrl": "https://www.youtube.com/watch?v=AV5PnseStFY",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "russian_twist",
+    "name": "俄式转体",
+    "muscleIds": ["obliques"],
+    "level": "beginner",
+    "advice": "坐姿屈膝，脚离地，双手握重物向两侧转体。保持核心紧绷，转体幅度不必过大，重点是控制。",
+    "videoUrl": "https://www.youtube.com/watch?v=wkD8rjkZtUI",
+    "videoSource": "youtube"
   },
   {
     "id": "squat",
-    "name": "深蹲",
+    "name": "杠铃深蹲",
     "muscleIds": ["quads", "glutes"],
     "level": "beginner",
-    "advice": "脚与肩同宽，膝盖跟随脚尖方向，躯干保持中立。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "杆置于斜方肌上（高杠）或股四头肌上（低杠）。双脚与肩同宽或略宽，膝盖与脚尖方向一致。蹲至大腿与地面平行或更低。",
+    "videoUrl": "https://www.youtube.com/watch?v=ultWZbUMPL8",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "leg_extension",
+    "name": "腿屈伸",
+    "muscleIds": ["quads"],
+    "level": "beginner",
+    "advice": "坐姿腿器械，完全伸直双腿后停顿1秒，感受股四头肌收缩。适合作为深蹲后的孤立补充训练。",
+    "videoUrl": "https://www.youtube.com/watch?v=ultWZbUMPL8",
+    "videoSource": "youtube"
   },
   {
     "id": "rdl",
     "name": "罗马尼亚硬拉",
     "muscleIds": ["hamstrings", "glutes"],
     "level": "advanced",
-    "advice": "髋铰链主导，杠贴近腿，感受腘绳与臀部拉伸。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "以髋铰链为主导，杠铃贴近腿部全程。屈髋俯身至腘绳有明显拉伸感，然后髋伸发力站直。膝盖微屈不锁死。",
+    "videoUrl": "https://www.youtube.com/watch?v=jEyC5kD0Nxc",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "leg_curl",
+    "name": "腿弯举",
+    "muscleIds": ["hamstrings"],
+    "level": "beginner",
+    "advice": "俯卧腿弯举器械，屈膝将重量向臀部方向弯举。顶峰收缩后缓慢下放，保持腘绳肌持续张力。",
+    "videoUrl": "https://www.youtube.com/watch?v=jEyC5kD0Nxc",
+    "videoSource": "youtube"
   },
   {
     "id": "hip_thrust",
     "name": "臀推",
     "muscleIds": ["glutes"],
     "level": "beginner",
-    "advice": "下背部贴凳，顶起时臀部夹紧，避免过度塌腰。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "上背部靠凳，杠铃置于髋关节处。双脚踩地，臀部发力向上顶起至身体成直线，顶峰夹紧1-2秒。",
+    "videoUrl": "https://www.youtube.com/watch?v=OUgsJ8-Vi0E",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "glute_bridge",
+    "name": "臀桥",
+    "muscleIds": ["glutes"],
+    "level": "beginner",
+    "advice": "仰卧屈膝，臀部发力顶起身体至肩膀-髋-膝成一直线。可用单腿进阶。",
+    "videoUrl": "https://www.youtube.com/watch?v=OUgsJ8-Vi0E",
+    "videoSource": "youtube"
   },
   {
     "id": "calf_raise",
-    "name": "提踵",
+    "name": "站姿提踵",
     "muscleIds": ["calves"],
     "level": "beginner",
-    "advice": "完整上下幅度，顶部稍作停顿。",
-    "videoUrl": "https://www.bilibili.com/video/BV1xx411c7mD",
-    "videoSource": "bilibili"
+    "advice": "站于器械上，采用全幅度：尽可能踮起至最高，落下时踝关节充分背屈。小腿耐受度高，可做3-4组15-20次。",
+    "videoUrl": "https://www.youtube.com/watch?v=gwLz_AJyoS4",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "deadlift",
+    "name": "传统硬拉",
+    "muscleIds": ["hamstrings", "glutes", "lowerback", "traps"],
+    "level": "advanced",
+    "advice": "杆贴近身体，全程保持腰背中立。伸髋伸膝同步发力站直，避免先伸腰。下降时屈髋屈膝控制，杆不离开身体。",
+    "videoUrl": "https://www.youtube.com/watch?v=op9kVnSso6Q",
+    "videoSource": "youtube"
+  },
+  {
+    "id": "shrug",
+    "name": "耸肩",
+    "muscleIds": ["traps"],
+    "level": "beginner",
+    "advice": "双手握杠铃或哑铃，自然下垂。肩膀向上耸起至耳朵高度（不旋转），充分收缩斜方肌后缓慢下放。",
+    "videoUrl": "https://www.youtube.com/watch?v=a4zV3ENGJm8",
+    "videoSource": "youtube"
   }
 ]

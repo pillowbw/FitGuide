@@ -229,21 +229,141 @@ p {
   text-decoration: none;
 }
 
-.muscle-map-grid {
+/* ── Muscle Map (legacy placeholder — unused) ── */
+.muscle-map {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.6rem;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
 }
 
+.muscle-map-stage {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  /* 固定比例：300 : 739（图片渲染尺寸） */
+  aspect-ratio: 300 / 739;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.muscle-map-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.muscle-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* 低透明度，使热区更清晰 */
+  opacity: 0.6;
+}
+
+.muscle-hotspots-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+/* 肌肉热区样式 */
 .muscle-hotspot {
-  padding: 1rem 0.75rem;
-  border-radius: var(--radius);
-  border: 1px dashed var(--line);
-  background: color-mix(in srgb, var(--surface) 70%, var(--bg-accent));
+  cursor: pointer;
+  transition: opacity 0.15s, fill 0.15s;
+  fill: var(--muscle-fill, #8fbcaa);
+  opacity: 0.75;
+}
+
+.muscle-hotspot:hover,
+.muscle-hotspot.is-hovered {
+  opacity: 1;
+  fill: var(--accent);
+}
+
+/* 区域颜色区分 */
+.region-upper { --muscle-fill: #5fa8d3; }
+.region-core  { --muscle-fill: #62a86c; }
+.region-lower { --muscle-fill: #d4906a; }
+
+/* 悬停提示 */
+.muscle-map-tooltip {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* 侧边图例 */
+.muscle-map-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   cursor: pointer;
   font: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  color: var(--ink);
+  transition: background 0.12s;
 }
 
+.legend-item:hover {
+  background: var(--bg-accent);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot[data-region="upper"] { background: #5fa8d3; }
+.legend-dot[data-region="core"]  { background: #62a86c; }
+.legend-dot[data-region="lower"] { background: #d4906a; }
+
+/* 移动端：图例移至底部 */
+@media (max-width: 600px) {
+  .muscle-map {
+    grid-template-columns: 1fr;
+  }
+  .muscle-map-legend {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: none;
+  }
+}
+
+/* ── Video List ── */
 .video-list {
   list-style: none;
   padding: 0;
@@ -252,10 +372,9 @@ p {
   gap: 0.75rem;
 }
 
-.video-list li {
+.video-item {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 0.75rem;
   padding: 0.9rem 1rem;
   border: 1px solid var(--line);
@@ -263,9 +382,143 @@ p {
   background: var(--surface);
 }
 
-.video-list a {
-  color: var(--accent-strong);
+@media (min-width: 480px) {
+  .video-item {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.video-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.video-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.video-name {
+  font-size: 1rem;
+}
+
+.video-advice {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.btn-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.85rem;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.btn-video:hover {
+  background: var(--accent-strong);
+}
+
+.tag.level-beginner { background: #e0f0e8; color: #2a7a50; }
+.tag.level-advanced { background: #fff0e0; color: #8a4a10; }
+
+/* ── Muscle Detail ── */
+.muscle-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.muscle-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--bg-accent);
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.muscle-title {
+  margin-bottom: 0.5rem;
+}
+
+.muscle-summary {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 52rem;
+  line-height: 1.6;
+}
+
+.muscle-section {
+  margin-top: 0.5rem;
+}
+
+.section-heading {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.section-count {
+  font-size: 0.8rem;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--muted);
+  background: var(--bg-accent);
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.tip-bullet {
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 0.45rem;
 }
 
 .tag {

@@ -1,20 +1,23 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import muscles from '../data/muscles.json'
 import MuscleMap from '../components/MuscleMap'
-import { saveProfile } from '../utils/storage'
+import { getProfile, saveProfile } from '../utils/storage'
 
 /** 成员 B：进阶 — 正反肌肉解剖图 */
 export default function AnatomyExplorer() {
   const [side, setSide] = useState('front')
   const navigate = useNavigate()
+  const selectedCount = getProfile().selectedMuscleIds?.length || 0
 
   function handleSelect(muscleId) {
-    const profilePatch = {
+    const profile = getProfile()
+    const selected = new Set(profile.selectedMuscleIds || [])
+    selected.add(muscleId)
+    saveProfile({
       path: 'advanced',
-      selectedMuscleIds: [muscleId],
-    }
-    saveProfile(profilePatch)
+      selectedMuscleIds: [...selected],
+    })
     navigate(`/muscle/${muscleId}`)
   }
 
@@ -42,9 +45,13 @@ export default function AnatomyExplorer() {
 
       <MuscleMap side={side} muscles={muscles} onSelect={handleSelect} />
 
-      <p className="owner-note">
-        负责人：成员 B — 请将 MuscleMap 替换为可点击 SVG / 热区图
-      </p>
+      <div className="cta-row">
+        <Link className="btn btn-primary" to="/plan">
+          {selectedCount > 0
+            ? `生成计划（已选 ${selectedCount} 块肌）`
+            : '生成个性化计划'}
+        </Link>
+      </div>
     </section>
   )
 }
